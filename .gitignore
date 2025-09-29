@@ -1,3 +1,7 @@
+### Added Ignore ###
+target/
+/project.iml
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/
