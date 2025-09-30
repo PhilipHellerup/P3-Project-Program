@@ -1,0 +1,24 @@
+/* Container Styling */
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+/* Heading Styling */
+.header {
+    color: black;
+}
+
+/* Clickable Paragraph */
+.clickable {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+/* Output Div Styling */
+#output {
+    margin-top: 20px;
+}
