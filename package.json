@@ -1,0 +1,26 @@
+{
+  "name": "p3-project-program",
+  "version": "1.0.0",
+  "description": "[Although here is the link for the database in case you need it](https://github.com/Rakibei/p3-database)",
+  "main": "index.js",
+  "scripts": {
+    "build:tailwindcss": "npx @tailwindcss/cli  -i src/main/resources/static/css/style.tailwind.css -o src/main/resources/static/css/style.build.tailwind.css --minify",
+    "watch:tailwindcss": "npx @tailwindcss/cli  -i src/main/resources/static/css/style.tailwind.css -o src/main/resources/static/css/style.build.tailwind.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhilipHellerup/P3-Project-Program.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PhilipHellerup/P3-Project-Program/issues"
+  },
+  "homepage": "https://github.com/PhilipHellerup/P3-Project-Program#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.13",
+    "tailwindcss": "^4.1.13"
+  }
+}

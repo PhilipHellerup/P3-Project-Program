@@ -1,6 +1,7 @@
 ### Added Ignore ###
 target/
 /project.iml
+node_modules/
 
 ### IntelliJ IDEA ###
 out/
