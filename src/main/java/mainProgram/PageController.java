@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 // Handles requests that return HTML views (html files).
 @Controller
 public class PageController {
-    // Handles requests to the root URL ("/") and serves index.html from html directory
+    // Handles requests to the root URL ("/") and serves index.html from templates directory
     @GetMapping("/")
     public String home() {
-        return "index"; // Spring looks for html/index.html
+        return "index"; // Spring looks for templates/index.html
     }
 }
