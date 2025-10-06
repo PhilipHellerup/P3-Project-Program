@@ -151,6 +151,7 @@ public class Job {
         } else {
         this.status = status;
         }
+    }
 
     public void setId(String id){
         this.id = id;
@@ -196,5 +197,4 @@ public class Job {
         this.date = date;
     }
 }
-
 
