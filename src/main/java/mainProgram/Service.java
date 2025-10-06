@@ -11,7 +11,6 @@ public class Service {
     public Service(String name, double price){
         this.name = name;
         this.price = price;
-        this.duration = serviceDuration;
     }
 
     // Getters
