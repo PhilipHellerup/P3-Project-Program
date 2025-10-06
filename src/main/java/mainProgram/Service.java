@@ -1,6 +1,5 @@
 package mainProgram;
 
-
 // Service class
 public class Service {
     // Attributes
@@ -9,7 +8,7 @@ public class Service {
     private int duration;
 
     // Constructor
-    public Service(String name, double price, int serviceDuration){
+    public Service(String name, double price){
         this.name = name;
         this.price = price;
     }
