@@ -1,4 +1,4 @@
-package mainProgram;
+package mainProgram; // Project Organization
 
 import jakarta.persistence.*;
 
@@ -13,7 +13,7 @@ public class User {
     private String email;
     private String display_name;
 
-    // Getters and setters
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

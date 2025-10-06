@@ -1,6 +1,8 @@
-package mainProgram;
+package mainProgram; // Project Organization
 
+// Product Class
 public class Product {
+    // Attributes
     private int id;
     private double price;
 

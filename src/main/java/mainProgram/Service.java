@@ -1,6 +1,6 @@
-package mainProgram;
+package mainProgram; // Project Organization
 
-// Service class
+// Service Class
 public class Service {
     // Attributes
     private String name;
