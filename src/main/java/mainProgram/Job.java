@@ -144,12 +144,56 @@ public class Job {
     }
 
     // Setters
+
     public void setStatus(status status){
         if(status == status.finished){
             System.out.println("Job has been finished, do you want to notify the costumer?");
         } else {
         this.status = status;
         }
+
+    public void setId(String id){
+        this.id = id;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setCustomerName(String customerName){
+        this.customerName = customerName;
+    }
+
+    public void setCustomerPhone(String customerPhone){
+        this.customerPhone = customerPhone;
+    }
+
+    public void setBikeDescription(String bikeDescription){
+        this.bikeDescription = bikeDescription;
+    }
+
+    public void setServices(Service[] services){
+        this.services = services;
+    }
+
+    public void setParts(Part[] parts){
+        this.parts = parts;
+    }
+
+    public void setWorkTimeMinutes(int workTimeMinutes){
+        this.workTimeMinutes = workTimeMinutes;
+    }
+
+    public void setCost(double cost){
+        this.cost = cost;
+    }
+
+    public void setDuration(int duration){
+        this.duration = duration;
+    }
+
+    public void setDate(String date){
+        this.date = date;
     }
 }
 
