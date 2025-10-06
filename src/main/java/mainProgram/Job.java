@@ -1,6 +1,6 @@
 package mainProgram; // Project Organization
 
-// Job Status
+// Job Status (Enum)
 enum status{
     notDelivered,
     delivered,
@@ -28,17 +28,23 @@ public class Job {
 
     // TODO: Create some data validation and cleaning
     // Constructor
-    public Job(String id, String name, String customerName, String customerPhone, String bikeDescription,
+    /*public Job(String id, String name, String customerName, String customerPhone, String bikeDescription,
                Service[] services, Part[] parts, int workTimeMinutes, double cost, int duration, String date) {
-        this.id = id;
-        this.name = name;
-        this.customerName = customerName;
-        this.customerPhone = customerPhone;
-        this.bikeDescription = bikeDescription;
-        this.services = services;
-        this.parts = parts;
+        this.id = id.trim();
+        this.name = name.trim();
+        this.customerName = customerName.trim();
+        this.customerPhone = (customerPhone == null) ? "" : customerPhone.trim(); //Optional
+        this.bikeDescription = (bikeDescription == null) ? "" : bikeDescription.trim(); //Optional
+        this.services = services.clone(); // defensive copy
+        this.parts = parts.clone();       // defensive copy
         this.workTimeMinutes = workTimeMinutes;
         this.cost = cost;
+    }
+*/
+    public Job(String id, String name, Part[] parts) {
+        this.id = id;
+        this.name = name;
+        this.parts = parts;
     }
 
     // Calculate the cost of a job from the prices of parts and services, and the working time.
@@ -48,12 +54,12 @@ public class Job {
         for (Part part : parts){
             cost += part.price;
         }
-
-        for (Service service : services){
-            cost += service.price;
-        }
-
-        cost += workTimeMinutes * pricePerMinute;
+//        for (Service service : services){
+//            cost += service.price;
+//        }
+//
+//        cost += workTimeMinutes * pricePerMinute;
+//
 
         return cost;
     }

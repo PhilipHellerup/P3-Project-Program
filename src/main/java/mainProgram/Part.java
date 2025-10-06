@@ -1,5 +1,9 @@
 package mainProgram;
 
 public class Part {
-    private double price;
+    public double price;
+
+    public Part(double price) {
+        this.price = price;
+    }
 }

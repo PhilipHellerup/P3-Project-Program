@@ -1,5 +1,5 @@
 package mainProgram;
 
 public class Service {
-    private double price;
+    public double price;
 }
