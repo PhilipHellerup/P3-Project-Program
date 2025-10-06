@@ -1,6 +1,8 @@
-package mainProgram;
+package mainProgram; // Project Organization
 
+// Part Class
 public class Part {
+    // Attributes
     private String name;
     private String type;
 
