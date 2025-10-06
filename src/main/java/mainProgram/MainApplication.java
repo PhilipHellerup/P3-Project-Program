@@ -17,14 +17,16 @@ public class MainApplication {
         SpringApplication.run(MainApplication.class, args);
 
         Part[] newparts = new Part[]{new Part("SCO Chain", "Chain", 20.48)};
-        Service[] services = new Service[]{new Service("lubrication", 150, 10)};
+        Service[] services = new Service[]{new Service("lubrication", 150, 10), new Service("change of chain", 250, 20)};
 
         Job newjob = new Job("22", "testjob1", "Jonas", "30261919", "cyklen kommer mandag, den skal have ny kassette",
                 services, newparts, 20, 17, "2025-04-15", status.inProgress );
 
-        double cost = newjob.calculateCost();
-
+        double cost = newjob.getCost();
         System.out.println(cost);
-        System.out.println(newjob.toString());
+
+        newjob.printToConsol();
+
+        newjob.setStatus(status.finished);
     }
 }

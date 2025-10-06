@@ -1,10 +1,13 @@
 package mainProgram; // Project Organization
 
+import java.util.Arrays;
+
 // Job Status (Enum)
 enum status{
     notDelivered,
     delivered,
     inProgress,
+    missingPart,
     finished,
     pickedUp
 }
@@ -44,21 +47,52 @@ public class Job {
     }
 
     // Calculate the cost of a job from the prices of parts and services, and the working time.
-    public double calculateCost(){
+    private double calculateCost(){
         double cost = 0;
-
         for (Part part : parts){
             cost += part.getPrice();
         }
         for (Service service : services){
             cost += service.getPrice();
         }
-
         cost += workTimeMinutes * pricePerMinute;
-
-
         return cost;
     }
+
+    private int calculateDuration(){
+        int duration = 0;
+        for (Service service : services){
+            duration += service.getDuration();
+        }
+
+        return duration;
+    }
+
+    // Print out information about a job for debugging
+    public void printToConsol(){
+        System.out.println("Job ID: " + id);
+        System.out.println("Job name: " + name);
+        System.out.println("Customer name: " + customerName);
+        System.out.println("Customer phone: " + customerPhone);
+        System.out.println("Bike description: " + bikeDescription);
+        System.out.print("Parts: [");
+        for (Part part : parts){
+            System.out.print(" " + part.getName() + ",");
+        }
+        System.out.println("]");
+        System.out.print("Services: [");
+        for (Service service : services){
+            System.out.print(" " + service.getName() + ",");
+        }
+        System.out.println("]");
+        System.out.println("Work time minutes: " + workTimeMinutes + " minutes");
+        System.out.println("Price per minute: " + pricePerMinute + " kr.");
+        System.out.println("Cost: " + getCost() + " kr.");
+        System.out.println("Duration: " + getDuration() + " minutes");
+        System.out.println("Date: " + date);
+        System.out.println("Status: " + status);
+    }
+
 
     // Getters
     public String getId() {
@@ -94,11 +128,11 @@ public class Job {
     }
 
     public double getCost() {
-        return cost;
+        return calculateCost();
     }
 
     public int getDuration() {
-        return duration;
+        return calculateDuration();
     }
 
     public String getDate() {
@@ -110,6 +144,14 @@ public class Job {
     }
 
     // Setters
+
+    public void setStatus(status status){
+        if(status == status.finished){
+            System.out.println("Job has been finished, do you want to notify the costumer?");
+        } else {
+        this.status = status;
+        }
+
     public void setId(String id){
         this.id = id;
     }
@@ -152,10 +194,6 @@ public class Job {
 
     public void setDate(String date){
         this.date = date;
-    }
-
-    public void setStatus(status status){
-        this.status = status;
     }
 }
 
