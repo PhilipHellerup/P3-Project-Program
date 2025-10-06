@@ -22,6 +22,13 @@ public class Day {
     }
 
     // Setters
+    public void setId(int id){
+        this.id = id;
+    }
+
+    public void setListOfJobs(Job[] listOfJobs){
+        this.listOfJobs = listOfJobs;
+    }
 }
 
 
