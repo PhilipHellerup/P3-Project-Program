@@ -29,4 +29,11 @@ public class Calendar {
     }
 
     // Setters
+    public void setListOfDays(Day[] listOfDays){
+        this.listOfDays = listOfDays;
+    }
+
+    public void setViewMode(viewMode viewMode){
+        this.viewMode = viewMode;
+    }
 }
