@@ -48,7 +48,7 @@ public class Job {
         double cost = 0;
 
         for (Part part : parts){
-            cost += part.price;
+            cost += part.getPrice();
         }
         for (Service service : services){
             cost += service.getPrice();

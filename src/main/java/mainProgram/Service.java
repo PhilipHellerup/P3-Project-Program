@@ -8,10 +8,10 @@ public class Service {
     private int duration;
 
     // Constructor
-    public Service(String name, double price){
+    public Service(String name, double price, int duration){
         this.name = name;
         this.price = price;
-        this.duration = serviceDuration;
+        this.duration = duration;
     }
 
     // Getters
