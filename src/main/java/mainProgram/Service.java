@@ -3,9 +3,6 @@ package mainProgram;
 
 // Service class
 public class Service {
-<<<<<<< HEAD
-    public double price;
-=======
     // Attributes
     private String name;
     private double price;
@@ -15,21 +12,21 @@ public class Service {
     public Service(String name, double price, int serviceDuration){
         this.name = name;
         this.price = price;
+        this.duration = serviceDuration;
     }
 
     // Getters
-    public String getServiceName(){
+    public String getName(){
         return name;
     }
 
-    public double getServicePrice(){
+    public double getPrice(){
         return price;
     }
 
-    public int getServiceDuration(){
+    public int getDuration(){
         return duration;
     }
 
     // Setters
->>>>>>> 3e8ea8b2e7302bbe22e83d33db19d01f7ade4334
 }

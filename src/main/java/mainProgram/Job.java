@@ -20,7 +20,7 @@ public class Job {
     private Service [] services;
     private Part [] parts;
     private int workTimeMinutes;
-    private int pricePerMinute;
+    private double pricePerMinute;
     private double cost;
     private int duration;
     private String date;
@@ -28,8 +28,8 @@ public class Job {
 
     // TODO: Create some data validation and cleaning
     // Constructor
-    /*public Job(String id, String name, String customerName, String customerPhone, String bikeDescription,
-               Service[] services, Part[] parts, int workTimeMinutes, double cost, int duration, String date) {
+    public Job(String id, String name, String customerName, String customerPhone, String bikeDescription,
+               Service[] services, Part[] parts, int workTimeMinutes, double pricePerMinute, String date, status status) {
         this.id = id.trim();
         this.name = name.trim();
         this.customerName = customerName.trim();
@@ -38,13 +38,9 @@ public class Job {
         this.services = services.clone(); // defensive copy
         this.parts = parts.clone();       // defensive copy
         this.workTimeMinutes = workTimeMinutes;
-        this.cost = cost;
-    }
-*/
-    public Job(String id, String name, Part[] parts) {
-        this.id = id;
-        this.name = name;
-        this.parts = parts;
+        this.pricePerMinute = pricePerMinute;
+        this.date = date;
+        this.status = status;
     }
 
     // Calculate the cost of a job from the prices of parts and services, and the working time.
@@ -54,12 +50,12 @@ public class Job {
         for (Part part : parts){
             cost += part.price;
         }
-//        for (Service service : services){
-//            cost += service.price;
-//        }
-//
-//        cost += workTimeMinutes * pricePerMinute;
-//
+        for (Service service : services){
+            cost += service.getPrice();
+        }
+
+        cost += workTimeMinutes * pricePerMinute;
+
 
         return cost;
     }
