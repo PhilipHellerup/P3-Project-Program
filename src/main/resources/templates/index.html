@@ -23,6 +23,10 @@
         Click Here to See The Quote of The Day!
         </p>
         <div id="output"></div>
+        <h2>Users</h2>
+        <ul>
+            <li th:each="u : ${users}" th:text="${u.display_name}"></li>
+        </ul>
     </div>
 </body>
 </html>
