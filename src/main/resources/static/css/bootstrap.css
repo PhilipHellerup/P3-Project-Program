@@ -8017,6 +8017,11 @@ textarea.form-control-lg {
     margin-top: 6rem !important;
 }
 
+/* remove the last separator line */
+.tableRemoveLastLine tr:last-child td {
+    border-bottom: none !important;
+}
+
 .mt-auto {
   margin-top: auto !important;
 }
