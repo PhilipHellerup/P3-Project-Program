@@ -6,34 +6,40 @@
     <title>Job Detaljer</title>
 
     <!-- Linking -->
-    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/bootstrap.css"/>
     <script src="/js/bootstrap.js"></script>
 </head>
-    <!-- Body -->
-    <div class="container">
-        <div class="card">
-            <div class="card-header">
-                <h1>Detaljer</h1>
+<body>
+    <!-- Page Container (No Nav Bar) -->
+    <div class="page-content-container m-4">
+        <!-- Card Container -->
+        <div class="d-inline-flex" style="width: 100%">
+            <!-- Description Card -->
+            <div class="card me-2" style="width: 100%">
+                <div class="card-header d-inline-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Detaljer</h5>
+                    <a href="#" class="btn btn-primary align-co" style="width: 6rem">Rediger</a>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Status:</li>
+                    <li class="list-group-item">Dato:</li>
+                    <li class="list-group-item">Bike:</li>
+                    <li class="list-group-item">Customer:</li>
+                    <li class="list-group-item">Phone:</li>
+                </ul>
             </div>
-            <div>
-                <p>Status: </p>
-                <p>Dato: </p>
-                <p>Bike: </p>
-                <p>Customer: </p>
-                <p>Phone: </p>
+            <!-- Description Card -->
+            <div class="card ms-2" style="width: 100%">
+                <div class="card-header d-inline-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Description</h5>
+                    <a href="#" class="btn btn-primary align-co" style="width: 6rem">Rediger</a>
+                </div>
+                <p class="card-text mx-2 my-2">Hjulskift + Styr Installation</p>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h1>Beskrivelse</h1>
-            </div>
-            <div>
-                <p>Hjulskift + Styr Installation</p>
-            </div>
-        </div>
-
-        <div class="table-container">
+        <!-- Table Container -->
+        <div class="table-content-container mt-6">
             <table class="table">
                 <thead>
                 <tr>
@@ -60,11 +66,7 @@
             </table>
         </div>
 
-
+        <button type="button" class="btn btn-primary">Tilføj Produkt</button>
     </div>
-
-
-<body>
-
 </body>
 </html>
