@@ -10,8 +10,11 @@
     <script src="/js/bootstrap.js"></script>
   </head>
   <body>
-    <nav>
-      <script src="/js/navbar.js"></script>
-    </nav>
+      <ul>
+        <li th:each="u : ${users}" th:text="${u.display_name}"></li>
+      </ul>
+      <nav>
+          <script src="/js/navbar.js"></script>
+      </nav>
   </body>
 </html>
