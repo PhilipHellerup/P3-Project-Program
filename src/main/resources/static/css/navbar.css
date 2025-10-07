@@ -80,6 +80,17 @@
   margin-bottom: 16px;
 }
 
+/* Adjust page margin, when navbar is present */
 body.with-navbar{
   margin-left: 13rem;
+}
+
+/* Navbar close button style */
+.close-navbar-btn{
+  
+}
+
+/* Navbar open button style */
+.open-navbar-btn{
+  
 }
