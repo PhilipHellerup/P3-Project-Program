@@ -1,6 +1,8 @@
 package mainProgram; // Project Organization
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 // Job Status (Enum)
 enum status{
@@ -20,8 +22,8 @@ public class Job {
     private String customerName;
     private String customerPhone;
     private String bikeDescription;
-    private Service [] services;
-    private Part [] parts;
+    private List<Service> services = new ArrayList<>();
+    private List<Part> parts = new ArrayList<>();
     private int workTimeMinutes;
     private double pricePerMinute;
     private double cost;
@@ -31,15 +33,14 @@ public class Job {
 
     // TODO: Create some data validation and cleaning
     // Constructor
-    public Job(String id, String name, String customerName, String customerPhone, String bikeDescription,
-               Service[] services, Part[] parts, int workTimeMinutes, double pricePerMinute, String date, status status) {
+    public Job(String id, String name, String customerName, String customerPhone, String bikeDescription, List<Service> services, List<Part> parts, int workTimeMinutes, double pricePerMinute, String date, status status) {
         this.id = id.trim();
         this.name = name.trim();
         this.customerName = customerName.trim();
         this.customerPhone = (customerPhone == null) ? "" : customerPhone.trim(); //Optional
         this.bikeDescription = (bikeDescription == null) ? "" : bikeDescription.trim(); //Optional
-        this.services = services.clone(); // defensive copy
-        this.parts = parts.clone();       // defensive copy
+        this.services = new ArrayList<>(services); // defensive copy
+        this.parts = new ArrayList<>(parts);       // defensive copy
         this.workTimeMinutes = workTimeMinutes;
         this.pricePerMinute = pricePerMinute;
         this.date = date;
@@ -115,12 +116,12 @@ public class Job {
         return bikeDescription;
     }
 
-    public Service[] getServices() {
-        return services;
+    public List<Service> getServices() {
+        return new ArrayList<>(services);
     }
 
-    public Part[] getParts() {
-        return parts;
+    public List<Part> getParts() {
+        return new ArrayList<>(parts);
     }
 
     public int getWorkTimeMinutes() {
@@ -173,12 +174,12 @@ public class Job {
         this.bikeDescription = bikeDescription;
     }
 
-    public void setServices(Service[] services){
-        this.services = services;
+    public void setServices(List<Service> services){
+        this.services = new ArrayList<>(services);
     }
 
-    public void setParts(Part[] parts){
-        this.parts = parts;
+    public void setParts(List<Part> parts){
+        this.parts = new ArrayList<>(parts);
     }
 
     public void setWorkTimeMinutes(int workTimeMinutes){

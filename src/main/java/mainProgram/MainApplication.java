@@ -1,5 +1,9 @@
 package mainProgram; // Project Organization
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /* --- Libraries --- */
 // Provides the main entry point for running Spring Boot programs
 import org.springframework.boot.SpringApplication;
@@ -16,8 +20,8 @@ public class MainApplication {
         // Runs the Spring Boot application
         SpringApplication.run(MainApplication.class, args);
 
-        Part[] newparts = new Part[]{new Part("SCO Chain", "Chain", 20.48)};
-        Service[] services = new Service[]{new Service("lubrication", 150, 10), new Service("change of chain", 250, 20)};
+        List<Part> newparts = new ArrayList<>(List.of(new Part("SCO Chain", "Chain", 20.48)));
+        List<Service> services = new ArrayList<>(List.of(new Service("lubrication", 150, 10), new Service("change of chain", 250, 20)));
 
         Job newjob = new Job("22", "testjob1", "Jonas", "30261919", "cyklen kommer mandag, den skal have ny kassette",
                 services, newparts, 20, 17, "2025-04-15", status.inProgress );
