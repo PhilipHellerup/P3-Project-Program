@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Job Liste</title>
+
+        <!-- Linking -->
+        <link rel="stylesheet" href="/css/bootstrap.css" />
+        <script src="/js/bootstrap.js"></script>
+        <script src="/js/quote.js"></script>
+    </head>
+
+    <body class="d-flex justify-content-center">
+    <div class="d-flex flex-column mt-lg-5">
+        <div class="d-inline-flex">
+            <div class="d-inline-flex gap-4">
+                <p class="fw-bolder">Uge 31</p>
+                <button class="btn btn-primary">
+                    Tilføj ny reperation
+                </button>
+            </div>
+        </div>
+
+    <!-- Table to show the actual jobs -->
+        <table class="table align-middle mt-lg-3">
+            <thead>
+            <tr>
+                <th scope="col">Ordreinformationer</th>
+                <th scope="col">Status</th>
+                <th scope="col">Beskrivelse</th>
+                <th scope="col">Data og tid</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="" th:each="j : ${jobs}">
+                <td class="w-15">
+                    <div class="d-flex flex-column gap-1">
+                        <p class="fw-bolder mb-1" th:text="${j.title}"></p>
+                        <p class="mb-0" th:text="${j.customer_name}"></p>
+                        <p th:text="${j.customer_phone}"></p>
+                    </div>
+                </td>
+                <td class="w-15">
+                    <p th:text="${j.status}"></p>
+                </td>
+                <td class="w-30">
+                    <div class="w-75">
+                        <p th:text="${j.job_description}"></p>
+                    </div>
+                </td>
+                <td class="w-30" th:text="${j.date}"></td>
+            </tbody>
+        </table>
+    </div>
+    </body>
+</html>

@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class PageController {
 
     private final UserRepository userRepository;
+    private final JobRepository jobRepository;
 
-    public PageController(UserRepository userRepository) {
+    public PageController(UserRepository userRepository, JobRepository jobRepository) {
         this.userRepository = userRepository;
+        this.jobRepository = jobRepository;
     }
     // Handles requests to the root URL ("/") and serves index.html from templates directory
     @GetMapping("/")
@@ -25,4 +27,10 @@ public class PageController {
         model.addAttribute("users", userRepository.findAll());
         return "index"; // -> src/main/resources/templates/dashboard.html
     }
+
+   @GetMapping("/jobliste")
+   public String jobliste(Model model) {
+        model.addAttribute("jobs", jobRepository.findAll());
+        return "jobliste";
+   }
 }
