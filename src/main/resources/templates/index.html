@@ -10,11 +10,19 @@
     <script src="/js/bootstrap.js"></script>
   </head>
   <body>
-      <ul>
-        <li th:each="u : ${users}" th:text="${u.display_name}"></li>
+  <!-- Body -->
+  <div class="container">
+      <ul class="list-group">
+          <li class="list-group-item" th:each="u : ${users}">
+              <span th:text="${u.display_name}">Display Name</span>
+              &nbsp;(<span th:text="${u.email}">email</span>)
+              &nbsp;
+              <a th:href="@{'/users/' + ${u.id} + '/edit'}" class="btn btn-sm btn-link">Edit</a>
+          </li>
       </ul>
-      <nav>
-          <script src="/js/navbar.js"></script>
-      </nav>
+  </div>
+  <nav>
+      <script src="/js/navbar.js"></script>
+  </nav>
   </body>
 </html>
