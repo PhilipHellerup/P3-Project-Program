@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Edit User</title>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+</head>
+<body>
+<div class="container">
+    <h1>Edit User</h1>
+
+    <!-- show optional flash message -->
+    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+
+    <form th:action="@{'/users/' + ${user.id} + '/edit'}" th:object="${user}" method="post">
+        <!-- If you use Spring Security, include the _csrf hidden input:
+             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="you@example.com" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="display_name" class="form-label">Display name</label>
+            <input type="text" id="display_name" th:field="*{display_name}" class="form-control" placeholder="Display name" required />
+        </div>
+
+        <!-- Hidden id (optional) -->
+        <input type="hidden" th:field="*{id}" />
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a th:href="@{/users}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+</body>
+</html>

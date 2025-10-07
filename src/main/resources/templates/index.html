@@ -27,8 +27,13 @@
         Click Here to See The Quote of The Day!
       </p>
       <div id="output"></div>
-      <ul>
-        <li th:each="u : ${users}" th:text="${u.display_name}"></li>
+      <ul class="list-group">
+        <li class="list-group-item" th:each="u : ${users}">
+          <span th:text="${u.display_name}">Display Name</span>
+          &nbsp;(<span th:text="${u.email}">email</span>)
+          &nbsp;
+          <a th:href="@{'/users/' + ${u.id} + '/edit'}" class="btn btn-sm btn-link">Edit</a>
+        </li>
       </ul>
     </div>
   </body>
