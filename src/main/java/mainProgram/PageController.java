@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 // Handles requests that return HTML views (html files).
 @Controller
 public class PageController {
-
     private final UserRepository userRepository;
 
     public PageController(UserRepository userRepository) {
