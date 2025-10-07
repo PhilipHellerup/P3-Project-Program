@@ -18,6 +18,9 @@
 }
 
 .nav-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   padding: 22px 20px;
   border-bottom: 1px solid #374151;
 }
@@ -81,16 +84,49 @@
 }
 
 /* Adjust page margin, when navbar is present */
-body.with-navbar{
+.body.with-navbar{
   margin-left: 13rem;
 }
 
+/* Navbar button style */
+.close-navbar-btn, .open-navbar-btn {
+  width: 40px;           /* Width of the button */
+  height: 40px;          /* Height of the button */
+  background-color: #303e51; /* Button color */
+  border: none;          /* Remove default border */
+  color: white;          /* Text color */
+  font-size: 16px;       /* Text size */
+  cursor: pointer;       /* Pointer on hover */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+  position: relative;
+}
+
 /* Navbar close button style */
-.close-navbar-btn{
-  
+.close-navbar-btn {
+  left: 3rem;
+  border-radius: 50%;    /* Makes it circular */
+}
+
+.close-navbar-btn:hover {
+  background-color: #3b82f6;
 }
 
 /* Navbar open button style */
 .open-navbar-btn{
-  
+  width: 40px;
+  padding-left: 20px;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  position: fixed;
+  top: 2.5%;
+  left: -1%;
+  transition: left 0.1s;
+}
+
+.open-navbar-btn:hover{
+  background-color: #3b82f6;
+  left: 0;
 }
