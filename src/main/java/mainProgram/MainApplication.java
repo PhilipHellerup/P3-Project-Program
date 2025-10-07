@@ -19,18 +19,5 @@ public class MainApplication {
     public static void main(String[] args) {
         // Runs the Spring Boot application
         SpringApplication.run(MainApplication.class, args);
-
-        List<Part> newparts = new ArrayList<>(List.of(new Part("SCO Chain", "Chain", 20.48)));
-        List<Service> services = new ArrayList<>(List.of(new Service("lubrication", 150, 10), new Service("change of chain", 250, 20)));
-
-        Job newjob = new Job("22", "testjob1", "Jonas", "30261919", "cyklen kommer mandag, den skal have ny kassette",
-                services, newparts, 20, 17, "2025-04-15", status.inProgress );
-
-        double cost = newjob.getCost();
-        System.out.println(cost);
-
-        newjob.printToConsol();
-
-        newjob.setStatus(status.finished);
     }
 }
