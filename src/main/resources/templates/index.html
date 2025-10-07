@@ -7,28 +7,31 @@
 
     <!-- Linking -->
     <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/navbar.css" />
     <script src="/js/bootstrap.js"></script>
     <script src="/js/quote.js"></script>
   </head>
 
   <body>
-    <!-- Body -->
-    <div class="container">
-      <!-- Header -->
-      <h1 class="header">Performsport Calendar</h1>
+    <!-- Sideindhold -->
+    <main class="main-content">
+      <div class="container">
+        <!-- Header -->
+        <h1 class="header">Performsport Calendar</h1>
 
-      <!-- Quote -->
-      <p
-        class="clickable text-primary"
-        style="cursor: pointer"
-        onclick="sendQuote()"
-      >
-        Click Here to See The Quote of The Day!
-      </p>
-      <div id="output"></div>
-      <ul>
-        <li th:each="u : ${users}" th:text="${u.display_name}"></li>
-      </ul>
-    </div>
+        <!-- Quote -->
+        <p
+          class="clickable text-primary"
+          style="cursor: pointer"
+          onclick="sendQuote()"
+        >
+          Click Here to See The Quote of The Day!
+        </p>
+        <div id="output"></div>
+        <ul>
+          <li th:each="u : ${users}" th:text="${u.display_name}"></li>
+        </ul>
+      </div>
+    </main>
   </body>
 </html>

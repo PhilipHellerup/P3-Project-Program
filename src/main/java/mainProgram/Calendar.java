@@ -1,5 +1,8 @@
 package mainProgram; // Project Organization
 
+import java.util.ArrayList;
+import java.util.List;
+
 // View Mode (Enum)
 enum viewMode{
     day,
@@ -10,18 +13,18 @@ enum viewMode{
 // Calendar Class
 public class Calendar {
     // Attributes
-    private Day[] listOfDays;
+    private List<Day> listOfDays = new ArrayList<>();
     private viewMode viewMode;
 
     // Constructor
-    public Calendar(Day[] listOfDays, viewMode viewMode) {
-        this.listOfDays = listOfDays;
+    public Calendar(List<Day> listOfDays, viewMode viewMode) {
+        this.listOfDays = new ArrayList<>(listOfDays);
         this.viewMode = viewMode;
     }
 
     // Getters
-    public Day[] getListOfDays() {
-        return listOfDays;
+    public List<Day> getListOfDays() {
+        return new ArrayList<>(listOfDays);
     }
 
     public viewMode getViewMode() {
@@ -29,8 +32,8 @@ public class Calendar {
     }
 
     // Setters
-    public void setListOfDays(Day[] listOfDays){
-        this.listOfDays = listOfDays;
+    public void setListOfDays(List<Day> listOfDays){
+        this.listOfDays = new ArrayList<>(listOfDays);
     }
 
     public void setViewMode(viewMode viewMode){

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 // Handles requests that return HTML views (html files).
 @Controller
 public class PageController {
-
     private final UserRepository userRepository;
     private final JobRepository jobRepository;
 
@@ -25,7 +24,13 @@ public class PageController {
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("users", userRepository.findAll());
-        return "index"; // -> src/main/resources/templates/dashboard.html
+        return "index"; // -> src/main/resources/templates/index.html
+    }
+
+    @GetMapping("/job-detaljer")
+    public String jobDetails(Model model) {
+        model.addAttribute("users", userRepository.findAll());
+        return "jobDetails"; // -> src/main/resources/templates/jobDetails.html
     }
 
    @GetMapping("/jobliste")

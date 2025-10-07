@@ -1,15 +1,18 @@
 package mainProgram; // Project Organization
 
+import java.util.ArrayList;
+import java.util.List;
+
 // Day Class
 public class Day {
     // Attributes
     private int id;
-    private Job[] listOfJobs;
+    private List<Job> listOfJobs = new ArrayList<>();
 
     // Constructor
-    public Day(int id, Job[] listOfJobs) {
+    public Day(int id, List<Job> listOfJobs) {
         this.id = id;
-        this.listOfJobs = listOfJobs;
+        this.listOfJobs = new ArrayList<>(listOfJobs);
     }
 
     // Getters
@@ -17,8 +20,8 @@ public class Day {
         return id;
     }
 
-    public Job[] getListOfJobs() {
-        return listOfJobs;
+    public List<Job> getListOfJobs() {
+        return new ArrayList<>(listOfJobs);
     }
 
     // Setters
@@ -26,8 +29,8 @@ public class Day {
         this.id = id;
     }
 
-    public void setListOfJobs(Job[] listOfJobs){
-        this.listOfJobs = listOfJobs;
+    public void setListOfJobs(List<Job> listOfJobs){
+        this.listOfJobs = new ArrayList<>(listOfJobs);
     }
 }
 

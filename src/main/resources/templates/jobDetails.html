@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Detaljer</title>
+
+    <!-- Linking -->
+    <link rel="stylesheet" href="/css/bootstrap.css"/>
+    <script src="/js/bootstrap.js"></script>
+</head>
+<body>
+    <nav>
+        <script src="/js/navbar.js"></script>
+    </nav>
+    <!-- Page Container (No Nav Bar) -->
+    <div class="page-content-container m-4">
+        <!-- Card Container -->
+        <div class="d-inline-flex" style="width: 100%">
+            <!-- Details Card -->
+            <div class="card me-2" style="width: 100%">
+                <div class="card-header d-inline-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Detaljer</h5>
+                    <a href="#" class="btn btn-primary align-co" style="width: 6rem">Rediger</a>
+                </div>
+                <div class="table-content-container">
+                    <table class="table tableRemoveLastLine mb-1">
+                        <tbody>
+                        <tr>
+                            <td><b>Status:</b></td>
+                            <td>Igangværende</td>
+                        </tr>
+                        <tr>
+                            <td><b>Dato:</b></td>
+                            <td>15. September, 8:00-8:30</td>
+                        </tr>
+                        <tr>
+                            <td><b>Cykel:</b></td>
+                            <td>Rød Cervelo</td>
+                        </tr>
+                        <tr>
+                            <td><b>Kunde:</b></td>
+                            <td>Jonas Vingegaard</td>
+                        </tr>
+                        <tr>
+                            <td><b>Telefon:</b></td>
+                            <td>+45 12 34 56 78</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Description Card -->
+            <div class="card ms-2" style="width: 100%">
+                <div class="card-header d-inline-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Description</h5>
+                    <a href="#" class="btn btn-primary align-co" style="width: 6rem">Rediger</a>
+                </div>
+                <p class="card-text mx-2 my-2">
+                    Hjulskift + Styr Installation <br>
+                    Noget klikker ved forhulet of styret skal skiftes
+                </p>
+            </div>
+        </div>
+
+        <!-- Product Table Container -->
+        <div class="product-table-content-container mt-6">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Produkter</th>
+                    <th scope="col">Antal</th>
+                    <th scope="col">Styk Pris</th>
+                    <th scope="col">Total Pris</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Komplet Service</td>
+                    <td>1</td>
+                    <td>700,00 Kr.</td>
+                    <td>700,00 Kr.</td>
+                </tr>
+                <tr>
+                    <td>GP5000, 700x30C</td>
+                    <td>2</td>
+                    <td>419,95</td>
+                    <td>839,90</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Button + Final Price Table -->
+        <div class="final-table-content-container d-flex justify-content-between align-items-start mt-3" style="width: 100%">
+            <!-- Left Side: Button -->
+            <button type="button" class="btn btn-primary">Tilføj Produkt</button>
+
+            <!-- Right Side: Totals table -->
+            <table class="table table-borderless mb-0" style="width: auto">
+                <tbody>
+                <tr>
+                    <td class="fs-5"><b>Pris:</b></td>
+                    <td class="fs-5">1.539,90</td>
+                </tr>
+                <tr>
+                    <td class="fs-5"><b>Moms:</b></td>
+                    <td class="fs-5">384,98</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="fs-5"><b>Total:</b></td>
+                    <td class="fs-5"><b>1.924,88</b></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+/* Venstrestillet vertikal navbar */
+* {
+  box-sizing: border-box;
+}
+
+.sidebar-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 13rem;
+  height: 100vh;
+  background-color: #1f2937; /* mørk grå-blå */
+  color: #e5e7eb;            /* lys tekst */
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #111827;
+  z-index: 1000;
+}
+
+.nav-header {
+  padding: 22px 20px;
+  border-bottom: 1px solid #374151;
+}
+
+.nav-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #f3f4f6;
+}
+
+.nav-menu {
+  list-style: none;
+  padding: 12px 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-item {
+  width: 100%;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 18px;
+  color: #e5e7eb;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: background-color 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
+  border-radius: 4px 0 0 4px;
+}
+
+.nav-link:hover {
+  background-color: #111827;
+  border-left-color: #3b82f6; /* blå accent */
+  transform: translateX(4px);
+}
+
+.nav-text {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* Hovedindhold rykkes til højre for at give plads til navbar */
+.main-content {
+  margin-left: 240px; /* samme som sidebar bredde */
+  padding: 24px;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+/* Gør headeren lidt pænere uden at forstyrre resten */
+.header {
+  margin-bottom: 16px;
+}
+
+body.with-navbar{
+  margin-left: 13rem;
+}
