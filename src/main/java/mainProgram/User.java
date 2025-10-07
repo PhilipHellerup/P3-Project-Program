@@ -22,5 +22,5 @@ public class User {
     public void setEmail(String email) { this.email = email; }
 
     public String getDisplay_name() { return display_name; }
-    public String setDisplay_name(String display_name) { this.display_name = display_name; return this.display_name; }
+    public void setDisplay_name(String display_name) { this.display_name = display_name; }
 }
