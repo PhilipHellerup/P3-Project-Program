@@ -54,12 +54,15 @@
                     <h5 class="mb-0">Description</h5>
                     <a href="#" class="btn btn-primary align-co" style="width: 6rem">Rediger</a>
                 </div>
-                <p class="card-text mx-2 my-2">Hjulskift + Styr Installation</p>
+                <p class="card-text mx-2 my-2">
+                    Hjulskift + Styr Installation <br>
+                    Noget klikker ved forhulet of styret skal skiftes
+                </p>
             </div>
         </div>
 
-        <!-- Table Container -->
-        <div class="table-content-container mt-6">
+        <!-- Product Table Container -->
+        <div class="product-table-content-container mt-6">
             <table class="table">
                 <thead>
                 <tr>
@@ -85,9 +88,34 @@
                 </tbody>
             </table>
         </div>
-        <button type="button" class="btn btn-primary">Tilføj Produkt</button>
 
+        <!-- Button + Final Price Table -->
+        <div class="final-table-content-container d-flex justify-content-between align-items-start mt-3" style="width: 100%">
+            <!-- Left Side: Button -->
+            <button type="button" class="btn btn-primary">Tilføj Produkt</button>
 
+            <!-- Right Side: Totals table -->
+            <table class="table table-borderless mb-0" style="width: auto">
+                <tbody>
+                <tr>
+                    <td class="fs-5"><b>Pris:</b></td>
+                    <td class="fs-5">1.539,90</td>
+                </tr>
+                <tr>
+                    <td class="fs-5"><b>Moms:</b></td>
+                    <td class="fs-5">384,98</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="fs-5"><b>Total:</b></td>
+                    <td class="fs-5"><b>1.924,88</b></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>
