@@ -7,7 +7,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 240px;
+  width: 13rem;
   height: 100vh;
   background-color: #1f2937; /* mørk grå-blå */
   color: #e5e7eb;            /* lys tekst */
@@ -78,4 +78,8 @@
 /* Gør headeren lidt pænere uden at forstyrre resten */
 .header {
   margin-bottom: 16px;
+}
+
+body.with-navbar{
+  margin-left: 13rem;
 }
