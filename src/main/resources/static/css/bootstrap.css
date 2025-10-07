@@ -7900,7 +7900,7 @@ textarea.form-control-lg {
 }
 
 .m-2 {
-  margin: 0.5rem !important;
+  margin: 0.75rem !important;
 }
 
 .m-3 {
@@ -7930,8 +7930,8 @@ textarea.form-control-lg {
 }
 
 .mx-2 {
-  margin-right: 0.5rem !important;
-  margin-left: 0.5rem !important;
+  margin-right: 0.75rem !important;
+  margin-left: 0.75rem !important;
 }
 
 .mx-3 {
@@ -7965,8 +7965,8 @@ textarea.form-control-lg {
 }
 
 .my-2 {
-  margin-top: 0.5rem !important;
-  margin-bottom: 0.5rem !important;
+  margin-top: 0.75rem !important;
+  margin-bottom: 0.75rem !important;
 }
 
 .my-3 {
@@ -8013,6 +8013,15 @@ textarea.form-control-lg {
   margin-top: 3rem !important;
 }
 
+.mt-6 {
+    margin-top: 6rem !important;
+}
+
+/* remove the last separator line */
+.tableRemoveLastLine tr:last-child td {
+    border-bottom: none !important;
+}
+
 .mt-auto {
   margin-top: auto !important;
 }
@@ -8026,7 +8035,7 @@ textarea.form-control-lg {
 }
 
 .me-2 {
-  margin-right: 0.5rem !important;
+  margin-right: 0.75rem !important;
 }
 
 .me-3 {
@@ -8082,7 +8091,7 @@ textarea.form-control-lg {
 }
 
 .ms-2 {
-  margin-left: 0.5rem !important;
+  margin-left: 0.75rem !important;
 }
 
 .ms-3 {

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Detaljer</title>
+
+    <!-- Linking -->
+    <link rel="stylesheet" href="/css/bootstrap.css"/>
+    <script src="/js/bootstrap.js"></script>
+</head>
+<body>
+    <!-- Page Container (No Nav Bar) -->
+    <div class="page-content-container m-4">
+        <!-- Card Container -->
+        <div class="d-inline-flex" style="width: 100%">
+            <!-- Details Card -->
+            <div class="card me-2" style="width: 100%">
+                <div class="card-header d-inline-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Detaljer</h5>
+                    <a href="#" class="btn btn-primary align-co" style="width: 6rem">Rediger</a>
+                </div>
+                <div class="table-content-container">
+                    <table class="table tableRemoveLastLine mb-1">
+                        <tbody>
+                        <tr>
+                            <td><b>Status:</b></td>
+                            <td>Igangværende</td>
+                        </tr>
+                        <tr>
+                            <td><b>Dato:</b></td>
+                            <td>15. September, 8:00-8:30</td>
+                        </tr>
+                        <tr>
+                            <td><b>Cykel:</b></td>
+                            <td>Rød Cervelo</td>
+                        </tr>
+                        <tr>
+                            <td><b>Kunde:</b></td>
+                            <td>Jonas Vingegaard</td>
+                        </tr>
+                        <tr>
+                            <td><b>Telefon:</b></td>
+                            <td>+45 12 34 56 78</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Description Card -->
+            <div class="card ms-2" style="width: 100%">
+                <div class="card-header d-inline-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Description</h5>
+                    <a href="#" class="btn btn-primary align-co" style="width: 6rem">Rediger</a>
+                </div>
+                <p class="card-text mx-2 my-2">Hjulskift + Styr Installation</p>
+            </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="table-content-container mt-6">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Produkter</th>
+                    <th scope="col">Antal</th>
+                    <th scope="col">Styk Pris</th>
+                    <th scope="col">Total Pris</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Komplet Service</td>
+                    <td>1</td>
+                    <td>700,00 Kr.</td>
+                    <td>700,00 Kr.</td>
+                </tr>
+                <tr>
+                    <td>GP5000, 700x30C</td>
+                    <td>2</td>
+                    <td>419,95</td>
+                    <td>839,90</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <button type="button" class="btn btn-primary">Tilføj Produkt</button>
+
+
+    </div>
+</body>
+</html>
