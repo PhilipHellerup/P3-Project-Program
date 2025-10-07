@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
@@ -7,31 +7,11 @@
 
     <!-- Linking -->
     <link rel="stylesheet" href="/css/bootstrap.css" />
-    <link rel="stylesheet" href="/css/navbar.css" />
     <script src="/js/bootstrap.js"></script>
-    <script src="/js/quote.js"></script>
   </head>
-
   <body>
-    <!-- Sideindhold -->
-    <main class="main-content">
-      <div class="container">
-        <!-- Header -->
-        <h1 class="header">Performsport Calendar</h1>
-
-        <!-- Quote -->
-        <p
-          class="clickable text-primary"
-          style="cursor: pointer"
-          onclick="sendQuote()"
-        >
-          Click Here to See The Quote of The Day!
-        </p>
-        <div id="output"></div>
-        <ul>
-          <li th:each="u : ${users}" th:text="${u.display_name}"></li>
-        </ul>
-      </div>
-    </main>
+    <nav>
+      <script src="/js/navbar.js"></script>
+    </nav>
   </body>
 </html>
