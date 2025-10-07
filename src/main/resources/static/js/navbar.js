@@ -8,23 +8,23 @@ document.addEventListener("DOMContentLoaded", function () {
     const navbarHTML = `
       <nav class="sidebar-nav">
         <div class="nav-header">
-          <h2>Bike Shop</h2>
+          <h2>Performsport</h2>
           <button id="close-navbar" class="close-navbar-btn" aria-label="Close navbar">&times;</button>
         </div>
         <ul class="nav-menu">
           <li class="nav-item">
             <a class="nav-link" href="/calendar">
-              <span class="nav-text">Calendar</span>
+              <span class="nav-text">Kalender</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/jobs">
-              <span class="nav-text">Job List</span>
+              <span class="nav-text">Job Liste</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/products">
-              <span class="nav-text">Products</span>
+              <span class="nav-text">Produkter</span>
             </a>
           </li>
         </ul>
