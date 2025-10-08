@@ -2,6 +2,7 @@ package mainProgram; // Project Organization
 
 /* --- Libraries --- */
 // Marks this class as a Spring MVC Controller (Model - View - Controller)
+import mainProgram.database.UserRepository;
 import org.springframework.stereotype.Controller;
 
 // Maps HTTP GET requests to specific methods
@@ -28,8 +29,7 @@ public class PageController {
     }
 
     @GetMapping("/job-detaljer")
-    public String jobDetails(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+    public String jobDetails() {
         return "jobDetails"; // -> src/main/resources/templates/jobDetails.html
     }
 

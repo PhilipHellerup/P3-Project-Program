@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <title>Edit User</title>
     <link rel="stylesheet" href="/css/bootstrap.css" />
+    <script src="/js/bootstrap.js"></script>
 </head>
+<link rel="stylesheet" href="/css/navbar.css" />
 <body>
 <div class="container">
     <h1>Edit User</h1>
@@ -29,8 +31,11 @@
         <input type="hidden" th:field="*{id}" />
 
         <button type="submit" class="btn btn-primary">Save</button>
-        <a th:href="@{/users}" class="btn btn-secondary">Cancel</a>
+        <a th:href="@{/}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 </body>
+<nav>
+    <script src="/js/navbar.js"></script>
+</nav>
 </html>

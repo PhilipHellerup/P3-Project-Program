@@ -1,4 +1,4 @@
-package mainProgram; // Project Organization
+package mainProgram.database; // Project Organization
 
 import jakarta.persistence.*;
 

@@ -1,4 +1,4 @@
-package mainProgram;
+package mainProgram.database;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

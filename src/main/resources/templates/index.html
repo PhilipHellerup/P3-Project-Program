@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
+    <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kalender</title>
@@ -8,21 +8,21 @@
     <!-- Linking -->
     <link rel="stylesheet" href="/css/bootstrap.css" />
     <script src="/js/bootstrap.js"></script>
-  </head>
-  <body>
-  <!-- Body -->
-  <div class="container">
-      <ul class="list-group">
-          <li class="list-group-item" th:each="u : ${users}">
+    </head>
+    <body>
+    <!-- Body -->
+    <div class="container">
+        <ul class="list-group">
+            <li class="list-group-item" th:each="u : ${users}">
               <span th:text="${u.display_name}">Display Name</span>
               &nbsp;(<span th:text="${u.email}">email</span>)
               &nbsp;
               <a th:href="@{'/users/' + ${u.id} + '/edit'}" class="btn btn-sm btn-link">Edit</a>
-          </li>
-      </ul>
-  </div>
-  <nav>
+            </li>
+        </ul>
+    </div>
+    <nav>
       <script src="/js/navbar.js"></script>
-  </nav>
-  </body>
+    </nav>
+    </body>
 </html>

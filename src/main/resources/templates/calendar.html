@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jobs Calendar</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="/css/bootstrap.css" rel="stylesheet"/>
+
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@4.0.0-alpha.3/dist/fullcalendar.min.css" rel="stylesheet"/>
+
+    <style>
+      body { padding: 1.5rem; }
+      .fc .fc-event { cursor: pointer; }
+      .fc .fc-button { padding: 0 0.65rem; }
+
+      /* Status palette */
+      .status-notDelivered  { background-color: #f6c23e !important; border-color: #e0a800 !important; color: #000 !important; }
+      .status-delivered     { background-color: #1cc88a !important; border-color: #17a673 !important; color: #fff !important; }
+      .status-inProgress    { background-color: #4e73df !important; border-color: #2e59d9 !important; color: #fff !important; }
+      .status-missingPart   { background-color: #f6b3b0 !important; border-color: #e07a78 !important; color: #000 !important; }
+      .status-finished      { background-color: #858796 !important; border-color: #6c6c7a !important; color: #fff !important; }
+      .status-pickedUp      { background-color: #8e44ad !important; border-color: #732d91 !important; color: #fff !important; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1 class="h3 mb-0">Job Management Calendar</h1>
+            <div class="legend mt-2">
+                <span class="badge" style="background:#f6c23e;color:#000">notDelivered</span>
+                <span class="badge" style="background:#1cc88a;color:#fff">delivered</span>
+                <span class="badge" style="background:#4e73df;color:#fff">inProgress</span>
+                <span class="badge" style="background:#f6b3b0;color:#000">missingPart</span>
+                <span class="badge" style="background:#858796;color:#fff">finished</span>
+                <span class="badge" style="background:#8e44ad;color:#fff">pickedUp</span>
+            </div>
+        </div>
+
+        <div>
+            <button class="btn btn-success" id="createJobBtn">Create Job</button>
+            <a href="#" class="btn btn-primary" id="refreshBtn">Refresh</a>
+        </div>
+    </div>
+
+    <div id="calendar"></div>
+
+    <!-- View Job Modal -->
+    <div class="modal fade" id="jobModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="jobModalTitle">Job</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="jobModalBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="editJobBtn">Edit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Job Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="createJobForm" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Job</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="jobTitle" class="form-label">Title</label>
+                        <input type="text" id="jobTitle" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="customerName" class="form-label">Customer name</label>
+                        <input type="text" id="customerName" name="customer_name" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="customerPhone" class="form-label">Customer phone</label>
+                        <input type="text" id="customerPhone" name="customer_phone" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="jobDescription" class="form-label">Job description</label>
+                        <textarea id="jobDescription" name="job_description" class="form-control"></textarea>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col">
+                            <label for="workTime" class="form-label">Work time (minutes)</label>
+                            <input type="number" id="workTime" name="work_time_minutes" class="form-control" min="0" value="60">
+                        </div>
+                        <div class="col">
+                            <label for="pricePerMin" class="form-label">Price per minute</label>
+                            <input type="number" step="0.01" id="pricePerMin" name="price_per_minute" class="form-control" value="1.00">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="jobDate" class="form-label">Date / Start</label>
+                        <input type="datetime-local" id="jobDate" name="date" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="jobStatus" class="form-label">Status</label>
+                        <select id="jobStatus" name="status_id" class="form-select" required>
+                            <option value="1">notDelivered</option>
+                            <option value="2">delivered</option>
+                            <option value="3">inProgress</option>
+                            <option value="4">missingPart</option>
+                            <option value="5">finished</option>
+                            <option value="6">pickedUp</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Job Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="editJobForm" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Job</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editJobId">
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input type="text" id="editJobTitle" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Customer Name</label>
+                        <input type="text" id="editCustomerName" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Customer Phone</label>
+                        <input type="text" id="editCustomerPhone" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Job Description</label>
+                        <textarea id="editJobDescription" class="form-control"></textarea>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col">
+                            <label class="form-label">Work time (minutes)</label>
+                            <input type="number" id="editWorkTime" class="form-control">
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Price per minute</label>
+                            <input type="number" step="0.01" id="editPricePerMin" class="form-control">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Date / Start</label>
+                        <input type="datetime-local" id="editJobDate" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select id="editJobStatus" class="form-select">
+                            <option value="1">notDelivered</option>
+                            <option value="2">delivered</option>
+                            <option value="3">inProgress</option>
+                            <option value="4">missingPart</option>
+                            <option value="5">finished</option>
+                            <option value="6">pickedUp</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS (bundle includes Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // --- Status mappings ---
+        const statusNameToId = {
+            'notDelivered': 1,
+            'delivered': 2,
+            'inProgress': 3,
+            'missingPart': 4,
+            'finished': 5,
+            'pickedUp': 6
+        };
+        const statusIdToName = Object.fromEntries(Object.entries(statusNameToId).map(([k,v]) => [v,k]));
+
+        function statusToColors(statusName) {
+            switch (statusName) {
+                case 'notDelivered': return { backgroundColor:'#f6c23e', borderColor:'#e0a800', textColor:'#000', cssClass:'status-notDelivered' };
+                case 'delivered':    return { backgroundColor:'#1cc88a', borderColor:'#17a673', textColor:'#fff', cssClass:'status-delivered' };
+                case 'inProgress':   return { backgroundColor:'#4e73df', borderColor:'#2e59d9', textColor:'#fff', cssClass:'status-inProgress' };
+                case 'missingPart':  return { backgroundColor:'#f6b3b0', borderColor:'#e07a78', textColor:'#000', cssClass:'status-missingPart' };
+                case 'finished':     return { backgroundColor:'#858796', borderColor:'#6c6c7a', textColor:'#fff', cssClass:'status-finished' };
+                case 'pickedUp':     return { backgroundColor:'#8e44ad', borderColor:'#732d91', textColor:'#fff', cssClass:'status-pickedUp' };
+                default:             return { backgroundColor:'#858796', borderColor:'#6c6c7a', textColor:'#fff', cssClass:'status-finished' };
+            }
+        }
+
+        // --- Map job to FullCalendar event ---
+        function mapJobToEvent(job) {
+            const statusName = job.status?.name || statusIdToName[job.status?.id] || 'notDelivered';
+            const statusId = job.status?.id || statusNameToId[statusName] || 1;
+            const colors = statusToColors(statusName);
+
+            return {
+                id: job.id,
+                title: (job.title || 'Job') + (job.customer_name ? (' — ' + job.customer_name) : ''),
+                start: job.date,
+                end: job.date ? (new Date(job.date).getTime() + ((job.work_time_minutes || 0) * 60000)) : null,
+                backgroundColor: colors.backgroundColor,
+                borderColor: colors.borderColor,
+                textColor: colors.textColor,
+                classNames: [colors.cssClass],
+                extendedProps: {
+                    customer_name: job.customer_name,
+                    customer_phone: job.customer_phone,
+                    job_description: job.job_description,
+                    work_time_minutes: job.work_time_minutes,
+                    price_per_minute: job.price_per_minute,
+                    status: statusName,
+                    status_id: statusId
+                }
+            };
+        }
+
+        // --- Fetch jobs and load into calendar ---
+        function fetchJobsAndInit(calendar) {
+            return fetch('/api/jobs')
+                .then(r => r.json())
+                .then(jobs => {
+                    const events = jobs.map(mapJobToEvent);
+                    calendar.removeAllEvents();
+                    calendar.addEventSource(events);
+                });
+        }
+
+        // --- Calendar setup ---
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay' },
+            navLinks: true,
+            selectable: true,
+            events: [],
+            eventClick: function(info) {
+                const job = info.event;
+                let bodyHtml = `
+                <p><strong>Customer:</strong> ${job.extendedProps.customer_name || ''}</p>
+                <p><strong>Phone:</strong> ${job.extendedProps.customer_phone || ''}</p>
+                <p><strong>Description:</strong> ${job.extendedProps.job_description || ''}</p>
+                <p><strong>Work Time:</strong> ${job.extendedProps.work_time_minutes || 0} min</p>
+                <p><strong>Price/Min:</strong> ${job.extendedProps.price_per_minute || 0}</p>
+                <p><strong>Date:</strong> ${job.start.toLocaleString()}</p>
+                <p><strong>Status:</strong> ${job.extendedProps.status}</p>
+            `;
+                document.getElementById('jobModalTitle').innerText = job.title;
+                document.getElementById('jobModalBody').innerHTML = bodyHtml;
+                currentJob = job;
+                jobModal.show();
+            }
+        });
+
+        // --- Modals ---
+        const jobModal = new bootstrap.Modal(document.getElementById('jobModal'));
+        const createModal = new bootstrap.Modal(document.getElementById('createModal'));
+        const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+        let currentJob = null;
+
+        calendar.render();
+        fetchJobsAndInit(calendar);
+
+        // --- Refresh ---
+        document.getElementById('refreshBtn').addEventListener('click', e => {
+            e.preventDefault();
+            fetchJobsAndInit(calendar);
+        });
+
+        // --- Create job ---
+        document.getElementById('createJobBtn').addEventListener('click', () => {
+            document.getElementById('createJobForm').reset();
+            createModal.show();
+        });
+
+        function toIsoLocalDateTime(localValue) {
+            if (!localValue) return null;
+            return localValue.length === 16 ? localValue + ':00' : localValue;
+        }
+
+        document.getElementById('createJobForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const payload = {
+                title: document.getElementById('jobTitle').value,
+                customer_name: document.getElementById('customerName').value,
+                customer_phone: document.getElementById('customerPhone').value,
+                job_description: document.getElementById('jobDescription').value,
+                work_time_minutes: parseInt(document.getElementById('workTime').value || '0', 10),
+                price_per_minute: parseFloat(document.getElementById('pricePerMin').value || '0'),
+                date: toIsoLocalDateTime(document.getElementById('jobDate').value),
+                status: { id: parseInt(document.getElementById('jobStatus').value, 10) }
+            };
+
+            fetch('/api/jobs', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+                .then(r => r.json())
+                .then(created => {
+                    calendar.addEvent(mapJobToEvent(created));
+                    createModal.hide();
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Failed to create job (see console)');
+                });
+        });
+
+        // --- Open edit modal ---
+        document.getElementById('editJobBtn').addEventListener('click', function() {
+            if (!currentJob) return;
+            document.getElementById('editJobId').value = currentJob.id;
+            document.getElementById('editJobTitle').value = currentJob.title;
+            document.getElementById('editCustomerName').value = currentJob.extendedProps.customer_name || '';
+            document.getElementById('editCustomerPhone').value = currentJob.extendedProps.customer_phone || '';
+            document.getElementById('editJobDescription').value = currentJob.extendedProps.job_description || '';
+            document.getElementById('editWorkTime').value = currentJob.extendedProps.work_time_minutes || 0;
+            document.getElementById('editPricePerMin').value = currentJob.extendedProps.price_per_minute || 0;
+            document.getElementById('editJobDate').value = currentJob.start.toISOString().slice(0,21);
+            document.getElementById('editJobStatus').value = currentJob.extendedProps.status_id || 1;
+
+            jobModal.hide();
+            editModal.show();
+        });
+
+        // --- Submit edit form ---
+        document.getElementById('editJobForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const payload = {
+                title: document.getElementById('editJobTitle').value,
+                customer_name: document.getElementById('editCustomerName').value,
+                customer_phone: document.getElementById('editCustomerPhone').value,
+                job_description: document.getElementById('editJobDescription').value,
+                work_time_minutes: parseInt(document.getElementById('editWorkTime').value || '0', 10),
+                price_per_minute: parseFloat(document.getElementById('editPricePerMin').value || '0'),
+                date: document.getElementById('editJobDate').value + ":00",
+                status: { id: parseInt(document.getElementById('editJobStatus').value, 10) }
+            };
+
+            fetch('/api/jobs/' + document.getElementById('editJobId').value, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+                .then(r => r.json())
+                .then(updated => {
+                    const newEvent = mapJobToEvent(updated);
+
+                    currentJob.setProp(newEvent.title);
+                    currentJob.setStart(newEvent.start);
+                    currentJob.setEnd(newEvent.end);
+                    currentJob.setProp('backgroundColor', newEvent.backgroundColor);
+                    currentJob.setProp('borderColor', newEvent.borderColor);
+                    currentJob.setProp('textColor', newEvent.textColor);
+                    currentJob.setProp('classNames', newEvent.classNames);
+                    currentJob.setProp(newEvent.status);
+
+                    // Update extendedProps individually
+                    for (const key in newEvent.extendedProps) {
+                        currentJob.setExtendedProp(key, newEvent.extendedProps[key]);
+                    }
+
+                    editModal.hide();
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Failed to update job');
+                });
+        });
+
+    });
+</script>
+
+</body>
+</html>

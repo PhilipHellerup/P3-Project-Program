@@ -1,5 +1,7 @@
 package mainProgram;
 
+import mainProgram.database.User;
+import mainProgram.database.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +53,6 @@ public class UserController {
 
         // Optionally show a flash message
         redirectAttributes.addFlashAttribute("message", "User updated successfully.");
-        return "redirect:/users";
+        return "redirect:/";
     }
 }
