@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Job Detaljer</title>
+    <title th:text="${job.title}"></title>
 
     <!-- Linking -->
     <link rel="stylesheet" href="/css/bootstrap.css"/>
@@ -28,23 +28,23 @@
                         <tbody>
                         <tr>
                             <td><b>Status:</b></td>
-                            <td>Igangværende</td>
+                            <td th:text="${job.status}"></td>
                         </tr>
                         <tr>
-                            <td><b>Dato:</b></td>
-                            <td>15. September, 8:00-8:30</td>
+                            <td><b>Oprettet:</b></td>
+                            <td th:text="${#temporals.format(job.date, 'd. MMMM yyyy HH:mm')}"></td>
                         </tr>
                         <tr>
                             <td><b>Cykel:</b></td>
-                            <td>Rød Cervelo</td>
+                            <td th:text="${job.title}"></td>
                         </tr>
                         <tr>
                             <td><b>Kunde:</b></td>
-                            <td>Jonas Vingegaard</td>
+                            <td th:text="${job.customer_name}"></td>
                         </tr>
                         <tr>
                             <td><b>Telefon:</b></td>
-                            <td>+45 12 34 56 78</td>
+                            <td th:text="${job.customer_phone}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -57,9 +57,7 @@
                     <h5 class="mb-0">Description</h5>
                     <a href="#" class="btn btn-primary align-co" style="width: 6rem">Rediger</a>
                 </div>
-                <p class="card-text mx-2 my-2">
-                    Hjulskift + Styr Installation <br>
-                    Noget klikker ved forhulet of styret skal skiftes
+                <p class="card-text mx-2 my-2" th:text="${job.job_description}">
                 </p>
             </div>
         </div>
@@ -76,17 +74,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>Komplet Service</td>
-                    <td>1</td>
-                    <td>700,00 Kr.</td>
-                    <td>700,00 Kr.</td>
-                </tr>
-                <tr>
-                    <td>GP5000, 700x30C</td>
-                    <td>2</td>
-                    <td>419,95</td>
-                    <td>839,90</td>
+                <tr th:each="jp : ${jobParts}">
+                    <td th:text="${jp.part.title}"></td>
+                    <td th:text="${jp.quantity}"></td>
+                    <td th:text="${jp.part.price} + ',-'"></td>
+                    <td th:text="${jp.quantity * jp.part.price}+ ',-'"></td>
                 </tr>
                 </tbody>
             </table>

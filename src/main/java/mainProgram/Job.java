@@ -37,6 +37,9 @@ public class Job {
     private LocalDateTime date;
     private status status;
 
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<JobPart> jobParts = new ArrayList<>();
+
     // TODO: Create some data validation and cleaning
     // Constructor
     public Job(Integer id, String name, String customerName, String customerPhone, String bikeDescription, int workTimeMinutes,
