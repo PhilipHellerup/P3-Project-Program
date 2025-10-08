@@ -55,23 +55,6 @@
 
     <div id="calendar"></div>
 
-    <!-- View Job Modal -->
-    <div class="modal fade" id="jobModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="jobModalTitle">Job</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="jobModalBody"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="editJobBtn">Edit</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Create Job Modal -->
     <div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -82,7 +65,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="jobTitle" class="form-label">Title</label>
+                        <label for="jobTitle" class="form-label">Cykel</label>
                         <input type="text" id="jobTitle" name="title" class="form-control" required>
                     </div>
                     <div class="mb-3">
@@ -125,66 +108,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Create</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Edit Job Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="editJobForm" class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Job</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="editJobId">
-                    <div class="mb-3">
-                        <label class="form-label">Title</label>
-                        <input type="text" id="editJobTitle" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Customer Name</label>
-                        <input type="text" id="editCustomerName" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Customer Phone</label>
-                        <input type="text" id="editCustomerPhone" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Job Description</label>
-                        <textarea id="editJobDescription" class="form-control"></textarea>
-                    </div>
-                    <div class="mb-3 row">
-                        <div class="col">
-                            <label class="form-label">Work time (minutes)</label>
-                            <input type="number" id="editWorkTime" class="form-control">
-                        </div>
-                        <div class="col">
-                            <label class="form-label">Price per minute</label>
-                            <input type="number" step="0.01" id="editPricePerMin" class="form-control">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Date / Start</label>
-                        <input type="datetime-local" id="editJobDate" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select id="editJobStatus" class="form-select">
-                            <option value="1">Not Delivered</option>
-                            <option value="2">Delivered</option>
-                            <option value="3">In Progress</option>
-                            <option value="4">Missing Part</option>
-                            <option value="5">Finished</option>
-                            <option value="6">PickedUp</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form>
@@ -320,36 +243,7 @@
             events: [],
 
             eventClick: function(info) {
-                const job = info.event;
-                const ep = job.extendedProps || {};
-
-                let rawTitle = ep.original_title;
-                if (!rawTitle) {
-                    // Fallback: try to strip the appended " — Customer" from the displayed title
-                    const displayed = job.title || '';
-                    const cust = ep.customer_name || '';
-                    if (cust && displayed.endsWith(' — ' + cust)) {
-                        rawTitle = displayed.slice(0, displayed.length - (' — ' + cust).length);
-                    } else if (displayed.includes(' — ')) {
-                        rawTitle = displayed.split(' — ')[0];
-                    } else {
-                        rawTitle = displayed || 'Job';
-                    }
-                }
-
-                let bodyHtml = `
-                    <p><strong>Customer:</strong> ${escapeHtml(ep.customer_name || '')}</p>
-                    <p><strong>Phone:</strong> ${escapeHtml(ep.customer_phone || '')}</p>
-                    <p><strong>Description:</strong> ${escapeHtml(ep.job_description || '')}</p>
-                    <p><strong>Work Time:</strong> ${escapeHtml(String(ep.work_time_minutes || 0))} min</p>
-                    <p><strong>Price/Min:</strong> ${escapeHtml(String(ep.price_per_minute || 0))}</p>
-                    <p><strong>Date:</strong> ${job.start ? escapeHtml(job.start.toLocaleString()) : ''}</p>
-                    <p><strong>Status:</strong> ${escapeHtml(formatStatusName(ep.status))}</p>
-                `;
-                document.getElementById('jobModalTitle').innerText = rawTitle;
-                document.getElementById('jobModalBody').innerHTML = bodyHtml;
-                currentJob = job;
-                jobModal.show();
+                document.location.href = '/jobliste/' + info.event.id;
             },
 
             // Fired when event is dropped (moved)
@@ -456,9 +350,7 @@
         });
 
         // --- Modals ---
-        const jobModal = new bootstrap.Modal(document.getElementById('jobModal'));
         const createModal = new bootstrap.Modal(document.getElementById('createModal'));
-        const editModal = new bootstrap.Modal(document.getElementById('editModal'));
         let currentJob = null;
 
         calendar.render();
@@ -522,95 +414,6 @@
                     alert('Failed to create job (see console)');
                 });
         });
-
-        // --- Open edit modal ---
-        document.getElementById('editJobBtn').addEventListener('click', function() {
-            if (!currentJob) return;
-            document.getElementById('editJobId').value = currentJob.id;
-
-            // Prefer the original raw title stored in extendedProps (set by mapJobToEvent).
-            // If missing, try to remove the appended " — Customer Name" from the displayed title.
-            const ep = currentJob.extendedProps || {};
-            let originalTitle = ep.original_title;
-            if (!originalTitle) {
-                const displayed = currentJob.title || '';
-                const cust = ep.customer_name || '';
-                if (cust && displayed.endsWith(' — ' + cust)) {
-                    originalTitle = displayed.slice(0, displayed.length - (' — ' + cust).length);
-                } else if (displayed.includes(' — ')) {
-                    originalTitle = displayed.split(' — ')[0];
-                } else {
-                    originalTitle = displayed;
-                }
-            }
-
-            document.getElementById('editJobTitle').value = originalTitle || '';
-            document.getElementById('editCustomerName').value = ep.customer_name || '';
-            document.getElementById('editCustomerPhone').value = ep.customer_phone || '';
-            document.getElementById('editJobDescription').value = ep.job_description || '';
-            document.getElementById('editWorkTime').value = ep.work_time_minutes || 0;
-            document.getElementById('editPricePerMin').value = ep.price_per_minute || 0;
-            // Use local time for datetime-local input (avoid UTC shift)
-            document.getElementById('editJobDate').value = formatDateTimeLocal(currentJob.start);
-            document.getElementById('editJobStatus').value = ep.status_id || 1;
-
-            jobModal.hide();
-            editModal.show();
-        });
-
-        // --- Submit edit form ---
-        document.getElementById('editJobForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const payload = {
-                title: document.getElementById('editJobTitle').value,
-                customer_name: document.getElementById('editCustomerName').value,
-                customer_phone: document.getElementById('editCustomerPhone').value,
-                job_description: document.getElementById('editJobDescription').value,
-                work_time_minutes: parseInt(document.getElementById('editWorkTime').value || '0', 10),
-                price_per_minute: parseFloat(document.getElementById('editPricePerMin').value || '0'),
-                date: document.getElementById('editJobDate').value + ":00",
-                status: { id: parseInt(document.getElementById('editJobStatus').value, 10) }
-            };
-
-            fetch('/api/jobs/' + document.getElementById('editJobId').value, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-                .then(r => r.json())
-                .then(updated => {
-                    const newEvent = mapJobToEvent(updated);
-
-                    // Update the currentJob FullCalendar Event API instance properly:
-                    // setProp expects (name, value) for properties like 'title', 'backgroundColor', etc.
-                    currentJob.setProp('title', newEvent.title);
-                    // setStart and setEnd accept Date or ISO string
-                    currentJob.setStart(newEvent.start);
-                    currentJob.setEnd(newEvent.end);
-
-                    currentJob.setProp('backgroundColor', newEvent.backgroundColor);
-                    currentJob.setProp('borderColor', newEvent.borderColor);
-                    currentJob.setProp('textColor', newEvent.textColor);
-
-                    // classNames can be set with setProp('classNames', array)
-                    currentJob.setProp('classNames', newEvent.classNames || []);
-
-                    // Update extendedProps individually (so popover/modal still use correct fields)
-                    for (const key in newEvent.extendedProps) {
-                        currentJob.setExtendedProp(key, newEvent.extendedProps[key]);
-                    }
-
-                    editModal.hide();
-                    // Refresh remote list to ensure server state and calendar are fully synced
-                    fetchJobsAndInit(calendar);
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert('Failed to update job');
-                });
-        });
-
     });
 </script>
 </body>

@@ -8,7 +8,6 @@
     <!-- Linking -->
     <link rel="stylesheet" href="/css/bootstrap.css" />
     <script src="/js/bootstrap.js"></script>
-    <link rel="stylesheet" href="/css/navbar.css" />
     <script src="/js/html.js"></script>
 </head>
 <script>
@@ -31,9 +30,86 @@
     });
 </script>
 <body>
-<nav>
-    <script src="/js/navbar.js"></script>
-</nav>
+    <nav>
+        <script src="/js/navbar.js"></script>
+    </nav>
+    <!-- Edit Job Modal -->
+    <div class="modal fade" id="editJobModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" id="editJobForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rediger Reparation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="jobId" th:value="${job.id}">
+                    <div class="mb-3">
+                        <label class="form-label">Cykel</label>
+                        <input type="text" id="title" class="form-control" th:value="${job.title}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Kunde</label>
+                        <input type="text" id="customer_name" class="form-control" th:value="${job.customer_name}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Telefon</label>
+                        <input type="text" id="customer_phone" class="form-control" th:value="${job.customer_phone}">
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col">
+                            <label class="form-label">Arbejdstid (min)</label>
+                            <input type="number" id="work_time_minutes" class="form-control" th:value="${job.work_time_minutes}">
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Pris pr. min</label>
+                            <input type="number" step="0.01" id="price_per_minute" class="form-control" th:value="${job.price_per_minute}">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dato / Start</label>
+                        <input type="datetime-local" id="date" class="form-control" th:value="${#temporals.format(job.date, 'yyyy-MM-dd''T''HH:mm')}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select id="status_id" class="form-select" th:value="${job.status.id}">
+                            <option value="1" th:selected="${job.status.id == 1}">Not Delivered</option>
+                            <option value="2" th:selected="${job.status.id == 2}">Delivered</option>
+                            <option value="3" th:selected="${job.status.id == 3}">In Progress</option>
+                            <option value="4" th:selected="${job.status.id == 4}">Missing Part</option>
+                            <option value="5" th:selected="${job.status.id == 5}">Finished</option>
+                            <option value="6" th:selected="${job.status.id == 6}">Picked Up</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Gem</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Luk</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Edit Description Modal -->
+    <div class="modal fade" id="descModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" id="editDescForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rediger Beskrivelse</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="jobIdDesc" th:value="${job.id}">
+                    <div class="mb-3">
+                        <label class="form-label">Beskrivelse</label>
+                        <textarea id="job_description_desc" class="form-control" rows="6" th:text="${job.job_description}"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Gem</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Luk</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <!-- Page Container (No Nav Bar) -->
     <div class="page-content-container m-4">
         <!-- Card Container -->
@@ -42,7 +118,7 @@
             <div class="card me-2" style="width: 100%">
                 <div class="card-header d-inline-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Detaljer</h5>
-                    <a href="#" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
+                    <a id="openEditBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
@@ -83,14 +159,14 @@
             <div class="card ms-2" style="width: 100%">
                 <div class="card-header d-inline-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Description</h5>
-                    <a href="#" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
+                    <a id="openDescBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                         </svg>
                     </a>
                 </div>
-                <p class="card-text mx-2 my-2" th:text="${job.job_description}">
+                <p class="card-text mx-2 my-2" id="jobDescriptionText" th:text="${job.job_description}">
                 </p>
             </div>
         </div>
@@ -145,5 +221,90 @@
             </table>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const editModal = new bootstrap.Modal(document.getElementById('editJobModal'));
+            document.getElementById('openEditBtn')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                editModal.show();
+            });
+
+            function toIsoLocal(val) {
+                if (!val) return null;
+                return val.length === 16 ? val + ':00' : val;
+            }
+
+            document.getElementById('editJobForm')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = document.getElementById('jobId').value;
+                const payload = {
+                    title: document.getElementById('title').value,
+                    customer_name: document.getElementById('customer_name').value,
+                    customer_phone: document.getElementById('customer_phone').value,
+                    work_time_minutes: parseInt(document.getElementById('work_time_minutes').value || '0', 10),
+                    price_per_minute: parseFloat(document.getElementById('price_per_minute').value || '0'),
+                    date: toIsoLocal(document.getElementById('date').value),
+                    status: { id: parseInt(document.getElementById('status_id').value, 10) }
+                };
+
+                fetch('/api/jobs/' + id, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                    .then(r => {
+                        if (!r.ok) throw new Error('Update failed');
+                        return r.json();
+                    })
+                    .then(() => {
+                        editModal.hide();
+                        window.location.reload();
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Kunne ikke opdatere jobbet.');
+                    });
+            });
+
+            // Description-only modal handling
+            const descModal = new bootstrap.Modal(document.getElementById('descModal'));
+            document.getElementById('openDescBtn')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                // keep textarea in sync with current text
+                const current = document.getElementById('jobDescriptionText')?.textContent ?? '';
+                const ta = document.getElementById('job_description_desc');
+                if (ta && !ta.value) ta.value = current.trim();
+                descModal.show();
+            });
+
+            document.getElementById('editDescForm')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = document.getElementById('jobIdDesc').value;
+                const payload = {
+                    job_description: document.getElementById('job_description_desc').value
+                };
+
+                fetch('/api/jobs/' + id + '/description', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                    .then(r => {
+                        if (!r.ok) throw new Error('Update description failed');
+                        return r.json?.() ?? {};
+                    })
+                    .then(() => {
+                        descModal.hide();
+                        // Update UI without full reload if possible
+                        const p = document.getElementById('jobDescriptionText');
+                        if (p) p.textContent = payload.job_description;
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Kunne ikke opdatere beskrivelsen.');
+                    });
+            });
+        });
+    </script>
 </body>
 </html>

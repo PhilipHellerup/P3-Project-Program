@@ -1,61 +1,79 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Add Font Awesome script
+    // Load Font Awesome (keep as you had it; watch CSP)
     const faScript = document.createElement("script");
     faScript.src = "https://kit.fontawesome.com/ffe0f0379f.js";
     faScript.crossOrigin = "anonymous";
     document.head.appendChild(faScript);
 
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "css/navbar.css";
-    document.head.appendChild(link);
+    // Utility: ensure the CSS link exists and load it, return a Promise
+    function ensureNavbarCss() {
+        return new Promise((resolve, reject) => {
+            // Use root-relative path to avoid page-relative resolutions
+            const href = "/css/navbar.css";
+
+            // If already present, resolve when it's loaded (or immediately)
+            const existing = Array.from(document.head.querySelectorAll('link[rel="stylesheet"]'))
+                .find(l => l.getAttribute('href') === href);
+            if (existing) {
+                // If it's already loaded (sheet available), resolve immediately
+                if (existing.sheet) {
+                    return resolve();
+                }
+                // otherwise wait for load/error
+                existing.addEventListener('load', () => resolve());
+                existing.addEventListener('error', (e) => reject(e));
+                // and give a fallback timeout
+                setTimeout(() => resolve(), 1500);
+                return;
+            }
+
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            link.addEventListener('load', () => resolve());
+            link.addEventListener('error', (e) => reject(e));
+            document.head.appendChild(link);
+
+            // safety fallback: if load doesn't fire in reasonable time, resolve so UI still appears
+            setTimeout(() => {
+                if (!link.sheet) {
+                    console.warn('navbar.css did not load within timeout — continuing anyway');
+                }
+                resolve();
+            }, 2500);
+        });
+    }
 
     function insertNavbar() {
+        // Prevent duplicates
+        if (document.querySelector('.sidebar-nav')) return;
+
         const navbarHTML = `
-            <nav class="sidebar-nav">
+            <nav class="sidebar-nav" aria-hidden="false">
                 <div class="nav-header">
                     <h2>Performsport</h2>
                     <button id="close-navbar" class="close-navbar-btn fa-solid fa-angles-left" aria-label="Close navbar"></button>
                 </div>
                 <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">
-                            <span class="nav-text">Home</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/calendar">
-                            <span class="nav-text">Kalender</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/jobliste">
-                            <span class="nav-text">Job Liste</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/products">
-                            <span class="nav-text">Produkter</span>
-                        </a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/"><span class="nav-text">Hjem</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/calendar"><span class="nav-text">Kalender</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/jobliste"><span class="nav-text">Job Liste</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/products"><span class="nav-text">Produkter</span></a></li>
                 </ul>
             </nav>
         `;
 
         document.body.insertAdjacentHTML("afterbegin", navbarHTML);
         const navbar = document.querySelector(".sidebar-nav");
-        document.body.classList.add("with-navbar");
+        document.body.classList.add("with-navbar", "content-push");
 
-        // Push content to the side
         navbar.style.transform = "translateX(0)";
-        document.body.classList.add("content-push");
 
         const closeBtn = document.getElementById("close-navbar");
         if (closeBtn) {
             closeBtn.addEventListener("click", function () {
                 const navbar = document.querySelector(".sidebar-nav");
                 if (navbar) {
-                    // Slide navbar out
                     navbar.style.transform = "translateX(-100%)";
                     document.body.classList.remove("content-push");
 
@@ -63,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         navbar.remove();
                         document.body.classList.remove("with-navbar");
                         showOpenButton();
-                    }, 300); // Allow time for transition
+                    }, 300);
                 }
             });
         }
@@ -79,10 +97,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
             openBtn.addEventListener("click", function () {
                 openBtn.remove();
-                insertNavbar();
+                // ensure CSS is present before re-inserting
+                ensureNavbarCss().then(insertNavbar).catch(() => insertNavbar());
             });
         }
     }
 
-    insertNavbar();
+    // Ensure CSS is loaded before inserting the navbar (prevents flash / 404 issues due to relative path)
+    ensureNavbarCss()
+        .then(() => insertNavbar())
+        .catch((err) => {
+            console.error('Failed to load navbar CSS:', err);
+            // Still insert navbar so functionality isn't blocked — user will see unstyled until stylesheet loads
+            insertNavbar();
+        });
 });
