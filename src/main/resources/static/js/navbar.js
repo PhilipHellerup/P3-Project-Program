@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function insertNavbar() {
         const navbarHTML = `
-      <nav class="sidebar-nav">
+      <nav class="sidebar-nav w-15">
         <div class="nav-header">
           <h2>Performsport</h2>
           <button id="close-navbar" class="close-navbar-btn fa-solid fa-angles-left" aria-label="Close navbar "></button>
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/jobs">
+            <a class="nav-link" href="/jobliste">
               <span class="nav-text">Job Liste</span>
             </a>
           </li>
