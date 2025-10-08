@@ -7,12 +7,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "css/navbar.css?version=51";
+    link.href = "css/navbar.css";
     document.head.appendChild(link);
 
     function insertNavbar() {
         const navbarHTML = `
-            <nav class="sidebar-nav">
+            <nav class="sidebar-nav w-15">
                 <div class="nav-header">
                     <h2>Performsport</h2>
                     <button id="close-navbar" class="close-navbar-btn fa-solid fa-angles-left" aria-label="Close navbar"></button>

@@ -12,18 +12,36 @@
     </head>
 
     <body class="d-flex justify-content-center">
-    <div class="d-flex flex-column mt-lg-5">
+    <!-- Navbar -->
+    <div class="w-15">
+        <nav>
+            <script src="/js/navbar.js"></script>
+        </nav>
+    </div>
+
+    <!-- The main part of the page -->
+    <div class="w-85 d-flex flex-column m-5 p-4 border border-secondary-subtle rounded-4 shadow-sm">
+        <!-- Tob part of the page -->
         <div class="d-inline-flex">
             <div class="d-inline-flex gap-4">
-                <p class="fw-bolder">Uge 31</p>
-                <button class="btn btn-primary">
-                    Tilføj ny reperation
-                </button>
+                <p class="fs-3 fw-bolder p-0 m-0">Reperationer</p>
             </div>
         </div>
 
+        <!-- search -->
+        <div class="d-flex flex-column justify-content-center" style="height: 20rem">
+            <div class="d-inline-flex w-100 gap-5">
+                <button class="btn btn-primary">
+                    Tilføj ny reperation
+                </button>
+                <div class="w-30 border border-secondary p-2" style="cursor: pointer">Search bar</div>
+                <div class="border border-secondary p-2" style="cursor: pointer">
+                    filter
+                </div>
+            </div>
+        </div>
     <!-- Table to show the actual jobs -->
-        <table class="table align-middle mt-lg-3">
+        <table class="table table-hover align-middle mt-lg-3">
             <thead>
             <tr>
                 <th scope="col">Ordreinformationer</th>
@@ -33,7 +51,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="" th:each="j : ${jobs}">
+            <tr th:each="j : ${jobs}"
+                th:attr="data-href=@{/jobliste/{id}(id=${j.id})}"
+                style="cursor: pointer">
                 <td class="w-15">
                     <div class="d-flex flex-column gap-1">
                         <p class="fw-bolder mb-1" th:text="${j.title}"></p>
@@ -42,14 +62,17 @@
                     </div>
                 </td>
                 <td class="w-15">
+                    <div>
                     <p th:text="${j.status}"></p>
+                    </div>
                 </td>
                 <td class="w-30">
                     <div class="w-75">
                         <p th:text="${j.job_description}"></p>
                     </div>
                 </td>
-                <td class="w-30" th:text="${j.date}"></td>
+                <td class="w-30" th:text="${#temporals.format(j.date, 'd. MMMM yyyy HH:mm')}"></td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -58,3 +81,15 @@
     </nav>
     </body>
 </html>
+
+<!--Table navigation using Thymeleaf. when licking on a row in a table, use "window.location" to navigate to the jobDetails page with information from the job. -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const rows = document.querySelectorAll("tr[data-href]");
+        rows.forEach(row => {
+            row.addEventListener("click", () => {
+                window.location.href = row.getAttribute("data-href");
+            });
+        });
+    });
+</script>
