@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Job Liste</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Liste</title>
 
-        <!-- Linking -->
-        <link rel="stylesheet" href="/css/bootstrap.css" />
-        <script src="/js/bootstrap.js"></script>
-        <script src="/js/quote.js"></script>
-    </head>
+    <!-- Linking -->
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/quote.js"></script>
+    <script src="/js/html.js"></script>
+</head>
 
-    <body class="d-flex justify-content-center">
+<body class="d-flex justify-content-center">
     <!-- Navbar -->
-    <div class="w-15">
-        <nav>
-            <script src="/js/navbar.js"></script>
-        </nav>
-    </div>
-
+    <nav>
+        <script src="/js/navbar.js"></script>
+    </nav>
     <!-- The main part of the page -->
     <div class="w-85 d-flex flex-column m-5 p-4 border border-secondary-subtle rounded-4 shadow-sm">
-        <!-- Tob part of the page -->
+        <!-- Top part of the page -->
         <div class="d-inline-flex">
             <div class="d-inline-flex gap-4">
                 <p class="fs-3 fw-bolder p-0 m-0">Reperationer</p>
@@ -63,7 +61,7 @@
                 </td>
                 <td class="w-15">
                     <div>
-                    <p th:text="${j.status}"></p>
+                        <span class="job-status" th:text="${j.status.name}"></span>
                     </div>
                 </td>
                 <td class="w-30">
@@ -76,10 +74,7 @@
             </tbody>
         </table>
     </div>
-    <nav>
-        <script src="/js/navbar.js"></script>
-    </nav>
-    </body>
+</body>
 </html>
 
 <!--Table navigation using Thymeleaf. when licking on a row in a table, use "window.location" to navigate to the jobDetails page with information from the job. -->
@@ -90,6 +85,27 @@
             row.addEventListener("click", () => {
                 window.location.href = row.getAttribute("data-href");
             });
+        });
+        document.querySelectorAll('.job-status').forEach(el => {
+            const raw = el.textContent.trim();
+            const colors = typeof statusToColors === 'function' ? statusToColors(raw) : {};
+            const label = typeof formatStatusName === 'function' ? formatStatusName(raw) : raw;
+
+            if (typeof formatStatusName === 'function') {
+                el.textContent = formatStatusName(el.textContent);
+            }
+
+            el.textContent = label;
+            Object.assign(el.style, {
+                display: 'inline-block',
+                padding: '2px 8px',
+                borderRadius: '6px',
+                border: `1px solid ${colors.borderColor || '#ccc'}`,
+                backgroundColor: colors.backgroundColor || '#eee',
+                color: colors.textColor || '#000',
+                fontWeight: '600'
+            });
+            if (colors.cssClass) el.classList.add(colors.cssClass);
         });
     });
 </script>

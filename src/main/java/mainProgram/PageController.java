@@ -40,14 +40,14 @@ public class PageController {
 
    @GetMapping("/jobliste")
    public String jobliste(Model model) {
-        model.addAttribute("jobs", jobRepository.findAll());
+        model.addAttribute("jobs", jobRepository.findAllByOrderByDateAsc());
         return "jobliste";
    }
 
     @GetMapping("/jobliste/{id}")
-    public String jobDetails(@PathVariable Long id, Model model) {
+    public String jobDetails(@PathVariable int id, Model model) {
         Job job = jobService.getJobById(id);
-        List<JobPart> jobParts = jobService.getPartsForJob(id);
+        List<JobPart> jobParts = jobService.getPartsForJob((long) id);
 
         model.addAttribute("job", job);
         model.addAttribute("jobParts", jobParts);

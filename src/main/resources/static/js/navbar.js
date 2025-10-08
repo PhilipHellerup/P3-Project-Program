@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function insertNavbar() {
         const navbarHTML = `
-            <nav class="sidebar-nav w-15">
+            <nav class="sidebar-nav">
                 <div class="nav-header">
                     <h2>Performsport</h2>
                     <button id="close-navbar" class="close-navbar-btn fa-solid fa-angles-left" aria-label="Close navbar"></button>

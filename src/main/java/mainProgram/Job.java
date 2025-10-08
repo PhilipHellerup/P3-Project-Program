@@ -9,14 +9,14 @@ import java.util.List;
 
 // Job Status (Enum)
 
-enum status{
+/* enum status{
     notDelivered,
     delivered,
     inProgress,
     missingPart,
     finished,
     pickedUp
-}
+} */
 
 // Job Class
 @Entity
@@ -34,6 +34,8 @@ public class Job {
     private Integer work_time_minutes;
     private Double price_per_minute;
     private LocalDateTime date;
+
+    /*
     private status status;
 
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -82,7 +84,7 @@ public class Job {
 //    }
 
     // Print out information about a job for debugging
-    public void printToConsol(){
+    public void printToConsole(){
         System.out.println("Job ID: " + id);
         System.out.println("Job name: " + title);
         System.out.println("Customer name: " + customer_name);
@@ -105,59 +107,7 @@ public class Job {
         System.out.println("Date: " + date);
         System.out.println("Status: " + status);
     }
-
-
-    // Getters
-    public Integer getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getCustomer_name() {
-        return customer_name;
-    }
-
-    public String getCustomer_phone() {
-        return customer_phone;
-    }
-
-    public String getJob_description() {
-        return job_description;
-    }
-
-//    public Service[] getServices() {
-//        return services;
-//    }
-//
-//    public Part[] getParts() {
-//        return parts;
-//    }
-
-    public int getWorkTimeMinutes() {
-        return work_time_minutes;
-    }
-
-//    public double getCost() {
-//        return calculateCost();
-//    }
-//
-//    public int getDuration() {
-//        return calculateDuration();
-//    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public status getStatus() {
-        return status;
-    }
-
-    // Setters
-
+*/
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
     private JobStatus status;

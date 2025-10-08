@@ -14,7 +14,7 @@ public class JobService {
         this.jobPartRepository = jobPartRepository;
     }
 
-    public Job getJobById(Long id) {
+    public Job getJobById(int id) {
         return jobRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
     }
