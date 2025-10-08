@@ -29,8 +29,14 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   padding: 22px 20px;
   border-bottom: 1px solid #374151;
+}
+
+.logo {
+  width: 90%;
+  max-width: 180px;
 }
 
 .nav-header h2 {
@@ -98,23 +104,24 @@
 
 /* Navbar button style */
 .close-navbar-btn, .open-navbar-btn {
-  width: 40px;           /* Width of the button */
-  height: 40px;          /* Height of the button */
-  background-color: #303e51; /* Button color */
-  border: none;          /* Remove default border */
-  color: white;          /* Text color */
-  font-size: 16px;       /* Text size */
-  cursor: pointer;       /* Pointer on hover */
+  width: 40px;
+  height: 40px;
+  background-color: #303e51;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s;
   position: relative;
+  flex-shrink: 0;
 }
 
 /* Navbar close button style */
 .close-navbar-btn {
-  left: 35%;
+  left: 10%;
   border-radius: 50%;    /* Makes it circular */
   transition: left 0.1s;
 }
