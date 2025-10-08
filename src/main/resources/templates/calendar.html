@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,6 +15,14 @@
       body { padding: 1.5rem; }
       .fc .fc-event { cursor: pointer; }
       .fc .fc-button { padding: 0 0.65rem; }
+      .fc .fc-col-header-cell-cushion { color: #000; text-decoration: none; }
+      .fc .fc-daygrid-day-number {color: #000; }
+      .fc .fc-event-title {
+        white-space: wrap;       /* keep on one line */
+        overflow: hidden;          /* clip overflow */
+        text-overflow: ellipsis;   /* show "..." when clipped */
+        display: block;
+      }
 
       /* Status palette */
       .status-notDelivered  { background-color: #f6c23e !important; border-color: #e0a800 !important; color: #000 !important; }
@@ -31,12 +39,12 @@
         <div>
             <h1 class="h3 mb-0">Job Management Calendar</h1>
             <div class="legend mt-2">
-                <span class="badge" style="background:#f6c23e;color:#000">notDelivered</span>
-                <span class="badge" style="background:#1cc88a;color:#fff">delivered</span>
-                <span class="badge" style="background:#4e73df;color:#fff">inProgress</span>
-                <span class="badge" style="background:#f6b3b0;color:#000">missingPart</span>
-                <span class="badge" style="background:#858796;color:#fff">finished</span>
-                <span class="badge" style="background:#8e44ad;color:#fff">pickedUp</span>
+                <span class="badge" style="background:#f6c23e;color:#000">Not Delivered</span>
+                <span class="badge" style="background:#1cc88a;color:#000">Delivered</span>
+                <span class="badge" style="background:#4e73df;color:#000">In Progress</span>
+                <span class="badge" style="background:#f6b3b0;color:#000">Missing Part</span>
+                <span class="badge" style="background:#858796;color:#000">Finished</span>
+                <span class="badge" style="background:#8e44ad;color:#000">Picked Up</span>
             </div>
         </div>
 
@@ -107,12 +115,12 @@
                     <div class="mb-3">
                         <label for="jobStatus" class="form-label">Status</label>
                         <select id="jobStatus" name="status_id" class="form-select" required>
-                            <option value="1">notDelivered</option>
-                            <option value="2">delivered</option>
-                            <option value="3">inProgress</option>
-                            <option value="4">missingPart</option>
-                            <option value="5">finished</option>
-                            <option value="6">pickedUp</option>
+                            <option value="1">Not Delivered</option>
+                            <option value="2">Delivered</option>
+                            <option value="3">In Progress</option>
+                            <option value="4">Missing Part</option>
+                            <option value="5">Finished</option>
+                            <option value="6">Picked Up</option>
                         </select>
                     </div>
                 </div>
@@ -167,12 +175,12 @@
                     <div class="mb-3">
                         <label class="form-label">Status</label>
                         <select id="editJobStatus" class="form-select">
-                            <option value="1">notDelivered</option>
-                            <option value="2">delivered</option>
-                            <option value="3">inProgress</option>
-                            <option value="4">missingPart</option>
-                            <option value="5">finished</option>
-                            <option value="6">pickedUp</option>
+                            <option value="1">Not Delivered</option>
+                            <option value="2">Delivered</option>
+                            <option value="3">In Progress</option>
+                            <option value="4">Missing Part</option>
+                            <option value="5">Finished</option>
+                            <option value="6">PickedUp</option>
                         </select>
                     </div>
                 </div>
@@ -184,6 +192,9 @@
         </div>
     </div>
 </div>
+<nav>
+    <script src="/js/navbar.js"></script>
+</nav>
 
 <!-- Bootstrap JS (bundle includes Popper) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -208,13 +219,33 @@
         function statusToColors(statusName) {
             switch (statusName) {
                 case 'notDelivered': return { backgroundColor:'#f6c23e', borderColor:'#e0a800', textColor:'#000', cssClass:'status-notDelivered' };
-                case 'delivered':    return { backgroundColor:'#1cc88a', borderColor:'#17a673', textColor:'#fff', cssClass:'status-delivered' };
-                case 'inProgress':   return { backgroundColor:'#4e73df', borderColor:'#2e59d9', textColor:'#fff', cssClass:'status-inProgress' };
+                case 'delivered':    return { backgroundColor:'#1cc88a', borderColor:'#17a673', textColor:'#000', cssClass:'status-delivered' };
+                case 'inProgress':   return { backgroundColor:'#4e73df', borderColor:'#2e59d9', textColor:'#000', cssClass:'status-inProgress' };
                 case 'missingPart':  return { backgroundColor:'#f6b3b0', borderColor:'#e07a78', textColor:'#000', cssClass:'status-missingPart' };
-                case 'finished':     return { backgroundColor:'#858796', borderColor:'#6c6c7a', textColor:'#fff', cssClass:'status-finished' };
-                case 'pickedUp':     return { backgroundColor:'#8e44ad', borderColor:'#732d91', textColor:'#fff', cssClass:'status-pickedUp' };
-                default:             return { backgroundColor:'#858796', borderColor:'#6c6c7a', textColor:'#fff', cssClass:'status-finished' };
+                case 'finished':     return { backgroundColor:'#858796', borderColor:'#6c6c7a', textColor:'#000', cssClass:'status-finished' };
+                case 'pickedUp':     return { backgroundColor:'#8e44ad', borderColor:'#732d91', textColor:'#000', cssClass:'status-pickedUp' };
+                default:             return { backgroundColor:'#858796', borderColor:'#6c6c7a', textColor:'#000', cssClass:'status-finished' };
             }
+        }
+
+        // simple HTML escaper for injecting text into innerHTML
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        // Convert camelCase or PascalCase strings to "Normal Case"
+        function formatStatusName(status) {
+            if (!status) return '';
+            // Split camelCase or PascalCase into words and capitalize each
+            return status
+                .replace(/([a-z0-9])([A-Z])/g, '$1 $2') // split camelCase
+                .replace(/^./, s => s.toUpperCase());  // capitalize first letter
         }
 
         // --- Map job to FullCalendar event ---
@@ -223,9 +254,18 @@
             const statusId = job.status?.id || statusNameToId[statusName] || 1;
             const colors = statusToColors(statusName);
 
+            // Build the displayed title to include customer name
+            const jobTitle = job.title || '';
+            const customer = job.customer_name || '';
+            // If both present: "Job Title — Customer Name"
+            // If only customer present: "Customer Name"
+            // If only title present: "Job Title"
+            const displayTitle = (jobTitle && customer) ? `${jobTitle} — ${customer}`
+                : (jobTitle ? jobTitle : (customer ? customer : 'Job'));
+
             return {
                 id: job.id,
-                title: (job.title || 'Job') + (job.customer_name ? (' — ' + job.customer_name) : ''),
+                title: displayTitle,
                 start: job.date,
                 end: job.date ? (new Date(job.date).getTime() + ((job.work_time_minutes || 0) * 60000)) : null,
                 backgroundColor: colors.backgroundColor,
@@ -233,6 +273,8 @@
                 textColor: colors.textColor,
                 classNames: [colors.cssClass],
                 extendedProps: {
+                    // keep original fields available for popover / edit modal
+                    original_title: job.title || '',
                     customer_name: job.customer_name,
                     customer_phone: job.customer_phone,
                     job_description: job.job_description,
@@ -255,30 +297,196 @@
                 });
         }
 
+        // Format a Date object to local ISO WITHOUT timezone: "YYYY-MM-DDTHH:mm:ss"
+        function formatLocalDateTime(date) {
+            if (!date) return null;
+            const pad = (n) => String(n).padStart(2, '0');
+            const Y = date.getFullYear();
+            const M = pad(date.getMonth() + 1);
+            const D = pad(date.getDate());
+            const hh = pad(date.getHours());
+            const mm = pad(date.getMinutes());
+            const ss = pad(date.getSeconds());
+            return `${Y}-${M}-${D}T${hh}:${mm}:${ss}`;
+        }
+
+        // Build a full payload for PUT from an EventApi object (use existing values)
+        function buildPayloadFromEvent(event) {
+            // event.extendedProps holds fields we stored earlier (customer_name, etc.)
+            const ep = event.extendedProps || {};
+            // status_id stored in extendedProps
+            const statusId = ep.status_id || 1;
+
+            // Prefer the original raw title (stored in extendedProps.original_title).
+            // Fall back to event.title only if original_title is missing.
+            const rawTitle = (ep.original_title !== undefined && ep.original_title !== null && ep.original_title !== '')
+                ? ep.original_title
+                : (event.title || '');
+
+            return {
+                title: rawTitle,
+                customer_name: ep.customer_name || '',
+                customer_phone: ep.customer_phone || '',
+                job_description: ep.job_description || '',
+                work_time_minutes: ep.work_time_minutes || 0,
+                price_per_minute: ep.price_per_minute || 0,
+                // use local format used elsewhere
+                date: event.start ? formatLocalDateTime(event.start) : null,
+                status: { id: parseInt(statusId, 10) }
+            };
+        }
+
         // --- Calendar setup ---
         const calendarEl = document.getElementById('calendar');
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay' },
             navLinks: true,
-            selectable: true,
+            eventTimeFormat: { // like '14:30'
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            },
+
+            // ENABLE dragging & resizing
+            editable: true,                 // allows events to be dragged/resized
+
             events: [],
+
             eventClick: function(info) {
                 const job = info.event;
+                const ep = job.extendedProps || {};
+
+                let rawTitle = ep.original_title;
+                if (!rawTitle) {
+                    // Fallback: try to strip the appended " — Customer" from the displayed title
+                    const displayed = job.title || '';
+                    const cust = ep.customer_name || '';
+                    if (cust && displayed.endsWith(' — ' + cust)) {
+                        rawTitle = displayed.slice(0, displayed.length - (' — ' + cust).length);
+                    } else if (displayed.includes(' — ')) {
+                        rawTitle = displayed.split(' — ')[0];
+                    } else {
+                        rawTitle = displayed || 'Job';
+                    }
+                }
+
                 let bodyHtml = `
-                <p><strong>Customer:</strong> ${job.extendedProps.customer_name || ''}</p>
-                <p><strong>Phone:</strong> ${job.extendedProps.customer_phone || ''}</p>
-                <p><strong>Description:</strong> ${job.extendedProps.job_description || ''}</p>
-                <p><strong>Work Time:</strong> ${job.extendedProps.work_time_minutes || 0} min</p>
-                <p><strong>Price/Min:</strong> ${job.extendedProps.price_per_minute || 0}</p>
-                <p><strong>Date:</strong> ${job.start.toLocaleString()}</p>
-                <p><strong>Status:</strong> ${job.extendedProps.status}</p>
-            `;
-                document.getElementById('jobModalTitle').innerText = job.title;
+                    <p><strong>Customer:</strong> ${escapeHtml(ep.customer_name || '')}</p>
+                    <p><strong>Phone:</strong> ${escapeHtml(ep.customer_phone || '')}</p>
+                    <p><strong>Description:</strong> ${escapeHtml(ep.job_description || '')}</p>
+                    <p><strong>Work Time:</strong> ${escapeHtml(String(ep.work_time_minutes || 0))} min</p>
+                    <p><strong>Price/Min:</strong> ${escapeHtml(String(ep.price_per_minute || 0))}</p>
+                    <p><strong>Date:</strong> ${job.start ? escapeHtml(job.start.toLocaleString()) : ''}</p>
+                    <p><strong>Status:</strong> ${escapeHtml(formatStatusName(ep.status))}</p>
+                `;
+                document.getElementById('jobModalTitle').innerText = rawTitle;
                 document.getElementById('jobModalBody').innerHTML = bodyHtml;
                 currentJob = job;
                 jobModal.show();
-            }
+            },
+
+            // Fired when event is dropped (moved)
+            eventDrop: function(info) {
+                const ev = info.event;
+                // Build payload from the event (with new start date/time)
+                const payload = buildPayloadFromEvent(ev);
+
+                // send update to backend
+                fetch('/api/jobs/' + ev.id, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Server returned ' + response.status);
+                        return response.json();
+                    })
+                    .then(updated => {
+                        // Update event visuals & extendedProps with returned object
+                        const newEvent = mapJobToEvent(updated);
+                        ev.setProp('title', newEvent.title);
+                        ev.setStart(newEvent.start);
+                        ev.setEnd(newEvent.end);
+                        ev.setProp('backgroundColor', newEvent.backgroundColor);
+                        ev.setProp('borderColor', newEvent.borderColor);
+                        ev.setProp('textColor', newEvent.textColor);
+                        ev.setProp('classNames', newEvent.classNames);
+                        for (const key in newEvent.extendedProps) {
+                            ev.setExtendedProp(key, newEvent.extendedProps[key]);
+                        }
+                        // no further action needed; change persisted
+                    })
+                    .catch(err => {
+                        console.error('Failed to update on drop:', err);
+                        // revert visually to original position
+                        info.revert();
+                        alert('Could not move job — update failed (see console).');
+                    });
+            },
+
+            // Fired when event is resized (duration changed)
+            eventResize: function(info) {
+                const ev = info.event;
+                // Build payload from the event (with new start and end reflected by work_time_minutes maybe)
+                // We'll update date (start) and keep work_time_minutes as original, but you might want to
+                // recompute work_time_minutes from new duration: optional.
+                // Here we'll keep same work_time_minutes and only update 'date' (start) on resize.
+                const payload = buildPayloadFromEvent(ev);
+
+                // Optionally recompute work_time_minutes from start->end:
+                if (ev.start && ev.end) {
+                    payload.work_time_minutes = Math.round((ev.end.getTime() - ev.start.getTime()) / 60000);
+                }
+
+                fetch('/api/jobs/' + ev.id, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Server returned ' + response.status);
+                        return response.json();
+                    })
+                    .then(updated => {
+                        const newEvent = mapJobToEvent(updated);
+                        ev.setProp('title', newEvent.title);
+                        ev.setStart(newEvent.start);
+                        ev.setEnd(newEvent.end);
+                        ev.setProp('backgroundColor', newEvent.backgroundColor);
+                        ev.setProp('borderColor', newEvent.borderColor);
+                        ev.setProp('textColor', newEvent.textColor);
+                        ev.setProp('classNames', newEvent.classNames);
+                        for (const key in newEvent.extendedProps) {
+                            ev.setExtendedProp(key, newEvent.extendedProps[key]);
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Failed to update on resize:', err);
+                        info.revert();
+                        alert('Could not resize job — update failed (see console).');
+                    });
+            },
+
+            eventDidMount: function(info) {
+                // Destroy any old popovers to avoid stacking
+                if (info.el.dataset.bsToggle === 'popover') {
+                    bootstrap.Popover.getInstance(info.el)?.dispose();
+                }
+
+                // Get job description (fallback if empty)
+                const description = info.event.extendedProps.job_description || '(No description)';
+
+                // Initialize a Bootstrap popover
+                new bootstrap.Popover(info.el, {
+                    title: "Description",
+                    content: description,
+                    trigger: 'hover',
+                    placement: 'left',
+                    container: 'body', // ensures it shows even if inside scrollable div
+                    html: false
+                });
+            },
         });
 
         // --- Modals ---
@@ -305,6 +513,19 @@
         function toIsoLocalDateTime(localValue) {
             if (!localValue) return null;
             return localValue.length === 16 ? localValue + ':00' : localValue;
+        }
+
+        // Helper: format Date to local "yyyy-MM-ddTHH:mm" for datetime-local inputs
+        function formatDateTimeLocal(date) {
+            if (!date) return '';
+            const pad = n => String(n).padStart(2, '0');
+            const d = new Date(date);
+            const yyyy = d.getFullYear();
+            const MM = pad(d.getMonth() + 1);
+            const dd = pad(d.getDate());
+            const HH = pad(d.getHours());
+            const mm = pad(d.getMinutes());
+            return `${yyyy}-${MM}-${dd}T${HH}:${mm}`;
         }
 
         document.getElementById('createJobForm').addEventListener('submit', function(e) {
@@ -340,14 +561,32 @@
         document.getElementById('editJobBtn').addEventListener('click', function() {
             if (!currentJob) return;
             document.getElementById('editJobId').value = currentJob.id;
-            document.getElementById('editJobTitle').value = currentJob.title;
-            document.getElementById('editCustomerName').value = currentJob.extendedProps.customer_name || '';
-            document.getElementById('editCustomerPhone').value = currentJob.extendedProps.customer_phone || '';
-            document.getElementById('editJobDescription').value = currentJob.extendedProps.job_description || '';
-            document.getElementById('editWorkTime').value = currentJob.extendedProps.work_time_minutes || 0;
-            document.getElementById('editPricePerMin').value = currentJob.extendedProps.price_per_minute || 0;
-            document.getElementById('editJobDate').value = currentJob.start.toISOString().slice(0,21);
-            document.getElementById('editJobStatus').value = currentJob.extendedProps.status_id || 1;
+
+            // Prefer the original raw title stored in extendedProps (set by mapJobToEvent).
+            // If missing, try to remove the appended " — Customer Name" from the displayed title.
+            const ep = currentJob.extendedProps || {};
+            let originalTitle = ep.original_title;
+            if (!originalTitle) {
+                const displayed = currentJob.title || '';
+                const cust = ep.customer_name || '';
+                if (cust && displayed.endsWith(' — ' + cust)) {
+                    originalTitle = displayed.slice(0, displayed.length - (' — ' + cust).length);
+                } else if (displayed.includes(' — ')) {
+                    originalTitle = displayed.split(' — ')[0];
+                } else {
+                    originalTitle = displayed;
+                }
+            }
+
+            document.getElementById('editJobTitle').value = originalTitle || '';
+            document.getElementById('editCustomerName').value = ep.customer_name || '';
+            document.getElementById('editCustomerPhone').value = ep.customer_phone || '';
+            document.getElementById('editJobDescription').value = ep.job_description || '';
+            document.getElementById('editWorkTime').value = ep.work_time_minutes || 0;
+            document.getElementById('editPricePerMin').value = ep.price_per_minute || 0;
+            // Use local time for datetime-local input (avoid UTC shift)
+            document.getElementById('editJobDate').value = formatDateTimeLocal(currentJob.start);
+            document.getElementById('editJobStatus').value = ep.status_id || 1;
 
             jobModal.hide();
             editModal.show();
@@ -377,21 +616,28 @@
                 .then(updated => {
                     const newEvent = mapJobToEvent(updated);
 
-                    currentJob.setProp(newEvent.title);
+                    // Update the currentJob FullCalendar Event API instance properly:
+                    // setProp expects (name, value) for properties like 'title', 'backgroundColor', etc.
+                    currentJob.setProp('title', newEvent.title);
+                    // setStart and setEnd accept Date or ISO string
                     currentJob.setStart(newEvent.start);
                     currentJob.setEnd(newEvent.end);
+
                     currentJob.setProp('backgroundColor', newEvent.backgroundColor);
                     currentJob.setProp('borderColor', newEvent.borderColor);
                     currentJob.setProp('textColor', newEvent.textColor);
-                    currentJob.setProp('classNames', newEvent.classNames);
-                    currentJob.setProp(newEvent.status);
 
-                    // Update extendedProps individually
+                    // classNames can be set with setProp('classNames', array)
+                    currentJob.setProp('classNames', newEvent.classNames || []);
+
+                    // Update extendedProps individually (so popover/modal still use correct fields)
                     for (const key in newEvent.extendedProps) {
                         currentJob.setExtendedProp(key, newEvent.extendedProps[key]);
                     }
 
                     editModal.hide();
+                    // Refresh remote list to ensure server state and calendar are fully synced
+                    fetchJobsAndInit(calendar);
                 })
                 .catch(err => {
                     console.error(err);
@@ -401,6 +647,5 @@
 
     });
 </script>
-
 </body>
 </html>
