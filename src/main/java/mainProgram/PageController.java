@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 // Maps HTTP GET requests to specific methods
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 
 /* --- PageController Class --- */
@@ -15,10 +18,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class PageController {
     private final UserRepository userRepository;
     private final JobRepository jobRepository;
+    private final JobService jobService;
 
-    public PageController(UserRepository userRepository, JobRepository jobRepository) {
+    public PageController(UserRepository userRepository, JobRepository jobRepository, JobService jobService) {
         this.userRepository = userRepository;
         this.jobRepository = jobRepository;
+        this.jobService = jobService;
     }
     // Handles requests to the root URL ("/") and serves index.html from templates directory
     @GetMapping("/")
@@ -38,4 +43,15 @@ public class PageController {
         model.addAttribute("jobs", jobRepository.findAll());
         return "jobliste";
    }
+
+    @GetMapping("/jobliste/{id}")
+    public String jobDetails(@PathVariable Long id, Model model) {
+        Job job = jobService.getJobById(id);
+        List<JobPart> jobParts = jobService.getPartsForJob(id);
+
+        model.addAttribute("job", job);
+        model.addAttribute("jobParts", jobParts);
+
+        return "jobDetails";
+    }
 }
