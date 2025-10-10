@@ -30,7 +30,7 @@ public class JobController {
         return jobRepository.findAll();
     }
 
-    // REST: create job
+    // REST: create a job
     @PostMapping("api/jobs")
     @ResponseBody
     public ResponseEntity<Job> createJob(@RequestBody Job job) {
@@ -64,6 +64,17 @@ public class JobController {
                         .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
                 existing.setStatus(status);
             }
+
+            Job updated = jobRepository.save(existing);
+            return ResponseEntity.ok(updated);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("api/jobs/{id}/description")
+    @ResponseBody
+    public ResponseEntity<Job> updateJobDesc(@PathVariable Integer id, @RequestBody Job job) {
+        return jobRepository.findById(id).map(existing -> {
+            existing.setJob_description(job.getJob_description());
 
             Job updated = jobRepository.save(existing);
             return ResponseEntity.ok(updated);

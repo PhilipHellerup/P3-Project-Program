@@ -40,3 +40,33 @@ function formatStatusName(status) {
         .replace(/([a-z0-9])([A-Z])/g, '$1 $2') // split camelCase
         .replace(/^./, s => s.toUpperCase());  // capitalize first letter
 }
+
+function translateStatusName(input) {
+    if (input == null) return '';
+
+    // Normalize
+    const value = String(input).trim();
+
+    // Support both numeric IDs and English names
+    const id = Number.isFinite(+value) ? String(+value) : null;
+
+    const byId = {
+        '1': 'Ikke Indleveret',
+        '2': 'Indleveret',
+        '3': 'Igangværende',
+        '4': 'Mangler del',
+        '5': 'Færdig',
+        '6': 'Afhentet'
+    };
+
+    const byEn = {
+        'notDelivered': 'Ikke Indleveret',
+        'delivered': 'Indleveret',
+        'inProgress': 'Igangværende',
+        'missingPart': 'Mangler Del',
+        'finished': 'Færdig',
+        'pickedUp': 'Afhentet'
+    };
+
+    return (id && byId[id]) || byEn[value] || value;
+};

@@ -96,8 +96,7 @@
         document.querySelectorAll('.job-status').forEach(el => {
             const raw = el.textContent.trim();
             const colors = typeof statusToColors === 'function' ? statusToColors(raw) : {};
-            const label = typeof formatStatusName === 'function' ? formatStatusName(raw) : raw;
-            el.textContent = label;
+            el.textContent = typeof translateStatusName === 'function' ? translateStatusName(raw) : raw;
             Object.assign(el.style, {
                 display: 'inline-block',
                 padding: '2px 8px',
