@@ -359,7 +359,6 @@
             },
 
             eventDidMount: function(info) {
-                // existing popover setup
                 const existing = bootstrap.Popover.getInstance(info.el);
                 if (existing) existing.dispose();
                 const description = info.event.extendedProps.job_description || '(Ingen beskrivelse)';
@@ -375,7 +374,6 @@
                 // Right-click handler
                 info.el.addEventListener('contextmenu', function(e) {
                     e.preventDefault();
-                    // Close any open popover to avoid overlap
                     const inst = bootstrap.Popover.getInstance(info.el);
                     if (inst) inst.hide();
                     showContextMenu(e.clientX, e.clientY, info.event);
@@ -451,7 +449,6 @@
             }
 
             if (action === 'setStatus') {
-                // Update status directly via PUT (no modal)
                 const name = anchor.getAttribute('data-status');
                 const statusMap = {
                     notDelivered: 1,
@@ -463,7 +460,6 @@
                 };
                 const newStatusId = statusMap[name];
 
-                // Build payload similar to edit modal submission
                 const ep = target.extendedProps || {};
                 const toIsoLocal = (date) => {
                     if (!date) return null;
@@ -529,13 +525,13 @@
             }
         });
 
-        // --- Refresh ---
+        // Refresh
         document.getElementById('refreshBtn').addEventListener('click', e => {
             e.preventDefault();
             fetchJobsAndInit(calendar);
         });
 
-        // --- Create job ---
+        // Create job
         document.getElementById('createJobBtn').addEventListener('click', () => {
             if (window.openCreateJobModal) window.openCreateJobModal();
         });
@@ -543,24 +539,6 @@
         window.refreshCalendarWithJob = function(createdJob) {
             calendar.addEvent(mapJobToEvent(createdJob));
         };
-
-        function toIsoLocalDateTime(localValue) {
-            if (!localValue) return null;
-            return localValue.length === 16 ? localValue + ':00' : localValue;
-        }
-
-        // Helper: format Date to local "yyyy-MM-ddTHH:mm" for datetime-local inputs
-        function formatDateTimeLocal(date) {
-            if (!date) return '';
-            const pad = n => String(n).padStart(2, '0');
-            const d = new Date(date);
-            const yyyy = d.getFullYear();
-            const MM = pad(d.getMonth() + 1);
-            const dd = pad(d.getDate());
-            const HH = pad(d.getHours());
-            const mm = pad(d.getMinutes());
-            return `${yyyy}-${MM}-${dd}T${HH}:${mm}`;
-        }
     });
 </script>
 </body>
