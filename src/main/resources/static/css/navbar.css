@@ -4,25 +4,25 @@
 }
 
 .sidebar-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 13rem;
-    height: 100%;
-    background: #1f2937;
-    color: #ffffff;
-    transform: translateX(-100%); /* Start hidden */
-    transition: transform 0.3s ease-in-out;
-    z-index: 1001;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 13rem;
+  height: 100%;
+  background: #1f2937;
+  color: #ffffff;
+  transform: translateX(-100%); /* Start hidden */
+  transition: transform 0.3s ease-in-out;
+  z-index: 1001;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .content-push {
-    margin-left: 13rem; /* Matches sidebar width */
+  margin-left: 13rem; /* Matches sidebar width */
 }
 
 .with-navbar .sidebar-nav {
-    transform: translateX(0);
+  transform: translateX(0);
 }
 
 .nav-header {
@@ -68,7 +68,10 @@
   color: #e5e7eb;
   text-decoration: none;
   border-left: 3px solid transparent;
-  transition: background-color 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease,
+    border-color 0.2s ease;
   border-radius: 4px 0 0 4px;
 }
 
@@ -98,12 +101,13 @@
 }
 
 /* Adjust page margin, when navbar is present */
-.body.with-navbar{
+.body.with-navbar {
   margin-left: 13rem;
 }
 
 /* Navbar button style */
-.close-navbar-btn, .open-navbar-btn {
+.close-navbar-btn,
+.open-navbar-btn {
   width: 40px;
   height: 40px;
   background-color: #303e51;
@@ -122,7 +126,7 @@
 /* Navbar close button style */
 .close-navbar-btn {
   left: 10%;
-  border-radius: 50%;    /* Makes it circular */
+  border-radius: 50%; /* Makes it circular */
   transition: left 0.1s;
 }
 
@@ -131,7 +135,7 @@
 }
 
 /* Navbar open button style */
-.open-navbar-btn{
+.open-navbar-btn {
   width: 40px;
   padding-left: 20px;
   border-top-right-radius: 50%;
@@ -142,7 +146,7 @@
   transition: left 0.1s;
 }
 
-.open-navbar-btn:hover{
+.open-navbar-btn:hover {
   background-color: #3b82f6;
   left: 0;
 }
