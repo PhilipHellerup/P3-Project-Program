@@ -4,9 +4,9 @@
 
     const createModal = new bootstrap.Modal(modalEl);
 
-    function toIsoLocalDateTime(v) {
-        if (!v) return null;
-        return v.length === 16 ? v + ':00' : v;
+    function toIsoLocal(val) {
+        if (!val) return null;
+        return val.length === 16 ? val + ':00' : val;
     }
 
     document.getElementById('createJobForm')?.addEventListener('submit', function (e) {
@@ -18,7 +18,7 @@
             job_description: document.getElementById('jobDescription').value,
             work_time_minutes: parseInt(document.getElementById('workTime').value || '0', 10),
             price_per_minute: parseFloat(document.getElementById('pricePerMin').value || '0'),
-            date: toIsoLocalDateTime(document.getElementById('jobDate').value),
+            date: toIsoLocal(document.getElementById('jobDate').value),
             status: { id: parseInt(document.getElementById('jobStatus').value, 10) }
         };
 

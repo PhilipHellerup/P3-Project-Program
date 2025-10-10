@@ -144,5 +144,73 @@
         </div>
     </div>
 </div>
+
+<!-- Full Edit Job Modal fragment -->
+<div th:fragment="full-edit-job-modal">
+    <div class="modal fade" id="fullEditJobModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form class="modal-content" id="fullEditJobForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rediger Reparation (fuld)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="full_jobId" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Cykel</label>
+                                <input type="text" id="full_title" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Kunde</label>
+                                <input type="text" id="full_customer_name" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Telefon</label>
+                                <input type="text" id="full_customer_phone" class="form-control">
+                            </div>
+                            <div class="mb-3 row">
+                                <div class="col">
+                                    <label class="form-label">Arbejdstid (min)</label>
+                                    <input type="number" id="full_work_time_minutes" class="form-control">
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Pris pr. min</label>
+                                    <input type="number" step="0.01" id="full_price_per_minute" class="form-control">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Start Dato</label>
+                                <input type="datetime-local" id="full_date" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select id="full_status_id" class="form-select">
+                                    <option value="1">Ikke Indleveret</option>
+                                    <option value="2">Indleveret</option>
+                                    <option value="3">Igangværende</option>
+                                    <option value="4">Mangler del</option>
+                                    <option value="5">Færdig</option>
+                                    <option value="6">Afhentet</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3 h-100">
+                                <label class="form-label">Beskrivelse</label>
+                                <textarea id="full_job_description" class="form-control" rows="18" style="height: 91%; resize: none"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Gem</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Luk</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>

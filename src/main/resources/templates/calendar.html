@@ -59,7 +59,7 @@
 
     <!-- Create Job Modal -->
     <div th:replace="~{modals :: create-job-modal}"></div>
-    <div th:replace="~{modals :: edit-job-modal}"></div>
+    <div th:replace="~{modals :: full-edit-job-modal}"></div>
 </div>
 <nav>
     <script src="/js/navbar.js"></script>
@@ -73,7 +73,7 @@
 
 <script src="/js/html.js"></script>
 <script src="/js/modals/create-job-modal.js"></script>
-<script src="/js/modals/edit-job-modal.js"></script>
+<script src="/js/modals/full-edit-job-modal.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -440,10 +440,10 @@
                     date: toLocalDatetimeInput(target.start),
                     status: { id: ep.status_id || 1 }
                 };
-                if (window.openEditJobModal) {
-                    window.openEditJobModal(jobForEdit);
+                if (window.openFullEditJobModal) {
+                    window.openFullEditJobModal(jobForEdit);
                 } else {
-                    alert('Edit modal is not available.');
+                    alert('Edit modal er ikke tilgængelig.');
                 }
                 return;
             }
