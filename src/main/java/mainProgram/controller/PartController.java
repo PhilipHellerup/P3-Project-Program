@@ -1,5 +1,7 @@
-package mainProgram;
+package mainProgram.controller;
 
+import mainProgram.Part;
+import mainProgram.repository.PartRepository;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 

@@ -1,5 +1,7 @@
 package mainProgram;
 
+import mainProgram.repository.JobPartRepository;
+import mainProgram.repository.JobRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

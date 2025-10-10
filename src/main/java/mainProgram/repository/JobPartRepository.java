@@ -1,5 +1,6 @@
-package mainProgram;
+package mainProgram.repository;
 
+import mainProgram.JobPart;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

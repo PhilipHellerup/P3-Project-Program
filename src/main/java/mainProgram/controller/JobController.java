@@ -1,9 +1,9 @@
 package mainProgram.controller;
 
 import mainProgram.Job;
-import mainProgram.JobRepository;
+import mainProgram.repository.JobRepository;
 import mainProgram.JobStatus;
-import mainProgram.JobStatusRepository;
+import mainProgram.repository.JobStatusRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,12 +21,6 @@ public class JobController {
     public JobController(JobRepository jobRepository, JobStatusRepository statusRepository) {
         this.jobRepository = jobRepository;
         this.statusRepository = statusRepository;
-    }
-
-    // Serve Thymeleaf calendar page
-    @GetMapping("calendar")
-    public String calendarPage(Model model) {
-        return "calendar";
     }
 
     // REST: list jobs
