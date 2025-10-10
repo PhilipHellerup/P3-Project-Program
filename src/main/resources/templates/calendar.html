@@ -36,7 +36,7 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
-            <h1 class="h3 mb-0">Job Management Calendar</h1>
+            <h1 class="h3 mb-0">Kalender</h1>
             <div class="legend mt-2">
                 <span class="badge" style="background:#f6c23e;color:#000">Not Delivered</span>
                 <span class="badge" style="background:#1cc88a;color:#000">Delivered</span>
@@ -219,7 +219,7 @@
         // --- Calendar setup ---
         const calendarEl = document.getElementById('calendar');
         const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
+            initialView: 'timeGridWeek',
             headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay' },
             navLinks: true,
             eventTimeFormat: { // like '14:30'
@@ -227,6 +227,8 @@
                 minute: '2-digit',
                 hour12: false
             },
+            slotMinTime: "07:00:00",
+            slotMaxTime: "21:00:00",
             locale: 'da',
             buttonText: {
                 today: 'I dag',
@@ -249,10 +251,8 @@
             // Fired when event is dropped (moved)
             eventDrop: function(info) {
                 const ev = info.event;
-                // Build payload from the event (with new start date/time)
                 const payload = buildPayloadFromEvent(ev);
 
-                // send update to backend
                 fetch('/api/jobs/' + ev.id, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
@@ -263,7 +263,6 @@
                         return response.json();
                     })
                     .then(updated => {
-                        // Update event visuals & extendedProps with returned object
                         const newEvent = mapJobToEvent(updated);
                         ev.setProp('title', newEvent.title);
                         ev.setStart(newEvent.start);
@@ -275,26 +274,18 @@
                         for (const key in newEvent.extendedProps) {
                             ev.setExtendedProp(key, newEvent.extendedProps[key]);
                         }
-                        // no further action needed; change persisted
                     })
                     .catch(err => {
                         console.error('Failed to update on drop:', err);
-                        // revert visually to original position
                         info.revert();
                         alert('Could not move job — update failed (see console).');
-                    });
+                    })
             },
 
             // Fired when event is resized (duration changed)
             eventResize: function(info) {
                 const ev = info.event;
-                // Build payload from the event (with new start and end reflected by work_time_minutes maybe)
-                // We'll update date (start) and keep work_time_minutes as original, but you might want to
-                // recompute work_time_minutes from new duration: optional.
-                // Here we'll keep same work_time_minutes and only update 'date' (start) on resize.
                 const payload = buildPayloadFromEvent(ev);
-
-                // Optionally recompute work_time_minutes from start->end:
                 if (ev.start && ev.end) {
                     payload.work_time_minutes = Math.round((ev.end.getTime() - ev.start.getTime()) / 60000);
                 }
@@ -325,27 +316,33 @@
                         console.error('Failed to update on resize:', err);
                         info.revert();
                         alert('Could not resize job — update failed (see console).');
+                    })
+                    .finally(() => {
+                        const inst = bootstrap.Popover.getInstance(info.el);
+                        if (inst) inst.dispose();
                     });
             },
 
             eventDidMount: function(info) {
-                // Destroy any old popovers to avoid stacking
-                if (info.el.dataset.bsToggle === 'popover') {
-                    bootstrap.Popover.getInstance(info.el)?.dispose();
-                }
+                // Ensure any old popover on this element is removed
+                const existing = bootstrap.Popover.getInstance(info.el);
+                if (existing) existing.dispose();
 
-                // Get job description (fallback if empty)
                 const description = info.event.extendedProps.job_description || '(No description)';
 
-                // Initialize a Bootstrap popover
                 new bootstrap.Popover(info.el, {
                     title: "Description",
                     content: description,
                     trigger: 'hover',
                     placement: 'left',
-                    container: 'body', // ensures it shows even if inside scrollable div
+                    container: 'body',
                     html: false
                 });
+            },
+            // Dispose popover when the event element is being removed from the DOM
+            eventWillUnmount: function(info) {
+                const inst = bootstrap.Popover.getInstance(info.el);
+                if (inst) inst.dispose();
             },
         });
 
