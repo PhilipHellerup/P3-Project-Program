@@ -32,10 +32,10 @@ public class PageController {
     // Handles requests to the root URL ("/") and serves index.html from templates directory
     @GetMapping("")
     public String home() {
-        return "redirect:calendar";
+        return "redirect:kalender";
     }
 
-    @GetMapping("calendar")
+    @GetMapping("kalender")
     public String calendarPage() {
         return "calendar";
     }

@@ -64,14 +64,14 @@ document.addEventListener("DOMContentLoaded", function () {
             const navbarHTML = `
             <nav class="sidebar-nav" aria-hidden="false">
                 <div class="nav-header">
-                    <img src="/images/Perform_logo_white.avif" alt="PerformSport" class="logo">
+                    <img src="/images/Perform_logo_white.avif" alt="Perform" class="logo">
                     <button id="close-navbar" class="close-navbar-btn fa-solid fa-angles-left" aria-label="Close navbar"></button>
                 </div>
                 <ul class="nav-menu">
                     <!-- <li class="nav-item"><a class="nav-link" href="/"><span class="nav-text">Hjem</span></a></li> -->
-                    <li class="nav-item"><a class="nav-link" href="/calendar"><span class="nav-text">Kalender</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/kalender"><span class="nav-text">Kalender</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/jobliste"><span class="nav-text">Job Liste</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/products"><span class="nav-text">Produkter</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/produkter"><span class="nav-text">Produkter</span></a></li>
                 </ul>
             </nav>
         `;

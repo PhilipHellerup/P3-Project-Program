@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Jobs Calendar</title>
+    <title>Kalender</title>
 
     <!-- Bootstrap CSS -->
     <link href="/css/bootstrap.css" rel="stylesheet"/>
@@ -20,18 +20,18 @@
         <div>
             <h1 class="h3 mb-0">Kalender</h1>
             <div class="legend mt-2">
-                <span class="badge" style="background:#f6c23e;color:#000">Not Delivered</span>
-                <span class="badge" style="background:#1cc88a;color:#000">Delivered</span>
-                <span class="badge" style="background:#4e73df;color:#000">In Progress</span>
-                <span class="badge" style="background:#f6b3b0;color:#000">Missing Part</span>
-                <span class="badge" style="background:#858796;color:#000">Finished</span>
-                <span class="badge" style="background:#8e44ad;color:#000">Picked Up</span>
+                <span class="badge" style="background:#f6c23e;color:#000">Ikke Indleveret</span>
+                <span class="badge" style="background:#1cc88a;color:#000">Indleveret</span>
+                <span class="badge" style="background:#4e73df;color:#000">Igangværende</span>
+                <span class="badge" style="background:#f6b3b0;color:#000">Mangler del</span>
+                <span class="badge" style="background:#858796;color:#000">Færdig</span>
+                <span class="badge" style="background:#8e44ad;color:#000">Afhentet</span>
             </div>
         </div>
 
         <div>
-            <button class="btn btn-success" id="createJobBtn">Create Job</button>
-            <a href="#" class="btn btn-primary" id="refreshBtn">Refresh</a>
+            <button class="btn btn-success" id="createJobBtn">Opret reparation</button>
+            <a href="#" class="btn btn-primary" id="refreshBtn">Opdater</a>
         </div>
     </div>
 
@@ -39,22 +39,22 @@
 
     <!-- Right-click context menu -->
     <div id="eventContextMenu" class="event-contextmenu">
-        <a class="dropdown-item" data-action="open">Open</a>
-        <a class="dropdown-item" data-action="openNewTab">Open in new tab</a>
-        <a class="dropdown-item" data-action="edit">Edit</a>
+        <a class="dropdown-item" data-action="open">Åbn</a>
+        <a class="dropdown-item" data-action="openNewTab">Åbn i ny fane</a>
+        <a class="dropdown-item" data-action="edit">Rediger</a>
         <div class="dropdown-item position-relative" id="statusSubmenuRoot">
             <span>Set Status</span><span class="fa-solid fa-angle-right"></span>
             <div id="statusSubmenu" class="event-submenu" style="display:none; position:absolute; top:0; left:100%; min-width: 180px;">
-                <a class="dropdown-item" data-action="setStatus" data-status="delivered">Delivered</a>
-                <a class="dropdown-item" data-action="setStatus" data-status="inProgress">In Progress</a>
-                <a class="dropdown-item" data-action="setStatus" data-status="notDelivered">Not Delivered</a>
-                <a class="dropdown-item" data-action="setStatus" data-status="missingPart">Missing Part</a>
-                <a class="dropdown-item" data-action="setStatus" data-status="finished">Finished</a>
-                <a class="dropdown-item" data-action="setStatus" data-status="pickedUp">Picked Up</a>
+                <a class="dropdown-item" data-action="setStatus" data-status="notDelivered">Ikke Indleveret</a>
+                <a class="dropdown-item" data-action="setStatus" data-status="delivered">Indleveret</a>
+                <a class="dropdown-item" data-action="setStatus" data-status="inProgress">Igangværende</a>
+                <a class="dropdown-item" data-action="setStatus" data-status="missingPart">Mangler del</a>
+                <a class="dropdown-item" data-action="setStatus" data-status="finished">Færdig</a>
+                <a class="dropdown-item" data-action="setStatus" data-status="pickedUp">Afhentet</a>
             </div>
         </div>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item text-danger" data-action="delete">Delete</a>
+        <a class="dropdown-item text-danger" data-action="delete">Slet</a>
     </div>
 
     <!-- Create Job Modal -->
@@ -183,9 +183,9 @@
 
             const ep = eventApi.extendedProps || {};
             const title = (ep.original_title || eventApi.title || 'Job').toString();
-            contextMenuEl.querySelector('[data-action="open"]').textContent = `Open "${title}"`;
-            contextMenuEl.querySelector('[data-action="openNewTab"]').textContent = `Open "${title}" in New Tab`;
-            contextMenuEl.querySelector('[data-action="edit"]').textContent = `Edit "${title}"`;
+            contextMenuEl.querySelector('[data-action="open"]').textContent = `Åbn "${title}"`;
+            contextMenuEl.querySelector('[data-action="openNewTab"]').textContent = `Åbn "${title}" i ny fane`;
+            contextMenuEl.querySelector('[data-action="edit"]').textContent = `Rediger "${title}"`;
 
             // Hide the current status from submenu
             const currentStatusName = (ep.status || '').toString(); // e.g., 'delivered'
@@ -195,7 +195,7 @@
                 a.style.display = (name === currentStatusName) ? 'none' : '';
             });
 
-            // Cascading submenu behavior (Windows-like)
+            // Cascading submenu behavior
             const root = contextMenuEl.querySelector('#statusSubmenuRoot');
             const submenu = contextMenuEl.querySelector('#statusSubmenu');
             if (root && submenu && !root.dataset.bound) {
@@ -313,7 +313,7 @@
                     .catch(err => {
                         console.error('Failed to update on drop:', err);
                         info.revert();
-                        alert('Could not move job — update failed (see console).');
+                        alert('Jobbet kunne ikke flyttes — opdateringen mislykkedes.');
                     })
             },
 
@@ -350,7 +350,7 @@
                     .catch(err => {
                         console.error('Failed to update on resize:', err);
                         info.revert();
-                        alert('Could not resize job — update failed (see console).');
+                        alert('Kunne ikke ændre længden på jobbet — opdatering mislykkedes.');
                     })
                     .finally(() => {
                         const inst = bootstrap.Popover.getInstance(info.el);
@@ -362,9 +362,9 @@
                 // existing popover setup
                 const existing = bootstrap.Popover.getInstance(info.el);
                 if (existing) existing.dispose();
-                const description = info.event.extendedProps.job_description || '(No description)';
+                const description = info.event.extendedProps.job_description || '(Ingen beskrivelse)';
                 new bootstrap.Popover(info.el, {
-                    title: "Description",
+                    title: "Beskrivelse",
                     content: description,
                     trigger: 'hover',
                     placement: 'left',
@@ -497,15 +497,11 @@
                     const updated = await res.json();
 
                     // Reflect changes on the calendar event
-                    // Reuse your mapper to keep logic consistent if available in this scope
                     const updatedStatusId = updated.status?.id ?? newStatusId;
                     // Update extended props and color classes minimally
                     target.setExtendedProp('status_id', updatedStatusId);
                     target.setExtendedProp('status', name);
 
-                    // If you have a statusToColors/status classes function available, you could also update styles here.
-                    // Otherwise, just refresh the page or re-fetch:
-                    // Option A: Soft refresh event colors if you have helpers
                     if (typeof statusToColors === 'function') {
                         const colors = statusToColors(name);
                         target.setProp('backgroundColor', colors.backgroundColor);
@@ -515,7 +511,7 @@
                     }
                 } catch (err) {
                     console.error('Failed to update status:', err);
-                    alert('Could not update status (see console).');
+                    alert('Status kunne ikke opdateres.');
                 }
                 return;
             }
@@ -528,7 +524,7 @@
                     target.remove();
                 } catch (err) {
                     console.error('Failed to delete job:', err);
-                    alert('Could not delete job (see console).');
+                    alert('Jobbet kunne ikke slettes.');
                 }
             }
         });
