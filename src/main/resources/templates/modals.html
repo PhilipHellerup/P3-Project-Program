@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Create Job Modal fragment -->
+<div th:fragment="create-job-modal">
+    <div class="modal fade" id="createJobModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="createJobForm" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Job</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="jobTitle" class="form-label">Title</label>
+                        <input type="text" id="jobTitle" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="customerName" class="form-label">Customer name</label>
+                        <input type="text" id="customerName" name="customer_name" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="customerPhone" class="form-label">Customer phone</label>
+                        <input type="text" id="customerPhone" name="customer_phone" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="jobDescription" class="form-label">Job description</label>
+                        <textarea id="jobDescription" name="job_description" class="form-control"></textarea>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col">
+                            <label for="workTime" class="form-label">Work time (minutes)</label>
+                            <input type="number" id="workTime" name="work_time_minutes" class="form-control" min="0" value="60">
+                        </div>
+                        <div class="col">
+                            <label for="pricePerMin" class="form-label">Price per minute</label>
+                            <input type="number" step="0.01" id="pricePerMin" name="price_per_minute" class="form-control" value="1.00">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="jobDate" class="form-label">Date / Start</label>
+                        <input type="datetime-local" id="jobDate" name="date" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="jobStatus" class="form-label">Status</label>
+                        <select id="jobStatus" name="status_id" class="form-select" required>
+                            <option value="1">Not Delivered</option>
+                            <option value="2">Delivered</option>
+                            <option value="3">In Progress</option>
+                            <option value="4">Missing Part</option>
+                            <option value="5">Finished</option>
+                            <option value="6">Picked Up</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Job Modal fragment -->
+<div th:fragment="edit-job-modal">
+    <div class="modal fade" id="editJobModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" id="editJobForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rediger Reparation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="jobId" />
+                    <div class="mb-3">
+                        <label class="form-label">Cykel</label>
+                        <input type="text" id="title" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Kunde</label>
+                        <input type="text" id="customer_name" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Telefon</label>
+                        <input type="text" id="customer_phone" class="form-control">
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col">
+                            <label class="form-label">Arbejdstid (min)</label>
+                            <input type="number" id="work_time_minutes" class="form-control">
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Pris pr. min</label>
+                            <input type="number" step="0.01" id="price_per_minute" class="form-control">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dato / Start</label>
+                        <input type="datetime-local" id="date" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select id="status_id" class="form-select">
+                            <option value="1">Not Delivered</option>
+                            <option value="2">Delivered</option>
+                            <option value="3">In Progress</option>
+                            <option value="4">Missing Part</option>
+                            <option value="5">Finished</option>
+                            <option value="6">Picked Up</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Gem</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Luk</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Description Modal fragment -->
+<div th:fragment="edit-description-modal">
+    <div class="modal fade" id="descModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" id="editDescForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rediger Beskrivelse</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="jobIdDesc">
+                    <div class="mb-3">
+                        <label class="form-label">Beskrivelse</label>
+                        <textarea id="job_description_desc" class="form-control" rows="6"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Gem</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Luk</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

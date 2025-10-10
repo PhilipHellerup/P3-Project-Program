@@ -9,107 +9,15 @@
     <link rel="stylesheet" href="/css/bootstrap.css" />
     <script src="/js/bootstrap.js"></script>
     <script src="/js/html.js"></script>
-</head>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const el = document.getElementById('job-status');
-        if (!el) return;
-        const raw = el.textContent.trim();
-        const colors = typeof statusToColors === 'function' ? statusToColors(raw) : {};
-        const label = typeof formatStatusName === 'function' ? formatStatusName(raw) : raw;
 
-        el.textContent = label;
-        el.style.display = 'inline-block';
-        el.style.padding = '2px 8px';
-        el.style.borderRadius = '3px';
-        el.style.border = `1px solid ${colors.borderColor || '#ccc'}`;
-        el.style.backgroundColor = colors.backgroundColor || '#eee';
-        el.style.color = colors.textColor || '#000';
-        el.style.fontWeight = '600';
-        if (colors.cssClass) el.classList.add(colors.cssClass);
-    });
-</script>
+</head>
 <body>
     <nav>
         <script src="/js/navbar.js"></script>
     </nav>
-    <!-- Edit Job Modal -->
-    <div class="modal fade" id="editJobModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" id="editJobForm">
-                <div class="modal-header">
-                    <h5 class="modal-title">Rediger Reparation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="jobId" th:value="${job.id}">
-                    <div class="mb-3">
-                        <label class="form-label">Cykel</label>
-                        <input type="text" id="title" class="form-control" th:value="${job.title}">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Kunde</label>
-                        <input type="text" id="customer_name" class="form-control" th:value="${job.customer_name}">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Telefon</label>
-                        <input type="text" id="customer_phone" class="form-control" th:value="${job.customer_phone}">
-                    </div>
-                    <div class="mb-3 row">
-                        <div class="col">
-                            <label class="form-label">Arbejdstid (min)</label>
-                            <input type="number" id="work_time_minutes" class="form-control" th:value="${job.work_time_minutes}">
-                        </div>
-                        <div class="col">
-                            <label class="form-label">Pris pr. min</label>
-                            <input type="number" step="0.01" id="price_per_minute" class="form-control" th:value="${job.price_per_minute}">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Dato / Start</label>
-                        <input type="datetime-local" id="date" class="form-control" th:value="${#temporals.format(job.date, 'yyyy-MM-dd''T''HH:mm')}">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select id="status_id" class="form-select" th:value="${job.status.id}">
-                            <option value="1" th:selected="${job.status.id == 1}">Not Delivered</option>
-                            <option value="2" th:selected="${job.status.id == 2}">Delivered</option>
-                            <option value="3" th:selected="${job.status.id == 3}">In Progress</option>
-                            <option value="4" th:selected="${job.status.id == 4}">Missing Part</option>
-                            <option value="5" th:selected="${job.status.id == 5}">Finished</option>
-                            <option value="6" th:selected="${job.status.id == 6}">Picked Up</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit">Gem</button>
-                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Luk</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- Edit Description Modal -->
-    <div class="modal fade" id="descModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" id="editDescForm">
-                <div class="modal-header">
-                    <h5 class="modal-title">Rediger Beskrivelse</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="jobIdDesc" th:value="${job.id}">
-                    <div class="mb-3">
-                        <label class="form-label">Beskrivelse</label>
-                        <textarea id="job_description_desc" class="form-control" rows="6" th:text="${job.job_description}"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit">Gem</button>
-                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Luk</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <!-- Modals must be present before their JS initializes -->
+    <div th:replace="~{modals :: edit-job-modal}"></div>
+    <div th:replace="~{modals :: edit-description-modal}"></div>
     <!-- Page Container (No Nav Bar) -->
     <div class="page-content-container m-4">
         <!-- Card Container -->
@@ -221,88 +129,42 @@
             </table>
         </div>
     </div>
+    <script src="/js/modals/edit-job-modal.js"></script>
+    <script src="/js/modals/edit-description-modal.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const editModal = new bootstrap.Modal(document.getElementById('editJobModal'));
-            document.getElementById('openEditBtn')?.addEventListener('click', (e) => {
-                e.preventDefault();
-                editModal.show();
-            });
-
-            function toIsoLocal(val) {
-                if (!val) return null;
-                return val.length === 16 ? val + ':00' : val;
+            // Format status label using html.js helper
+            try {
+                const statusEl = document.getElementById('job-status');
+                if (statusEl && typeof window.formatStatusName === 'function') {
+                    statusEl.textContent = window.formatStatusName(statusEl.textContent?.trim() ?? '');
+                }
+            } catch (e) {
+                // no-op
             }
 
-            document.getElementById('editJobForm')?.addEventListener('submit', (e) => {
+            // Open Edit modal with current job prefilled via the module
+            document.getElementById('openEditBtn')?.addEventListener('click', (e) => {
                 e.preventDefault();
-                const id = document.getElementById('jobId').value;
-                const payload = {
-                    title: document.getElementById('title').value,
-                    customer_name: document.getElementById('customer_name').value,
-                    customer_phone: document.getElementById('customer_phone').value,
-                    work_time_minutes: parseInt(document.getElementById('work_time_minutes').value || '0', 10),
-                    price_per_minute: parseFloat(document.getElementById('price_per_minute').value || '0'),
-                    date: toIsoLocal(document.getElementById('date').value),
-                    status: { id: parseInt(document.getElementById('status_id').value, 10) }
+                const job = {
+                    id: '[[${job.id}]]' || '',
+                    title: '[[${job.title}]]',
+                    customer_name: '[[${job.customer_name}]]',
+                    customer_phone: '[[${job.customer_phone}]]',
+                    work_time_minutes: '[[${job.work_time_minutes}]]' || 0,
+                    price_per_minute: '[[${job.price_per_minute}]]' || 0,
+                    date: "[[${#temporals.format(job.date, 'yyyy-MM-dd''T''HH:mm')}]]" ||  '',
+                    status: { id: '[[${job.status.id}]]' || 1 }
                 };
-
-                fetch('/api/jobs/' + id, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                })
-                    .then(r => {
-                        if (!r.ok) throw new Error('Update failed');
-                        return r.json();
-                    })
-                    .then(() => {
-                        editModal.hide();
-                        window.location.reload();
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        alert('Kunne ikke opdatere jobbet.');
-                    });
+                if (window.openEditJobModal) window.openEditJobModal(job);
             });
 
-            // Description-only modal handling
-            const descModal = new bootstrap.Modal(document.getElementById('descModal'));
+            // Open Description modal
             document.getElementById('openDescBtn')?.addEventListener('click', (e) => {
                 e.preventDefault();
-                // keep textarea in sync with current text
+                const id = '[[${job.id}]]' || '';
                 const current = document.getElementById('jobDescriptionText')?.textContent ?? '';
-                const ta = document.getElementById('job_description_desc');
-                if (ta && !ta.value) ta.value = current.trim();
-                descModal.show();
-            });
-
-            document.getElementById('editDescForm')?.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const id = document.getElementById('jobIdDesc').value;
-                const payload = {
-                    job_description: document.getElementById('job_description_desc').value
-                };
-
-                fetch('/api/jobs/' + id + '/description', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                })
-                    .then(r => {
-                        if (!r.ok) throw new Error('Update description failed');
-                        return r.json?.() ?? {};
-                    })
-                    .then(() => {
-                        descModal.hide();
-                        // Update UI without full reload if possible
-                        const p = document.getElementById('jobDescriptionText');
-                        if (p) p.textContent = payload.job_description;
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        alert('Kunne ikke opdatere beskrivelsen.');
-                    });
+                if (window.openDescriptionModal) window.openDescriptionModal(id, current.trim());
             });
         });
     </script>

@@ -11,26 +11,8 @@
     <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css" rel="stylesheet"/>
 
-    <style>
-      body { padding: 1.5rem; }
-      .fc .fc-event { cursor: pointer; }
-      .fc .fc-col-header-cell-cushion { color: #000; text-decoration: none; }
-      .fc .fc-daygrid-day-number {color: #000; }
-      .fc .fc-event-title {
-        white-space: wrap;       /* keep on one line */
-        overflow: hidden;          /* clip overflow */
-        text-overflow: ellipsis;   /* show "..." when clipped */
-        display: block;
-      }
-
-      /* Status palette */
-      .status-notDelivered  { background-color: #f6c23e !important; border-color: #e0a800 !important; color: #000 !important; }
-      .status-delivered     { background-color: #1cc88a !important; border-color: #17a673 !important; color: #fff !important; }
-      .status-inProgress    { background-color: #4e73df !important; border-color: #2e59d9 !important; color: #fff !important; }
-      .status-missingPart   { background-color: #f6b3b0 !important; border-color: #e07a78 !important; color: #000 !important; }
-      .status-finished      { background-color: #858796 !important; border-color: #6c6c7a !important; color: #fff !important; }
-      .status-pickedUp      { background-color: #8e44ad !important; border-color: #732d91 !important; color: #fff !important; }
-    </style>
+    <!-- Calendar CSS -->
+    <link href="/css/calendar.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="container">
@@ -55,64 +37,29 @@
 
     <div id="calendar"></div>
 
-    <!-- Create Job Modal -->
-    <div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="createJobForm" class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Create Job</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="jobTitle" class="form-label">Cykel</label>
-                        <input type="text" id="jobTitle" name="title" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="customerName" class="form-label">Customer name</label>
-                        <input type="text" id="customerName" name="customer_name" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="customerPhone" class="form-label">Customer phone</label>
-                        <input type="text" id="customerPhone" name="customer_phone" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="jobDescription" class="form-label">Job description</label>
-                        <textarea id="jobDescription" name="job_description" class="form-control"></textarea>
-                    </div>
-                    <div class="mb-3 row">
-                        <div class="col">
-                            <label for="workTime" class="form-label">Work time (minutes)</label>
-                            <input type="number" id="workTime" name="work_time_minutes" class="form-control" min="0" value="60">
-                        </div>
-                        <div class="col">
-                            <label for="pricePerMin" class="form-label">Price per minute</label>
-                            <input type="number" step="0.01" id="pricePerMin" name="price_per_minute" class="form-control" value="1.00">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="jobDate" class="form-label">Date / Start</label>
-                        <input type="datetime-local" id="jobDate" name="date" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="jobStatus" class="form-label">Status</label>
-                        <select id="jobStatus" name="status_id" class="form-select" required>
-                            <option value="1">Not Delivered</option>
-                            <option value="2">Delivered</option>
-                            <option value="3">In Progress</option>
-                            <option value="4">Missing Part</option>
-                            <option value="5">Finished</option>
-                            <option value="6">Picked Up</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Create</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </form>
+    <!-- Right-click context menu -->
+    <div id="eventContextMenu" class="event-contextmenu">
+        <a class="dropdown-item" data-action="open">Open</a>
+        <a class="dropdown-item" data-action="openNewTab">Open in new tab</a>
+        <a class="dropdown-item" data-action="edit">Edit</a>
+        <div class="dropdown-item position-relative" id="statusSubmenuRoot">
+            <span>Set Status</span><span class="fa-solid fa-angle-right"></span>
+            <div id="statusSubmenu" class="event-submenu" style="display:none; position:absolute; top:0; left:100%; min-width: 180px;">
+                <a class="dropdown-item" data-action="setStatus" data-status="delivered">Delivered</a>
+                <a class="dropdown-item" data-action="setStatus" data-status="inProgress">In Progress</a>
+                <a class="dropdown-item" data-action="setStatus" data-status="notDelivered">Not Delivered</a>
+                <a class="dropdown-item" data-action="setStatus" data-status="missingPart">Missing Part</a>
+                <a class="dropdown-item" data-action="setStatus" data-status="finished">Finished</a>
+                <a class="dropdown-item" data-action="setStatus" data-status="pickedUp">Picked Up</a>
+            </div>
         </div>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item text-danger" data-action="delete">Delete</a>
     </div>
+
+    <!-- Create Job Modal -->
+    <div th:replace="~{modals :: create-job-modal}"></div>
+    <div th:replace="~{modals :: edit-job-modal}"></div>
 </div>
 <nav>
     <script src="/js/navbar.js"></script>
@@ -125,9 +72,16 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
 
 <script src="/js/html.js"></script>
+<script src="/js/modals/create-job-modal.js"></script>
+<script src="/js/modals/edit-job-modal.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const faScript = document.createElement("script");
+        faScript.src = "https://kit.fontawesome.com/ffe0f0379f.js";
+        faScript.crossOrigin = "anonymous";
+        document.head.appendChild(faScript);
+
         // --- Map job to FullCalendar event ---
         function mapJobToEvent(job) {
             const statusName = job.status?.name || statusIdToName[job.status?.id] || 'notDelivered';
@@ -216,12 +170,90 @@
             };
         }
 
+        let contextTargetEvent = null;
+        const contextMenuEl = document.getElementById('eventContextMenu');
+
+        function hideContextMenu() {
+            contextMenuEl.style.display = 'none';
+            contextTargetEvent = null;
+        }
+
+        function showContextMenu(x, y, eventApi) {
+            contextTargetEvent = eventApi;
+
+            const ep = eventApi.extendedProps || {};
+            const title = (ep.original_title || eventApi.title || 'Job').toString();
+            contextMenuEl.querySelector('[data-action="open"]').textContent = `Open "${title}"`;
+            contextMenuEl.querySelector('[data-action="openNewTab"]').textContent = `Open "${title}" in New Tab`;
+            contextMenuEl.querySelector('[data-action="edit"]').textContent = `Edit "${title}"`;
+
+            // Hide the current status from submenu
+            const currentStatusName = (ep.status || '').toString(); // e.g., 'delivered'
+            const submenuItems = contextMenuEl.querySelectorAll('#statusSubmenu a.dropdown-item[data-action="setStatus"]');
+            submenuItems.forEach(a => {
+                const name = a.getAttribute('data-status');
+                a.style.display = (name === currentStatusName) ? 'none' : '';
+            });
+
+            // Cascading submenu behavior (Windows-like)
+            const root = contextMenuEl.querySelector('#statusSubmenuRoot');
+            const submenu = contextMenuEl.querySelector('#statusSubmenu');
+            if (root && submenu && !root.dataset.bound) {
+                root.dataset.bound = '1';
+                let submenuHideTimer = null;
+                const openSubmenu = () => {
+                    submenu.style.display = 'block';
+                    const rootRect = root.getBoundingClientRect();
+                    const submenuRect = submenu.getBoundingClientRect();
+                    const vw = window.innerWidth;
+                    const vh = window.innerHeight;
+                    let top = 0;
+                    let left = rootRect.width;
+                    if (rootRect.right + submenuRect.width > vw) {
+                        left = -submenuRect.width;
+                    }
+                    if (rootRect.top + submenuRect.height > vh) {
+                        top = Math.max(0, vh - (rootRect.top + submenuRect.height) - 4);
+                    }
+                    submenu.style.top = `${top}px`;
+                    submenu.style.left = `${left}px`;
+                };
+                const scheduleHide = () => {
+                    clearTimeout(submenuHideTimer);
+                    submenuHideTimer = setTimeout(() => {
+                        submenu.style.display = 'none';
+                    }, 200);
+                };
+                const cancelHide = () => clearTimeout(submenuHideTimer);
+
+                root.addEventListener('mouseenter', () => {
+                    cancelHide();
+                    openSubmenu();
+                });
+                root.addEventListener('mouseleave', scheduleHide);
+                submenu.addEventListener('mouseenter', cancelHide);
+                submenu.addEventListener('mouseleave', scheduleHide);
+            }
+
+            // Position main menu within viewport
+            const menuRect = { width: 240, height: 260 };
+            const vw = window.innerWidth, vh = window.innerHeight;
+            let left = x, top = y;
+            if (left + menuRect.width > vw) left = vw - menuRect.width - 10;
+            if (top + menuRect.height > vh) top = vh - menuRect.height - 10;
+
+            contextMenuEl.style.left = left + 'px';
+            contextMenuEl.style.top = top + 'px';
+            contextMenuEl.style.display = 'block';
+        }
+
         // --- Calendar setup ---
         const calendarEl = document.getElementById('calendar');
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'timeGridWeek',
             headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay' },
             navLinks: true,
+
             eventTimeFormat: { // like '14:30'
                 hour: '2-digit',
                 minute: '2-digit',
@@ -229,6 +261,8 @@
             },
             slotMinTime: "07:00:00",
             slotMaxTime: "21:00:00",
+            height: "auto",
+
             locale: 'da',
             buttonText: {
                 today: 'I dag',
@@ -237,6 +271,7 @@
                 day: 'Dag',
                 list: 'Liste'
             },
+
             weekends: false,
 
             // ENABLE dragging & resizing
@@ -324,12 +359,10 @@
             },
 
             eventDidMount: function(info) {
-                // Ensure any old popover on this element is removed
+                // existing popover setup
                 const existing = bootstrap.Popover.getInstance(info.el);
                 if (existing) existing.dispose();
-
                 const description = info.event.extendedProps.job_description || '(No description)';
-
                 new bootstrap.Popover(info.el, {
                     title: "Description",
                     content: description,
@@ -338,20 +371,167 @@
                     container: 'body',
                     html: false
                 });
+
+                // Right-click handler
+                info.el.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                    // Close any open popover to avoid overlap
+                    const inst = bootstrap.Popover.getInstance(info.el);
+                    if (inst) inst.hide();
+                    showContextMenu(e.clientX, e.clientY, info.event);
+                });
             },
-            // Dispose popover when the event element is being removed from the DOM
             eventWillUnmount: function(info) {
                 const inst = bootstrap.Popover.getInstance(info.el);
                 if (inst) inst.dispose();
             },
         });
 
-        // --- Modals ---
-        const createModal = new bootstrap.Modal(document.getElementById('createModal'));
-        let currentJob = null;
-
         calendar.render();
         fetchJobsAndInit(calendar);
+
+        // Global handlers to close menu
+        document.addEventListener('click', (e) => {
+            if (contextMenuEl.style.display === 'block' && !contextMenuEl.contains(e.target)) {
+                hideContextMenu();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') hideContextMenu();
+        });
+        window.addEventListener('scroll', hideContextMenu, true);
+        window.addEventListener('resize', hideContextMenu);
+
+        // Menu actions
+        contextMenuEl.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const anchor = e.target.closest('.dropdown-item');
+            if (!anchor) return;
+
+            const target = contextTargetEvent;
+            hideContextMenu();
+            if (!target) return;
+
+            const action = anchor.getAttribute('data-action');
+
+            if (action === 'open') {
+                document.location.href = '/jobliste/' + target.id;
+                return;
+            }
+
+            if (action === 'openNewTab') {
+                window.open('/jobliste/' + target.id, '_blank', 'noopener');
+                return;
+            }
+
+            if (action === 'edit') {
+                const ep = target.extendedProps || {};
+                const toLocalDatetimeInput = (date) => {
+                    if (!date) return '';
+                    const d = new Date(date);
+                    const pad = (n) => String(n).padStart(2, '0');
+                    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+                };
+                const jobForEdit = {
+                    id: target.id,
+                    title: ep.original_title || target.title || '',
+                    customer_name: ep.customer_name || '',
+                    customer_phone: ep.customer_phone || '',
+                    work_time_minutes: ep.work_time_minutes ?? 0,
+                    price_per_minute: ep.price_per_minute ?? 0,
+                    date: toLocalDatetimeInput(target.start),
+                    status: { id: ep.status_id || 1 }
+                };
+                if (window.openEditJobModal) {
+                    window.openEditJobModal(jobForEdit);
+                } else {
+                    alert('Edit modal is not available.');
+                }
+                return;
+            }
+
+            if (action === 'setStatus') {
+                // Update status directly via PUT (no modal)
+                const name = anchor.getAttribute('data-status');
+                const statusMap = {
+                    notDelivered: 1,
+                    delivered: 2,
+                    inProgress: 3,
+                    missingPart: 4,
+                    finished: 5,
+                    pickedUp: 6
+                };
+                const newStatusId = statusMap[name];
+
+                // Build payload similar to edit modal submission
+                const ep = target.extendedProps || {};
+                const toIsoLocal = (date) => {
+                    if (!date) return null;
+                    const pad = (n) => String(n).padStart(2, '0');
+                    const d = new Date(date);
+                    const yyyy = d.getFullYear();
+                    const MM = pad(d.getMonth() + 1);
+                    const dd = pad(d.getDate());
+                    const HH = pad(d.getHours());
+                    const mm = pad(d.getMinutes());
+                    const ss = pad(d.getSeconds());
+                    return `${yyyy}-${MM}-${dd}T${HH}:${mm}:${ss}`;
+                };
+                const payload = {
+                    title: ep.original_title || target.title || '',
+                    customer_name: ep.customer_name || '',
+                    customer_phone: ep.customer_phone || '',
+                    work_time_minutes: ep.work_time_minutes ?? 0,
+                    price_per_minute: ep.price_per_minute ?? 0,
+                    date: toIsoLocal(target.start),
+                    status: { id: newStatusId }
+                };
+
+                try {
+                    const res = await fetch('/api/jobs/' + target.id, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!res.ok) throw new Error('Server returned ' + res.status);
+                    const updated = await res.json();
+
+                    // Reflect changes on the calendar event
+                    // Reuse your mapper to keep logic consistent if available in this scope
+                    const updatedStatusId = updated.status?.id ?? newStatusId;
+                    // Update extended props and color classes minimally
+                    target.setExtendedProp('status_id', updatedStatusId);
+                    target.setExtendedProp('status', name);
+
+                    // If you have a statusToColors/status classes function available, you could also update styles here.
+                    // Otherwise, just refresh the page or re-fetch:
+                    // Option A: Soft refresh event colors if you have helpers
+                    if (typeof statusToColors === 'function') {
+                        const colors = statusToColors(name);
+                        target.setProp('backgroundColor', colors.backgroundColor);
+                        target.setProp('borderColor', colors.borderColor);
+                        target.setProp('textColor', colors.textColor);
+                        target.setProp('classNames', [colors.cssClass]);
+                    }
+                } catch (err) {
+                    console.error('Failed to update status:', err);
+                    alert('Could not update status (see console).');
+                }
+                return;
+            }
+
+            if (action === 'delete') {
+                if (!confirm('Delete this job?')) return;
+                try {
+                    const res = await fetch('/api/jobs/' + target.id, { method: 'DELETE' });
+                    if (!res.ok) throw new Error('Server returned ' + res.status);
+                    target.remove();
+                } catch (err) {
+                    console.error('Failed to delete job:', err);
+                    alert('Could not delete job (see console).');
+                }
+            }
+        });
 
         // --- Refresh ---
         document.getElementById('refreshBtn').addEventListener('click', e => {
@@ -361,9 +541,12 @@
 
         // --- Create job ---
         document.getElementById('createJobBtn').addEventListener('click', () => {
-            document.getElementById('createJobForm').reset();
-            createModal.show();
+            if (window.openCreateJobModal) window.openCreateJobModal();
         });
+
+        window.refreshCalendarWithJob = function(createdJob) {
+            calendar.addEvent(mapJobToEvent(createdJob));
+        };
 
         function toIsoLocalDateTime(localValue) {
             if (!localValue) return null;
@@ -382,35 +565,6 @@
             const mm = pad(d.getMinutes());
             return `${yyyy}-${MM}-${dd}T${HH}:${mm}`;
         }
-
-        document.getElementById('createJobForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const payload = {
-                title: document.getElementById('jobTitle').value,
-                customer_name: document.getElementById('customerName').value,
-                customer_phone: document.getElementById('customerPhone').value,
-                job_description: document.getElementById('jobDescription').value,
-                work_time_minutes: parseInt(document.getElementById('workTime').value || '0', 10),
-                price_per_minute: parseFloat(document.getElementById('pricePerMin').value || '0'),
-                date: toIsoLocalDateTime(document.getElementById('jobDate').value),
-                status: { id: parseInt(document.getElementById('jobStatus').value, 10) }
-            };
-
-            fetch('/api/jobs', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-                .then(r => r.json())
-                .then(created => {
-                    calendar.addEvent(mapJobToEvent(created));
-                    createModal.hide();
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert('Failed to create job (see console)');
-                });
-        });
     });
 </script>
 </body>
