@@ -2,31 +2,32 @@ package mainProgram; // Project Organization
 
 // Product Class
 public class Product {
-    // Attributes
-    private int id;
-    private double price;
 
-    // Constructor
-    public Product(int id, double price) {
-        this.id = id;
-        this.price = price;
-    }
+  // Attributes
+  private int id;
+  private double price;
 
-    // Getters 
-    public int getId() {
-        return id;
-    }
+  // Constructor
+  public Product(int id, double price) {
+    this.id = id;
+    this.price = price;
+  }
 
-    public double getPrice() {
-        return price;
-    }
+  // Getters
+  public int getId() {
+    return id;
+  }
 
-    // Setters
-    public void setId(int id) {
-        this.id = id;
-    }
+  public double getPrice() {
+    return price;
+  }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+  // Setters
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public void setPrice(double price) {
+    this.price = price;
+  }
 }
