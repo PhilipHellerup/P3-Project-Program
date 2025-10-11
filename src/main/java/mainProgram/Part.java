@@ -1,7 +1,6 @@
 package mainProgram; // Project Organization
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,51 +9,50 @@ import java.util.List;
 @Table(name = "parts")
 public class Part {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // assumes serial/bigserial PK
-    // Attributes
-    private Integer id;
-    private String title;
-    private String type;
-    private Double price;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY) // assumes serial/bigserial PK
+  // Attributes
+  private Integer id;
 
-    @OneToMany(mappedBy = "part", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<JobPart> jobParts = new ArrayList<>();
+  private String title;
+  private String type;
+  private Double price;
 
-    // Constructor
-    public Part(String title, String type, Double price) {
-        this.title = title;
-        this.type = type;
-        this.price = price;
-    }
+  @OneToMany(mappedBy = "part", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<JobPart> jobParts = new ArrayList<>();
 
-    public Part() {
+  // Constructor
+  public Part(String title, String type, Double price) {
+    this.title = title;
+    this.type = type;
+    this.price = price;
+  }
 
-    }
+  public Part() {}
 
-    // Getters
-    public String getTitle() {
-        return title;
-    }
-    
-    public String getType() {
-        return type;
-    }
+  // Getters
+  public String getTitle() {
+    return title;
+  }
 
-    public double getPrice() {
-        return price;
-    }
+  public String getType() {
+    return type;
+  }
 
-    // Setters
-    public void setName(String name) {
-        this.title = title;
-    }
+  public double getPrice() {
+    return price;
+  }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+  // Setters
+  public void setName(String name) {
+    this.title = title;
+  }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public void setPrice(Double price) {
+    this.price = price;
+  }
 }
