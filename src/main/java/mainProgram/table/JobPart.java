@@ -1,4 +1,4 @@
-package mainProgram;
+package mainProgram.table;
 
 import jakarta.persistence.*;
 

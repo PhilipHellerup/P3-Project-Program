@@ -4,6 +4,7 @@ singleQuote: true
 trailingComma: 'all'
 semi: true
 arrowParens: 'always'
+htmlWhitespaceSensitivity: 'ignore'
 
 plugins:
   - prettier-plugin-java
