@@ -8,21 +8,35 @@
   top: 0;
   left: 0;
   width: 13rem;
-  height: 100vh;
-  background-color: #1f2937; /* mørk grå-blå */
-  color: #e5e7eb;            /* lys tekst */
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid #111827;
-  z-index: 1000;
+  height: 100%;
+  background: #1f2937;
+  color: #ffffff;
+  transform: translateX(-100%); /* Start hidden */
+  transition: transform 0.3s ease-in-out;
+  z-index: 1001;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.content-push {
+  margin-left: 13rem; /* Matches sidebar width */
+}
+
+.with-navbar .sidebar-nav {
+  transform: translateX(0);
 }
 
 .nav-header {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   padding: 22px 20px;
   border-bottom: 1px solid #374151;
+}
+
+.logo {
+  width: 90%;
+  max-width: 180px;
 }
 
 .nav-header h2 {
@@ -54,7 +68,10 @@
   color: #e5e7eb;
   text-decoration: none;
   border-left: 3px solid transparent;
-  transition: background-color 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease,
+    border-color 0.2s ease;
   border-radius: 4px 0 0 4px;
 }
 
@@ -84,30 +101,33 @@
 }
 
 /* Adjust page margin, when navbar is present */
-.body.with-navbar{
+.body.with-navbar {
   margin-left: 13rem;
 }
 
 /* Navbar button style */
-.close-navbar-btn, .open-navbar-btn {
-  width: 40px;           /* Width of the button */
-  height: 40px;          /* Height of the button */
-  background-color: #303e51; /* Button color */
-  border: none;          /* Remove default border */
-  color: white;          /* Text color */
-  font-size: 16px;       /* Text size */
-  cursor: pointer;       /* Pointer on hover */
+.close-navbar-btn,
+.open-navbar-btn {
+  width: 40px;
+  height: 40px;
+  background-color: #303e51;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s;
   position: relative;
+  flex-shrink: 0;
 }
 
 /* Navbar close button style */
 .close-navbar-btn {
-  left: 3rem;
-  border-radius: 50%;    /* Makes it circular */
+  left: 10%;
+  border-radius: 50%; /* Makes it circular */
+  transition: left 0.1s;
 }
 
 .close-navbar-btn:hover {
@@ -115,18 +135,18 @@
 }
 
 /* Navbar open button style */
-.open-navbar-btn{
+.open-navbar-btn {
   width: 40px;
   padding-left: 20px;
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
   position: fixed;
-  top: 2.5%;
+  top: 2.3%;
   left: -1%;
   transition: left 0.1s;
 }
 
-.open-navbar-btn:hover{
+.open-navbar-btn:hover {
   background-color: #3b82f6;
   left: 0;
 }

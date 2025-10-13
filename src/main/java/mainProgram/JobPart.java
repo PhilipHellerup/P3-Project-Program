@@ -5,26 +5,27 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "job_part_jointable")
 public class JobPart {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "job_id")
-    private Job job;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "part_id")
-    private Part part;
+  @ManyToOne
+  @JoinColumn(name = "job_id")
+  private Job job;
 
-    private Integer quantity;
+  @ManyToOne
+  @JoinColumn(name = "part_id")
+  private Part part;
 
-    // getters/setters
-    public Part getPart() {
-        return part;
-    }
+  private Integer quantity;
 
-    public Integer getQuantity() {
-        return quantity;
-    }
+  // getters/setters
+  public Part getPart() {
+    return part;
+  }
+
+  public Integer getQuantity() {
+    return quantity;
+  }
 }
