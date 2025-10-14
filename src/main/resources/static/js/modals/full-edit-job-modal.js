@@ -80,7 +80,7 @@
     // Set job status using nested or fallback ID
     document.getElementById('full_status_id').value = job.status?.id || job.status_id || 1;
 
-    // Fill in description if available
+    // Fill in the description if available
     document.getElementById('full_job_description').value = job.job_description || '';
 
     // Display the modal after fields are populated

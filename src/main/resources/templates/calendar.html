@@ -8,12 +8,6 @@
     <!-- Bootstrap CSS -->
     <link href="/css/bootstrap.css" rel="stylesheet" />
 
-    <!-- FullCalendar CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css"
-      rel="stylesheet"
-    />
-
     <!-- Calendar CSS -->
     <link href="/css/calendar.css" rel="stylesheet" />
   </head>
@@ -563,6 +557,7 @@
               title: ep.original_title || target.title || '',
               customer_name: ep.customer_name || '',
               customer_phone: ep.customer_phone || '',
+              job_description: ep.job_description || '',
               work_time_minutes: ep.work_time_minutes ?? 0,
               price_per_minute: ep.price_per_minute ?? 0,
               date: toLocalDatetimeInput(target.start),
@@ -610,6 +605,7 @@
               title: ep.original_title || target.title || '',
               customer_name: ep.customer_name || '',
               customer_phone: ep.customer_phone || '',
+              job_description: ep.job_description || '',
               work_time_minutes: ep.work_time_minutes ?? 0,
               price_per_minute: ep.price_per_minute ?? 0,
               date: toIsoLocal(target.start),

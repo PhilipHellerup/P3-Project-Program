@@ -8,15 +8,8 @@
 
     <!-- Linking: include CSS and JS assets. Keep CSS in <head> for render-blocking styles. -->
     <link rel="stylesheet" href="/css/bootstrap.css" />
-    <script src="/js/bootstrap.js"></script>
-    <script src="/js/html.js"></script>
   </head>
   <body>
-    <!-- Navigation: navbar script injects navigation markup at runtime -->
-    <nav>
-      <script src="/js/navbar.js"></script>
-    </nav>
-
     <!--
   Modals must exist in the DOM before their initialization scripts run.
   Using Thymeleaf th:replace to include modal fragments from a `modals` template.
@@ -180,9 +173,17 @@
       </div>
     </div>
 
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/html.js"></script>
+
     <!-- Modal-specific JS: initialize modal behavior after modal markup is included -->
     <script src="/js/modals/edit-job-modal.js"></script>
     <script src="/js/modals/edit-description-modal.js"></script>
+
+    <!-- Navigation: navbar script injects navigation markup at runtime -->
+    <nav>
+        <script src="/js/navbar.js"></script>
+    </nav>
 
     <!-- Inline script: small DOM manipulation and wiring for edit buttons and status styling -->
     <script>
