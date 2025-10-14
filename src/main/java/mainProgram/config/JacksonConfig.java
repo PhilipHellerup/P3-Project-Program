@@ -15,7 +15,7 @@ public class JacksonConfig {
 
   /**
    * Creates and configures a custom ObjectMapper bean for JSON processing.
-   * 
+   *
    * <p>Configuration includes:
    * <ul>
    *   <li>JavaTimeModule registration for Java 8+ date/time API support (LocalDate, LocalDateTime, etc.)</li>

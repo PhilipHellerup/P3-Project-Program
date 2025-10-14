@@ -7,11 +7,11 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Repository interface for Job entity database operations.
- * 
+ *
  * <p>This interface extends Spring Data JPA's JpaRepository, which automatically provides
  * standard CRUD operations without requiring explicit implementation. Spring Data JPA
  * generates the implementation at runtime based on method naming conventions.</p>
- * 
+ *
  * <p>Inherited methods include:</p>
  * <ul>
  *   <li>findAll() - Retrieve all jobs</li>
@@ -22,31 +22,30 @@ import org.springframework.stereotype.Repository;
  *   <li>count() - Count total number of jobs</li>
  *   <li>existsById(Integer id) - Check if a job exists</li>
  * </ul>
- * 
+ *
  * @see Job
  * @see JpaRepository
  */
 @Repository
 public interface JobRepository extends JpaRepository<Job, Integer> {
-
   /**
    * Retrieves all jobs ordered by date in ascending order (earliest first).
-   * 
+   *
    * <p>This is a derived query method - Spring Data JPA automatically generates
    * the query implementation based on the method name following the convention:
    * findAllByOrderBy[Property][Direction]</p>
-   * 
+   *
    * @return a list of all jobs sorted by date from oldest to newest
    */
   List<Job> findAllByOrderByDateAsc();
 
   /**
    * Retrieves all jobs ordered by date in descending order (newest first).
-   * 
+   *
    * <p>This is a derived query method - Spring Data JPA automatically generates
    * the query implementation based on the method name following the convention:
    * findAllByOrderBy[Property][Direction]</p>
-   * 
+   *
    * @return a list of all jobs sorted by date from newest to oldest
    */
   List<Job> findAllByOrderByDateDesc();

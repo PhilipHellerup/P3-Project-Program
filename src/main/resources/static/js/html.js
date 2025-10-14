@@ -1,4 +1,3 @@
-
 /**
  * HTML Utility Functions
  *
@@ -7,8 +6,6 @@
  *
  * @module html
  */
-
-// --- Status mappings ---
 
 /**
  * Maps human-readable status names to their corresponding database IDs.
@@ -26,6 +23,7 @@
  *
  * @constant {Object.<string, number>}
  */
+// Status mappings
 const statusNameToId = {
   notDelivered: 1,
   delivered: 2,
@@ -166,11 +164,11 @@ function statusToColors(statusName) {
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
   return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/>/g, '&gt;')
-      .replace(/</g, '&lt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
+    .replace(/&/g, '&amp;')
+    .replace(/>/g, '&gt;')
+    .replace(/</g, '&lt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 /**
@@ -198,8 +196,8 @@ function formatStatusName(status) {
   if (!status) return '';
   // Split camelCase or PascalCase into words and capitalize each
   return status
-      .replace(/([a-z0-9])([A-Z])/g, '$1 $2') // split camelCase
-      .replace(/^./, (s) => s.toUpperCase()); // capitalize first letter
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2') // split camelCase
+    .replace(/^./, (s) => s.toUpperCase()); // capitalize first letter
 }
 
 /**
