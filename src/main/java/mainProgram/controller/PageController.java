@@ -1,12 +1,12 @@
 package mainProgram.controller; // Project Organization
 
 import java.util.List;
-/* --- Libraries --- */
-// Marks this class as a Spring MVC Controller (Model - View - Controller)
-import mainProgram.Job;
-import mainProgram.JobPart;
 import mainProgram.JobService;
 import mainProgram.repository.JobRepository;
+/* --- Libraries --- */
+// Marks this class as a Spring MVC Controller (Model - View - Controller)
+import mainProgram.table.Job;
+import mainProgram.table.JobPart;
 import org.springframework.stereotype.Controller;
 // Maps HTTP GET requests to specific methods
 import org.springframework.ui.Model;

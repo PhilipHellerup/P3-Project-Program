@@ -1,7 +1,7 @@
 package mainProgram.repository;
 
 import java.util.List;
-import mainProgram.Job;
+import mainProgram.table.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

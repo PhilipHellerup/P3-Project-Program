@@ -2,6 +2,7 @@ package mainProgram; // Project Organization
 
 import java.util.ArrayList;
 import java.util.List;
+import mainProgram.table.Job;
 
 // Day Class
 public class Day {

@@ -1,13 +1,12 @@
 package mainProgram.controller;
 
 import java.util.List;
-import mainProgram.Job;
-import mainProgram.JobStatus;
 import mainProgram.repository.JobRepository;
 import mainProgram.repository.JobStatusRepository;
+import mainProgram.table.Job;
+import mainProgram.table.JobStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller

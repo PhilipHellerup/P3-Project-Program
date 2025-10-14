@@ -1,4 +1,4 @@
-package mainProgram; // Project Organization
+package mainProgram.table; // Project Organization
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

@@ -3,6 +3,8 @@ package mainProgram;
 import java.util.List;
 import mainProgram.repository.JobPartRepository;
 import mainProgram.repository.JobRepository;
+import mainProgram.table.Job;
+import mainProgram.table.JobPart;
 import org.springframework.stereotype.Service;
 
 @Service
