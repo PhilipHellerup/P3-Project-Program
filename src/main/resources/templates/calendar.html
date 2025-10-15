@@ -8,20 +8,16 @@
     <!-- Bootstrap CSS -->
     <link href="/css/bootstrap.css" rel="stylesheet" />
 
-    <!-- FullCalendar CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css"
-      rel="stylesheet"
-    />
-
     <!-- Calendar CSS -->
     <link href="/css/calendar.css" rel="stylesheet" />
   </head>
   <body>
     <div class="container">
+      <!-- Page Header with Title, Legend, and Action Buttons -->
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
           <h1 class="h3 mb-0">Kalender</h1>
+          <!-- Status Legend - Visual guide for job status colors -->
           <div class="legend mt-2">
             <span class="badge" style="background: #f6c23e; color: #000">Ikke Indleveret</span>
             <span class="badge" style="background: #1cc88a; color: #000">Indleveret</span>
@@ -32,19 +28,23 @@
           </div>
         </div>
 
+        <!-- Action Buttons -->
         <div>
           <button class="btn btn-success" id="createJobBtn">Opret reparation</button>
-          <a href="#" class="btn btn-primary" id="refreshBtn">Opdater</a>
+          <a class="btn btn-primary" id="refreshBtn">Opdater</a>
         </div>
       </div>
 
+      <!-- FullCalendar Container -->
       <div id="calendar"></div>
 
-      <!-- Right-click context menu -->
+      <!-- Right-click Context Menu for Event Actions -->
       <div id="eventContextMenu" class="event-contextmenu">
         <a class="dropdown-item" data-action="open">Åbn</a>
         <a class="dropdown-item" data-action="openNewTab">Åbn i ny fane</a>
         <a class="dropdown-item" data-action="edit">Rediger</a>
+
+        <!-- Status Change Submenu with Cascading Display -->
         <div class="dropdown-item position-relative" id="statusSubmenuRoot">
           <span>Set Status</span>
           <span class="fa-solid fa-angle-right"></span>
@@ -71,10 +71,12 @@
         <a class="dropdown-item text-danger" data-action="delete">Slet</a>
       </div>
 
-      <!-- Create Job Modal -->
+      <!-- Thymeleaf Modal Fragments -->
       <div th:replace="~{modals :: create-job-modal}"></div>
       <div th:replace="~{modals :: full-edit-job-modal}"></div>
     </div>
+
+    <!-- Navigation Bar -->
     <nav>
       <script src="/js/navbar.js"></script>
     </nav>
@@ -85,18 +87,25 @@
     <!-- FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
 
+    <!-- Custom JavaScript Modules -->
     <script src="/js/html.js"></script>
     <script src="/js/modals/create-job-modal.js"></script>
     <script src="/js/modals/full-edit-job-modal.js"></script>
 
     <script>
       document.addEventListener('DOMContentLoaded', function () {
+        // Load FontAwesome icons dynamically
         const faScript = document.createElement('script');
         faScript.src = 'https://kit.fontawesome.com/ffe0f0379f.js';
         faScript.crossOrigin = 'anonymous';
         document.head.appendChild(faScript);
 
-        // --- Map job to FullCalendar event ---
+        /**
+         * Converts a Job object from the API into a FullCalendar event object.
+         *
+         * @param {Object} job - Job data from the API
+         * @returns {Object} FullCalendar event object with title, dates, colors, and extended properties
+         */
         function mapJobToEvent(job) {
           const statusName = job.status?.name || statusIdToName[job.status?.id] || 'notDelivered';
           const statusId = job.status?.id || statusNameToId[statusName] || 1;
@@ -105,9 +114,7 @@
           // Build the displayed title to include customer name
           const jobTitle = job.title || '';
           const customer = job.customer_name || '';
-          // If both present: "Job Title — Customer Name"
-          // If only customer present: "Customer Name"
-          // If only title present: "Job Title"
+          // Format: "Job Title — Customer Name" or fallback to individual parts
           const displayTitle =
             jobTitle && customer
               ? `${jobTitle} — ${customer}`
@@ -129,7 +136,7 @@
             textColor: colors.textColor,
             classNames: [colors.cssClass],
             extendedProps: {
-              // keep original fields available for popover / edit modal
+              // Store original fields for popover display and editing
               original_title: job.title || '',
               customer_name: job.customer_name,
               customer_phone: job.customer_phone,
@@ -142,7 +149,12 @@
           };
         }
 
-        // --- Fetch jobs and load into calendar ---
+        /**
+         * Fetches all jobs from the API and initializes the calendar with them.
+         *
+         * @param {Object} calendar - FullCalendar instance
+         * @returns {Promise} Promise that resolves when jobs are loaded
+         */
         function fetchJobsAndInit(calendar) {
           return fetch('/api/jobs')
             .then((r) => r.json())
@@ -153,7 +165,13 @@
             });
         }
 
-        // Format a Date object to local ISO WITHOUT timezone: "YYYY-MM-DDTHH:mm:ss"
+        /**
+         * Formats a Date object to local ISO format without timezone.
+         * Format: "YYYY-MM-DDTHH:mm:ss"
+         *
+         * @param {Date} date - Date object to format
+         * @returns {string|null} Formatted date string or null if no date provided
+         */
         function formatLocalDateTime(date) {
           if (!date) return null;
           const pad = (n) => String(n).padStart(2, '0');
@@ -166,15 +184,18 @@
           return `${Y}-${M}-${D}T${hh}:${mm}:${ss}`;
         }
 
-        // Build a full payload for PUT from an EventApi object (use existing values)
+        /**
+         * Builds a complete API payload from a FullCalendar event object.
+         * Used for PUT requests to update job data.
+         *
+         * @param {Object} event - FullCalendar EventApi object
+         * @returns {Object} Job payload ready for API submission
+         */
         function buildPayloadFromEvent(event) {
-          // event.extendedProps holds fields we stored earlier (customer_name, etc.)
           const ep = event.extendedProps || {};
-          // status_id stored in extendedProps
           const statusId = ep.status_id || 1;
 
-          // Prefer the original raw title (stored in extendedProps.original_title).
-          // Fall back to event.title only if original_title is missing.
+          // Prefer the original raw title (stored separately from display title)
           const rawTitle =
             ep.original_title !== undefined &&
             ep.original_title !== null &&
@@ -189,32 +210,45 @@
             job_description: ep.job_description || '',
             work_time_minutes: ep.work_time_minutes || 0,
             price_per_minute: ep.price_per_minute || 0,
-            // use local format used elsewhere
             date: event.start ? formatLocalDateTime(event.start) : null,
             status: { id: parseInt(statusId, 10) },
           };
         }
 
+        // Context Menu State
         let contextTargetEvent = null;
         const contextMenuEl = document.getElementById('eventContextMenu');
 
+        /**
+         * Hides the context menu and clears the target event reference.
+         */
         function hideContextMenu() {
           contextMenuEl.style.display = 'none';
           contextTargetEvent = null;
         }
 
+        /**
+         * Displays the context menu at the specified coordinates for the given event.
+         * Dynamically updates menu items based on event properties and hides current status option.
+         *
+         * @param {number} x - X coordinate (clientX)
+         * @param {number} y - Y coordinate (clientY)
+         * @param {Object} eventApi - FullCalendar EventApi object
+         */
         function showContextMenu(x, y, eventApi) {
           contextTargetEvent = eventApi;
 
           const ep = eventApi.extendedProps || {};
           const title = (ep.original_title || eventApi.title || 'Job').toString();
+
+          // Update menu items with event-specific text
           contextMenuEl.querySelector('[data-action="open"]').textContent = `Åbn "${title}"`;
           contextMenuEl.querySelector('[data-action="openNewTab"]').textContent =
             `Åbn "${title}" i ny fane`;
           contextMenuEl.querySelector('[data-action="edit"]').textContent = `Rediger "${title}"`;
 
-          // Hide the current status from submenu
-          const currentStatusName = (ep.status || '').toString(); // e.g., 'delivered'
+          // Hide the current status from the submenu to avoid confusion
+          const currentStatusName = (ep.status || '').toString();
           const submenuItems = contextMenuEl.querySelectorAll(
             '#statusSubmenu a.dropdown-item[data-action="setStatus"]',
           );
@@ -223,12 +257,13 @@
             a.style.display = name === currentStatusName ? 'none' : '';
           });
 
-          // Cascading submenu behavior
+          // Setup cascading submenu behavior (only once)
           const root = contextMenuEl.querySelector('#statusSubmenuRoot');
           const submenu = contextMenuEl.querySelector('#statusSubmenu');
           if (root && submenu && !root.dataset.bound) {
             root.dataset.bound = '1';
             let submenuHideTimer = null;
+
             const openSubmenu = () => {
               submenu.style.display = 'block';
               const rootRect = root.getBoundingClientRect();
@@ -237,23 +272,29 @@
               const vh = window.innerHeight;
               let top = 0;
               let left = rootRect.width;
+
+              // Position submenu to the left if it would overflow right edge
               if (rootRect.right + submenuRect.width > vw) {
                 left = -submenuRect.width;
               }
+              // Adjust vertical position if it would overflow bottom
               if (rootRect.top + submenuRect.height > vh) {
                 top = Math.max(0, vh - (rootRect.top + submenuRect.height) - 4);
               }
               submenu.style.top = `${top}px`;
               submenu.style.left = `${left}px`;
             };
+
             const scheduleHide = () => {
               clearTimeout(submenuHideTimer);
               submenuHideTimer = setTimeout(() => {
                 submenu.style.display = 'none';
               }, 200);
             };
+
             const cancelHide = () => clearTimeout(submenuHideTimer);
 
+            // Hover events for cascading behavior
             root.addEventListener('mouseenter', () => {
               cancelHide();
               openSubmenu();
@@ -263,7 +304,7 @@
             submenu.addEventListener('mouseleave', scheduleHide);
           }
 
-          // Position main menu within viewport
+          // Position main menu within viewport bounds
           const menuRect = { width: 240, height: 260 };
           const vw = window.innerWidth,
             vh = window.innerHeight;
@@ -277,7 +318,7 @@
           contextMenuEl.style.display = 'block';
         }
 
-        // --- Calendar setup ---
+        // FullCalendar Configuration and Initialization
         const calendarEl = document.getElementById('calendar');
         const calendar = new FullCalendar.Calendar(calendarEl, {
           initialView: 'timeGridWeek',
@@ -288,16 +329,19 @@
           },
           navLinks: true,
 
+          // Time display format (24-hour format)
           eventTimeFormat: {
-            // like '14:30'
             hour: '2-digit',
             minute: '2-digit',
             hour12: false,
           },
+
+          // Business hours display range
           slotMinTime: '07:00:00',
           slotMaxTime: '21:00:00',
           height: 'auto',
 
+          // Danish localization
           locale: 'da',
           buttonText: {
             today: 'I dag',
@@ -307,18 +351,24 @@
             list: 'Liste',
           },
 
-          weekends: false,
+          weekends: false, // Hide weekends
 
-          // ENABLE dragging & resizing
-          editable: true, // allows events to be dragged/resized
+          // Enable drag-and-drop editing
+          editable: true,
 
-          events: [],
+          events: [], // Will be populated by fetchJobsAndInit
 
+          /**
+           * Event click handler - navigates to job details page.
+           */
           eventClick: function (info) {
             document.location.href = '/jobliste/' + info.event.id;
           },
 
-          // Fired when event is dropped (moved)
+          /**
+           * Event drop handler - updates job date/time when dragged.
+           * Sends PUT request to API and reverts on failure.
+           */
           eventDrop: function (info) {
             const ev = info.event;
             const payload = buildPayloadFromEvent(ev);
@@ -333,6 +383,7 @@
                 return response.json();
               })
               .then((updated) => {
+                // Update event with fresh data from server
                 const newEvent = mapJobToEvent(updated);
                 ev.setProp('title', newEvent.title);
                 ev.setStart(newEvent.start);
@@ -347,15 +398,20 @@
               })
               .catch((err) => {
                 console.error('Failed to update on drop:', err);
-                info.revert();
+                info.revert(); // Revert the drag operation
                 alert('Jobbet kunne ikke flyttes — opdateringen mislykkedes.');
               });
           },
 
-          // Fired when event is resized (duration changed)
+          /**
+           * Event resize handler - updates job duration when resized.
+           * Calculates new work_time_minutes based on the new end time.
+           */
           eventResize: function (info) {
             const ev = info.event;
             const payload = buildPayloadFromEvent(ev);
+
+            // Calculate new duration in minutes
             if (ev.start && ev.end) {
               payload.work_time_minutes = Math.round(
                 (ev.end.getTime() - ev.start.getTime()) / 60000,
@@ -372,6 +428,7 @@
                 return response.json();
               })
               .then((updated) => {
+                // Update event with fresh data from server
                 const newEvent = mapJobToEvent(updated);
                 ev.setProp('title', newEvent.title);
                 ev.setStart(newEvent.start);
@@ -386,18 +443,26 @@
               })
               .catch((err) => {
                 console.error('Failed to update on resize:', err);
-                info.revert();
+                info.revert(); // Revert the resize operation
                 alert('Kunne ikke ændre længden på jobbet — opdatering mislykkedes.');
               })
               .finally(() => {
+                // Clean up any open popovers
                 const inst = bootstrap.Popover.getInstance(info.el);
                 if (inst) inst.dispose();
               });
           },
 
+          /**
+           * Event mount handler - sets up Bootstrap popover and context menu.
+           * Called when an event element is added to the DOM.
+           */
           eventDidMount: function (info) {
+            // Clean up any existing popover
             const existing = bootstrap.Popover.getInstance(info.el);
             if (existing) existing.dispose();
+
+            // Create popover with job description
             const description = info.event.extendedProps.job_description || '(Ingen beskrivelse)';
             new bootstrap.Popover(info.el, {
               title: 'Beskrivelse',
@@ -408,36 +473,50 @@
               html: false,
             });
 
-            // Right-click handler
+            // Right-click context menu handler
             info.el.addEventListener('contextmenu', function (e) {
               e.preventDefault();
               const inst = bootstrap.Popover.getInstance(info.el);
-              if (inst) inst.hide();
+              if (inst) inst.hide(); // Hide popover when showing context menu
               showContextMenu(e.clientX, e.clientY, info.event);
             });
           },
+
+          /**
+           * Event unmount handler - cleans up Bootstrap popover.
+           * Called when an event element is removed from the DOM.
+           */
           eventWillUnmount: function (info) {
             const inst = bootstrap.Popover.getInstance(info.el);
             if (inst) inst.dispose();
           },
         });
 
+        // Render the calendar and load initial job data
         calendar.render();
         fetchJobsAndInit(calendar);
 
-        // Global handlers to close menu
+        // --- Global Event Handlers for Context Menu ---
+
+        // Close menu on click outside
         document.addEventListener('click', (e) => {
           if (contextMenuEl.style.display === 'block' && !contextMenuEl.contains(e.target)) {
             hideContextMenu();
           }
         });
+
+        // Close menu on Escape key
         document.addEventListener('keydown', (e) => {
           if (e.key === 'Escape') hideContextMenu();
         });
+
+        // Close menu on scroll
         window.addEventListener('scroll', hideContextMenu, true);
+
+        // Close menu on window resize
         window.addEventListener('resize', hideContextMenu);
 
-        // Menu actions
+        // --- Context Menu Action Handler ---
         contextMenuEl.addEventListener('click', async (e) => {
           e.stopPropagation();
           const anchor = e.target.closest('.dropdown-item');
@@ -449,34 +528,42 @@
 
           const action = anchor.getAttribute('data-action');
 
+          // Open job details in current window
           if (action === 'open') {
             document.location.href = '/jobliste/' + target.id;
             return;
           }
 
+          // Open job details in new tab
           if (action === 'openNewTab') {
             window.open('/jobliste/' + target.id, '_blank', 'noopener');
             return;
           }
 
+          // Edit job using modal
           if (action === 'edit') {
             const ep = target.extendedProps || {};
+
+            // Convert Date object to datetime-local input format
             const toLocalDatetimeInput = (date) => {
               if (!date) return '';
               const d = new Date(date);
               const pad = (n) => String(n).padStart(2, '0');
               return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
             };
+
             const jobForEdit = {
               id: target.id,
               title: ep.original_title || target.title || '',
               customer_name: ep.customer_name || '',
               customer_phone: ep.customer_phone || '',
+              job_description: ep.job_description || '',
               work_time_minutes: ep.work_time_minutes ?? 0,
               price_per_minute: ep.price_per_minute ?? 0,
               date: toLocalDatetimeInput(target.start),
               status: { id: ep.status_id || 1 },
             };
+
             if (window.openFullEditJobModal) {
               window.openFullEditJobModal(jobForEdit);
             } else {
@@ -485,6 +572,7 @@
             return;
           }
 
+          // Update job status
           if (action === 'setStatus') {
             const name = anchor.getAttribute('data-status');
             const statusMap = {
@@ -498,6 +586,8 @@
             const newStatusId = statusMap[name];
 
             const ep = target.extendedProps || {};
+
+            // Format date for API
             const toIsoLocal = (date) => {
               if (!date) return null;
               const pad = (n) => String(n).padStart(2, '0');
@@ -510,10 +600,12 @@
               const ss = pad(d.getSeconds());
               return `${yyyy}-${MM}-${dd}T${HH}:${mm}:${ss}`;
             };
+
             const payload = {
               title: ep.original_title || target.title || '',
               customer_name: ep.customer_name || '',
               customer_phone: ep.customer_phone || '',
+              job_description: ep.job_description || '',
               work_time_minutes: ep.work_time_minutes ?? 0,
               price_per_minute: ep.price_per_minute ?? 0,
               date: toIsoLocal(target.start),
@@ -529,12 +621,12 @@
               if (!res.ok) throw new Error('Server returned ' + res.status);
               const updated = await res.json();
 
-              // Reflect changes on the calendar event
+              // Update event properties with new status
               const updatedStatusId = updated.status?.id ?? newStatusId;
-              // Update extended props and color classes minimally
               target.setExtendedProp('status_id', updatedStatusId);
               target.setExtendedProp('status', name);
 
+              // Update event colors based on new status
               if (typeof statusToColors === 'function') {
                 const colors = statusToColors(name);
                 target.setProp('backgroundColor', colors.backgroundColor);
@@ -549,6 +641,7 @@
             return;
           }
 
+          // Delete job
           if (action === 'delete') {
             if (!confirm('Delete this job?')) return;
             try {
@@ -556,7 +649,7 @@
                 method: 'DELETE',
               });
               if (!res.ok) throw new Error('Server returned ' + res.status);
-              target.remove();
+              target.remove(); // Remove event from calendar
             } catch (err) {
               console.error('Failed to delete job:', err);
               alert('Jobbet kunne ikke slettes.');
@@ -564,17 +657,24 @@
           }
         });
 
-        // Refresh
+        // Button Event Handlers
+
+        // Refresh calendar data
         document.getElementById('refreshBtn').addEventListener('click', (e) => {
           e.preventDefault();
           fetchJobsAndInit(calendar);
         });
 
-        // Create job
+        // Open create job modal
         document.getElementById('createJobBtn').addEventListener('click', () => {
           if (window.openCreateJobModal) window.openCreateJobModal();
         });
 
+        /**
+         * Global function called by modal to add newly created job to the calendar.
+         *
+         * @param {Object} createdJob - Job object returned from API after creation
+         */
         window.refreshCalendarWithJob = function (createdJob) {
           calendar.addEvent(mapJobToEvent(createdJob));
         };
