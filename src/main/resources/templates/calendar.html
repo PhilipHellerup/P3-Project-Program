@@ -18,24 +18,24 @@
     <link href="/css/calendar.css" rel="stylesheet" />
   </head>
   <body>
-  <div class="shadow-lg p-5 rounded-4">
+  <div class="shadow-lg p-5 rounded-3">
     <div class="container">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-          <h1 class="h3 mb-0">Kalender</h1>
-          <div class="legend mt-2">
-            <span class="badge" style="background: #f6c23e; color: #000">Ikke Indleveret</span>
-            <span class="badge" style="background: #1cc88a; color: #000">Indleveret</span>
-            <span class="badge" style="background: #4e73df; color: #000">Igangværende</span>
-            <span class="badge" style="background: #f6b3b0; color: #000">Mangler del</span>
-            <span class="badge" style="background: #858796; color: #000">Færdig</span>
-            <span class="badge" style="background: #8e44ad; color: #000">Afhentet</span>
-          </div>
-        </div>
+      <div class="d-flex justify-content-end align-items-center mb-3">
+          <!--These should be rendered in the nav bar, when on the calendar page -->
+<!--          <div>-->
+<!--          <h1 class="h3 mb-0">Kalender</h1>-->
+<!--          <div class="legend mt-2">-->
+<!--            <span class="badge" style="background: #f6c23e; color: #000">Ikke Indleveret</span>-->
+<!--            <span class="badge" style="background: #1cc88a; color: #000">Indleveret</span>-->
+<!--            <span class="badge" style="background: #4e73df; color: #000">Igangværende</span>-->
+<!--            <span class="badge" style="background: #f6b3b0; color: #000">Mangler del</span>-->
+<!--            <span class="badge" style="background: #858796; color: #000">Færdig</span>-->
+<!--            <span class="badge" style="background: #8e44ad; color: #000">Afhentet</span>-->
+<!--          </div>-->
+<!--        </div>-->
 
         <div>
-          <button class="btn btn-success" id="createJobBtn">Opret reparation</button>
-          <a href="#" class="btn btn-primary" id="refreshBtn">Opdater</a>
+<!--          <a href="#" class="btn btn-primary" id="refreshBtn">Opdater</a>-->
         </div>
       </div>
 
@@ -282,14 +282,22 @@
         // --- Calendar setup ---
         const calendarEl = document.getElementById('calendar');
         const calendar = new FullCalendar.Calendar(calendarEl, {
+            customButtons: {
+                // Custom btn in the full calendar tool line, to open the create job modal
+                createJob: {
+                    text: 'Tilføj reparation',
+                    click: function() {
+                        if (window.openCreateJobModal) window.openCreateJobModal();
+                    }
+                }
+            },
           initialView: 'timeGridWeek',
           headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay',
+            left: 'prev,title,next,today',
+              center: 'dayGridMonth,timeGridWeek,timeGridDay',
+              right: 'createJob'
           },
           navLinks: true,
-
           eventTimeFormat: {
             // like '14:30'
             hour: '2-digit',
@@ -297,10 +305,21 @@
             hour12: false,
           },
           slotMinTime: '07:00:00',
-          slotMaxTime: '21:00:00',
+          slotMaxTime: '17:00:00',
           height: 'auto',
-
+            allDaySlot: false,
+            dayHeaderFormat: {
+                weekday: 'short',
+                day: 'numeric',
+                month: 'short'
+            },
+            slotLabelFormat: {
+                hour: 'numeric',
+                minute: '2-digit',
+                omitZeroMinute: false,
+            },
           locale: 'da',
+
           buttonText: {
             today: 'I dag',
             month: 'Måned',
@@ -309,7 +328,7 @@
             list: 'Liste',
           },
 
-          weekends: false,
+            hiddenDays: [0],
 
           // ENABLE dragging & resizing
           editable: true, // allows events to be dragged/resized
@@ -570,11 +589,6 @@
         document.getElementById('refreshBtn').addEventListener('click', (e) => {
           e.preventDefault();
           fetchJobsAndInit(calendar);
-        });
-
-        // Create job
-        document.getElementById('createJobBtn').addEventListener('click', () => {
-          if (window.openCreateJobModal) window.openCreateJobModal();
         });
 
         window.refreshCalendarWithJob = function (createdJob) {

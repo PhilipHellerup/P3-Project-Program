@@ -18,6 +18,226 @@ body {
   display: block;
 }
 
+.fc .fc-button:focus{
+    box-shadow: none !important;
+}
+
+/* === FullCalendar Toolbar Styling === */
+.fc .fc-toolbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.fc .fc-toolbar-chunk:first-child {
+    justify-self: start;
+}
+
+.fc .fc-toolbar-chunk:nth-child(2) {
+    justify-self: center;
+}
+
+.fc .fc-toolbar-chunk:last-child {
+    justify-self: end;
+}
+
+.fc .fc-toolbar-chunk div {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    height: fit-content;
+}
+
+/* Title (e.g., "Uge 42 - Oktober 2025") */
+.fc .fc-toolbar-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #000;
+}
+
+.fc .fc-today-button {
+    color: #3D3D3D;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    font-weight: 600;
+    padding: 6px 14px;
+    transition: all 0.15s ease-in-out;
+}
+
+/* Prev/Next buttons */
+.fc .fc-prev-button,
+.fc .fc-next-button {
+    display: flex;
+    justify-items: center;
+    background: #fff;
+    border: 1px solid #ccc;
+    color: #333;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    font-weight: 600;
+    padding: 6px 10px;
+    transition: all 0.15s ease-in-out;
+}
+
+.fc .fc-prev-button:hover,
+.fc .fc-next-button:hover,
+.fc .fc-today-button:hover,
+.fc .fc-today-button:disabled:hover {
+    background: #f8f9fa;
+    border-color: #999;
+    color: #3D3D3D;
+}
+
+/* Active/disabled today button */
+.fc .fc-today-button:disabled {
+    opacity: 100%;
+    color: #3D3D3D;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    font-weight: 600;
+    padding: 6px 14px;
+    transition: all 0.15s ease-in-out;
+}
+
+/* Icon alignment */
+.fc .fc-icon {
+    font-size: 1rem;
+    vertical-align: middle;
+}
+
+.fc-button-group {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 25px;
+    background: #EFEFEF;
+    border-radius: 12px;
+}
+
+.fc-direction-ltr .fc-button-group > .fc-button:not(:last-child){
+    border-radius: 12px;
+}
+.fc-direction-ltr .fc-button-group > .fc-button:not(:first-child){
+    border-radius: 12px;
+}
+
+
+.fc .fc-dayGridMonth-button,
+.fc .fc-timeGridWeek-button,
+.fc .fc-timeGridDay-button {
+    background: #EFEFEF;
+    border: none;
+    color: #333;
+    border-radius: 12px;
+    box-shadow: none;
+    font-weight: 600;
+    padding: 4px 14px;
+    transition: all 0.15s ease-in-out;
+}
+
+.fc .fc-dayGridMonth-button:not(:disabled).fc-button-active,
+.fc .fc-timeGridWeek-button:not(:disabled).fc-button-active,
+.fc .fc-timeGridDay-button:not(:disabled).fc-button-active {
+    background: #fff;
+    border: none;
+    color: #333;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    font-weight: 600;
+    padding: 4px 14px;
+    transition: all 0.15s ease-in-out;
+}
+
+.fc .fc-dayGridMonth-button:not(:disabled).fc-button-active:focus,
+.fc .fc-timeGridWeek-button:not(:disabled).fc-button-active:focus,
+.fc .fc-timeGridDay-button:not(:disabled).fc-button-active:focus {
+    background: #fff;
+    border: none;
+    color: #333;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    font-weight: 600;
+    padding: 4px 14px;
+    transition: all 0.15s ease-in-out;
+}
+
+.fc .fc-dayGridMonth-button:hover,
+.fc .fc-timeGridWeek-button:hover,
+.fc .fc-timeGridDay-button:hover {
+    background: #fff;
+    border: none;
+    color: #333;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    font-weight: 600;
+    padding: 4px 14px;
+    transition: all 0.15s ease-in-out;
+}
+
+
+/* Create job btn */
+.fc .fc-createJob-button {
+    background: #32A759;
+    height: 40px;
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    font-weight: 600;
+    padding: 6px 14px;
+    transition: all 0.15s ease-in-out;
+}
+
+.fc .fc-createJob-button:hover {
+    background: #247940;
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    font-weight: 600;
+    padding: 6px 14px;
+    transition: all 0.15s ease-in-out;
+}
+
+
+/* Everything for the calendar grid*/
+.fc-day-today {
+    background: #E5F4FF !important;
+    border-bottom: 2px solid #5375FF !important;
+}
+
+fc-timegrid-slot-label-frame {
+    color: #939292 !important;
+}
+
+
+/* no top, left and right border */
+.fc .fc-scrollgrid {
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+    border-right: none !important;
+}
+
+.fc-theme-standard .fc-scrollgrid {
+    border-right: none !important;
+}
+
+.fc-col-header-cell:last-child {
+    border-right: none !important;
+}
+
+.fc-timegrid-col:last-child {
+    border-right: none !important;
+}
+
 /* Status palette */
 .status-notDelivered {
   background-color: #f6c23e !important;
@@ -25,8 +245,10 @@ body {
   color: #000 !important;
 }
 .status-delivered {
-  background-color: #1cc88a !important;
-  border-color: #17a673 !important;
+  background-color: #ffffff !important;
+    padding: 5px;
+    border: 1px solid #BCBCBC !important;
+    border-radius: 8px !important;
   color: #000 !important;
 }
 .status-inProgress {
