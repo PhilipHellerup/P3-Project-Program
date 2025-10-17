@@ -111,9 +111,7 @@
           // If only customer present: "Customer Name"
           // If only title present: "Job Title"
           const displayTitle =
-            jobTitle && customer
-              ? `${jobTitle} — ${customer}`
-              : jobTitle
+              jobTitle
                 ? jobTitle
                 : customer
                   ? customer

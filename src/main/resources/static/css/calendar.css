@@ -1,9 +1,6 @@
 body {
   padding: 1.5rem;
 }
-.fc .fc-event {
-  cursor: pointer;
-}
 .fc .fc-col-header-cell-cushion {
   color: #000;
   text-decoration: none;
@@ -238,38 +235,41 @@ fc-timegrid-slot-label-frame {
     border-right: none !important;
 }
 
+/* Styling of the events */
+.fc .fc-event {
+    cursor: pointer;
+    background-color: #ffffff !important;
+    padding: 5px !important;
+    border: 2px solid !important;
+    font-size: 1rem;
+    border-radius: 12px !important;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+}
+
 /* Status palette */
 .status-notDelivered {
-  background-color: #f6c23e !important;
-  border-color: #e0a800 !important;
-  color: #000 !important;
+  border-color: #F65D60 !important;
+  color: #F65D60 !important;
 }
 .status-delivered {
-  background-color: #ffffff !important;
-    padding: 5px;
-    border: 1px solid #BCBCBC !important;
-    border-radius: 8px !important;
-  color: #000 !important;
+    border: #FEB568 !important;
+  color: #FEB568 !important;
 }
 .status-inProgress {
-  background-color: #4e73df !important;
-  border-color: #2e59d9 !important;
-  color: #000 !important;
+  border-color: #0088FF !important;
+  color: #0088FF !important;
 }
 .status-missingPart {
-  background-color: #f6b3b0 !important;
-  border-color: #e07a78 !important;
-  color: #000 !important;
+  border-color: #4B41C8 !important;
+  color: #4B41C8 !important;
 }
 .status-finished {
-  background-color: #858796 !important;
-  border-color: #6c6c7a !important;
-  color: #000 !important;
+  border-color: #32A759 !important;
+  color: #32A759 !important;
 }
 .status-pickedUp {
-  background-color: #8e44ad !important;
-  border-color: #732d91 !important;
-  color: #000 !important;
+  border-color: #939292 !important;
+  color: #939292 !important;
 }
 
 /* Context menu */

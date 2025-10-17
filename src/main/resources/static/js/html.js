@@ -13,51 +13,51 @@ function statusToColors(statusName) {
   switch (statusName) {
     case 'notDelivered':
       return {
-        backgroundColor: '#f6c23e',
-        borderColor: '#e0a800',
-        textColor: '#000',
+        backgroundColor: '#ffffff',
+        borderColor: '#F65D60',
+        textColor: '#F65D60',
         cssClass: 'status-notDelivered',
       };
     case 'delivered':
       return {
-        backgroundColor: '#1cc88a',
-        borderColor: '#17a673',
-        textColor: '#000',
+        backgroundColor: '#ffffff',
+        borderColor: '#FEB568',
+        textColor: '#FEB568',
         cssClass: 'status-delivered',
       };
     case 'inProgress':
       return {
-        backgroundColor: '#4e73df',
-        borderColor: '#2e59d9',
-        textColor: '#000',
+        backgroundColor: '#ffffff',
+        borderColor: '#0088FF',
+        textColor: '#0088FF',
         cssClass: 'status-inProgress',
       };
     case 'missingPart':
       return {
-        backgroundColor: '#f6b3b0',
-        borderColor: '#e07a78',
-        textColor: '#000',
+        backgroundColor: '#ffffff',
+        borderColor: '#4B41C8',
+        textColor: '#4B41C8',
         cssClass: 'status-missingPart',
       };
     case 'finished':
       return {
-        backgroundColor: '#858796',
-        borderColor: '#6c6c7a',
-        textColor: '#000',
+        backgroundColor: '#ffffff',
+        borderColor: '#32A759',
+        textColor: '#32A759',
         cssClass: 'status-finished',
       };
     case 'pickedUp':
       return {
-        backgroundColor: '#8e44ad',
-        borderColor: '#732d91',
-        textColor: '#000',
+        backgroundColor: '#ffffff',
+        borderColor: '#939292',
+        textColor: '#939292',
         cssClass: 'status-pickedUp',
       };
     default:
       return {
-        backgroundColor: '#858796',
-        borderColor: '#6c6c7a',
-        textColor: '#000',
+        backgroundColor: '#ffffff',
+        borderColor: '#858796',
+        textColor: '#858796',
         cssClass: 'status-finished',
       };
   }
