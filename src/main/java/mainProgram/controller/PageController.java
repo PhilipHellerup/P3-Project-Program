@@ -66,6 +66,17 @@ public class PageController {
   }
 
   /**
+   * Displays the products list page with all products.
+   * Populates the model with a list of all products for rendering in the template.
+   *
+   * @return the name of the product list template (products.html)
+   */
+  @GetMapping("produktliste")
+  public String products() {
+        return "products";
+    }
+
+  /**
    * Displays the job list page with all jobs sorted by date in ascending order.
    * Populates the model with a list of all jobs for rendering in the template.
    *
