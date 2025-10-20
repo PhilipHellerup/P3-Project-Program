@@ -115,7 +115,14 @@
           // If both present: "Job Title — Customer Name"
           // If only customer present: "Customer Name"
           // If only title present: "Job Title"
-          const displayTitle = jobTitle ? jobTitle : customer ? customer : 'Job';
+          let displayTitle;
+          if (jobTitle) {
+            displayTitle = jobTitle;
+          } else if (customer) {
+            displayTitle = customer;
+          } else {
+            displayTitle = 'Job';
+          }
 
           return {
             id: job.id,
