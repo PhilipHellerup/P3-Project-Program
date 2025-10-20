@@ -16,37 +16,36 @@
     <!-- Main container: central column for the jobs listing -->
     <div class="w-85 d-flex flex-column m-5 p-4 border border-secondary-subtle rounded-4 shadow-sm">
       <!-- Header: page title / quick actions -->
-      <div class="d-inline-flex">
-        <div class="d-inline-flex gap-4">
-          <p class="fs-3 fw-bolder p-0 m-0">Reperationer</p>
-        <!-- placeholder active not active button -->
-            <button class="tab-btn" data-filter="active" th:classappend="${currentFilter == 'active' ? 'active' : ''}">Aktive</button>
-            <button class="tab-btn" data-filter="completed" th:classappend="${currentFilter == 'completed' ? 'active' : ''}">Afsluttet</button>
+        <!-- Header: page title / quick actions -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-inline-flex gap-3">
+                <!-- Active/Completed filter buttons -->
+                <button class="tab-btn" data-filter="active" th:classappend="${currentFilter == 'active' ? 'active' : ''}">Aktive</button>
+                <button class="tab-btn" data-filter="completed" th:classappend="${currentFilter == 'completed' ? 'active' : ''}">Afsluttet</button>
+            </div>
+
+            <!-- Button opens the Create Job modal (handler wired at bottom) -->
+            <button class="btn btn-primary" id="openCreateJobBtn">Tilføj ny reperation</button>
         </div>
-      </div>
 
         <!-- Search / controls area: layout placeholders for search, filter, add button -->
         <div class="d-flex flex-column justify-content-center" style="height: 20rem">
             <div class="d-inline-flex w-100 gap-5">
-                <!-- Button opens the Create Job modal (handler wired at bottom) -->
-                <button class="btn btn-primary" id="openCreateJobBtn">Tilføj ny reperation</button>
-
-          <!-- search UI. Replace with an actual <input> + JS for filtering. -->
+                <!-- search UI. Replace with an actual <input> + JS for filtering. -->
                 <div class="search-bar">
                     <nav class="navbar navbar-light">
                         <form class="d-inline-flex" style="width: 40rem">
                             <input class="form-control" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-dark my-2 my-sm-0 ms-2 p-2 d-flex align-items-center justify-content-center" type="submit">
-                    <span class="material-symbols-outlined" aria-hidden="true">
-                        search
-                    </span>
+                  <span class="material-symbols-outlined" aria-hidden="true">
+                    search
+                  </span>
                             </button>
-
                         </form>
                     </nav>
                 </div>
+            </div>
         </div>
-      </div>
 
       <!-- Jobs table: each row is clickable and navigates to job details using data-href attribute -->
       <table class="table table-hover align-middle mt-lg-3">
