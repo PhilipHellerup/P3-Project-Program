@@ -8,6 +8,8 @@
 
     <!-- Linking -->
     <link rel="stylesheet" href="/css/bootstrap.css" />
+      <link rel="stylesheet" href="/css/jobliste.css" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
   </head>
 
   <body class="d-flex justify-content-center">
@@ -17,20 +19,32 @@
       <div class="d-inline-flex">
         <div class="d-inline-flex gap-4">
           <p class="fs-3 fw-bolder p-0 m-0">Reperationer</p>
+        <!-- placeholder active not active button -->
+            <button class="tab-btn" data-filter="active" th:classappend="${currentFilter == 'active' ? 'active' : ''}">Aktive</button>
+            <button class="tab-btn" data-filter="completed" th:classappend="${currentFilter == 'completed' ? 'active' : ''}">Afsluttet</button>
         </div>
       </div>
 
-      <!-- Search / controls area: layout placeholders for search, filter, add button -->
-      <div class="d-flex flex-column justify-content-center" style="height: 20rem">
-        <div class="d-inline-flex w-100 gap-5">
-          <!-- Button opens the Create Job modal (handler wired at bottom) -->
-          <button class="btn btn-primary" id="openCreateJobBtn">Tilføj ny reperation</button>
+        <!-- Search / controls area: layout placeholders for search, filter, add button -->
+        <div class="d-flex flex-column justify-content-center" style="height: 20rem">
+            <div class="d-inline-flex w-100 gap-5">
+                <!-- Button opens the Create Job modal (handler wired at bottom) -->
+                <button class="btn btn-primary" id="openCreateJobBtn">Tilføj ny reperation</button>
 
-          <!-- Placeholder for search UI. Replace with an actual <input> + JS for filtering. -->
-          <div class="w-30 border border-secondary p-2" style="cursor: pointer">Search bar</div>
+          <!-- search UI. Replace with an actual <input> + JS for filtering. -->
+                <div class="search-bar">
+                    <nav class="navbar navbar-light">
+                        <form class="d-inline-flex" style="width: 40rem">
+                            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-dark my-2 my-sm-0 ms-2 p-2 d-flex align-items-center justify-content-center" type="submit">
+                    <span class="material-symbols-outlined" aria-hidden="true">
+                        search
+                    </span>
+                            </button>
 
-          <!-- Placeholder for filter UI. Replace with a dropdown or offcanvas for filters. -->
-          <div class="border border-secondary p-2" style="cursor: pointer">filter</div>
+                        </form>
+                    </nav>
+                </div>
         </div>
       </div>
 
