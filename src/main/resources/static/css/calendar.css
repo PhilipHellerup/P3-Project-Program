@@ -215,7 +215,7 @@ html, body {
   border-bottom: 2px solid #5375ff !important;
 }
 
-fc-timegrid-slot-label-frame {
+.fc-timegrid-slot-label-frame {
   color: #939292 !important;
 }
 
