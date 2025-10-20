@@ -90,44 +90,45 @@
 
     <!-- Navbar: injected by navbar.js which writes the DOM for the navigation -->
     <nav>
-        <script src="/js/navbar.js"></script>
+      <script src="/js/navbar.js"></script>
     </nav>
 
     <!-- Table navigation and status badge wiring. -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Make each <tr data-href> row clickable and navigate to the URL in data-href
-            const rows = document.querySelectorAll('tr[data-href]');
-            rows.forEach((row) => {
-                row.addEventListener('click', () => {
-                    window.location.href = row.getAttribute('data-href');
-                });
-            });
-
-            // Convert plain status text into a visually distinct badge using helper functions if available
-            document.querySelectorAll('.job-status').forEach((el) => {
-                const raw = el.textContent.trim();
-                // statusToColors returns an object { borderColor, backgroundColor, textColor, cssClass }
-                const colors = typeof statusToColors === 'function' ? statusToColors(raw) : {};
-                // translateStatusName is optional and maps internal status names to human-readable labels
-                el.textContent = typeof translateStatusName === 'function' ? translateStatusName(raw) : raw;
-                Object.assign(el.style, {
-                    display: 'inline-block',
-                    padding: '2px 8px',
-                    borderRadius: '3px',
-                    border: `1px solid ${colors.borderColor || '#ccc'}`,
-                    backgroundColor: colors.backgroundColor || '#eee',
-                    color: colors.textColor || '#000',
-                    fontWeight: '600',
-                });
-                if (colors.cssClass) el.classList.add(colors.cssClass);
-            });
-
-            // Use the modal module's openCreateJobModal if provided
-            document.getElementById('openCreateJobBtn')?.addEventListener('click', () => {
-                if (window.openCreateJobModal) window.openCreateJobModal();
-            });
+      document.addEventListener('DOMContentLoaded', function () {
+        // Make each <tr data-href> row clickable and navigate to the URL in data-href
+        const rows = document.querySelectorAll('tr[data-href]');
+        rows.forEach((row) => {
+          row.addEventListener('click', () => {
+            window.location.href = row.getAttribute('data-href');
+          });
         });
+
+        // Convert plain status text into a visually distinct badge using helper functions if available
+        document.querySelectorAll('.job-status').forEach((el) => {
+          const raw = el.textContent.trim();
+          // statusToColors returns an object { borderColor, backgroundColor, textColor, cssClass }
+          const colors = typeof statusToColors === 'function' ? statusToColors(raw) : {};
+          // translateStatusName is optional and maps internal status names to human-readable labels
+          el.textContent =
+            typeof translateStatusName === 'function' ? translateStatusName(raw) : raw;
+          Object.assign(el.style, {
+            display: 'inline-block',
+            padding: '2px 8px',
+            borderRadius: '3px',
+            border: `1px solid ${colors.borderColor || '#ccc'}`,
+            backgroundColor: colors.backgroundColor || '#eee',
+            color: colors.textColor || '#000',
+            fontWeight: '600',
+          });
+          if (colors.cssClass) el.classList.add(colors.cssClass);
+        });
+
+        // Use the modal module's openCreateJobModal if provided
+        document.getElementById('openCreateJobBtn')?.addEventListener('click', () => {
+          if (window.openCreateJobModal) window.openCreateJobModal();
+        });
+      });
     </script>
   </body>
 </html>
