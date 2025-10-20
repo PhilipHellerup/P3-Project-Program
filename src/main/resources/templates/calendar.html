@@ -17,66 +17,68 @@
     <!-- Calendar CSS -->
     <link href="/css/calendar.css" rel="stylesheet" />
   </head>
-  <body>
-  <div class="shadow-lg p-5 rounded-3">
-    <div class="container">
-      <div class="d-flex justify-content-end align-items-center mb-3">
+  <body class="">
+    <div class="shadow-lg p-5 rounded-3 h-100">
+      <div class="container h-100">
+        <div class="d-flex justify-content-end align-items-center mb-3">
           <!--These should be rendered in the nav bar, when on the calendar page -->
-<!--          <div>-->
-<!--          <h1 class="h3 mb-0">Kalender</h1>-->
-<!--          <div class="legend mt-2">-->
-<!--            <span class="badge" style="background: #f6c23e; color: #000">Ikke Indleveret</span>-->
-<!--            <span class="badge" style="background: #1cc88a; color: #000">Indleveret</span>-->
-<!--            <span class="badge" style="background: #4e73df; color: #000">Igangværende</span>-->
-<!--            <span class="badge" style="background: #f6b3b0; color: #000">Mangler del</span>-->
-<!--            <span class="badge" style="background: #858796; color: #000">Færdig</span>-->
-<!--            <span class="badge" style="background: #8e44ad; color: #000">Afhentet</span>-->
-<!--          </div>-->
-<!--        </div>-->
+          <!--          <div>-->
+          <!--          <h1 class="h3 mb-0">Kalender</h1>-->
+          <!--          <div class="legend mt-2">-->
+          <!--            <span class="badge" style="background: #f6c23e; color: #000">Ikke Indleveret</span>-->
+          <!--            <span class="badge" style="background: #1cc88a; color: #000">Indleveret</span>-->
+          <!--            <span class="badge" style="background: #4e73df; color: #000">Igangværende</span>-->
+          <!--            <span class="badge" style="background: #f6b3b0; color: #000">Mangler del</span>-->
+          <!--            <span class="badge" style="background: #858796; color: #000">Færdig</span>-->
+          <!--            <span class="badge" style="background: #8e44ad; color: #000">Afhentet</span>-->
+          <!--          </div>-->
+          <!--        </div>-->
 
-        <div>
-<!--          <a href="#" class="btn btn-primary" id="refreshBtn">Opdater</a>-->
-        </div>
-      </div>
-
-      <div id="calendar"></div>
-
-      <!-- Right-click context menu -->
-      <div id="eventContextMenu" class="event-contextmenu">
-        <a class="dropdown-item" data-action="open">Åbn</a>
-        <a class="dropdown-item" data-action="openNewTab">Åbn i ny fane</a>
-        <a class="dropdown-item" data-action="edit">Rediger</a>
-        <div class="dropdown-item position-relative" id="statusSubmenuRoot">
-          <span>Set Status</span>
-          <span class="fa-solid fa-angle-right"></span>
-          <div
-            id="statusSubmenu"
-            class="event-submenu"
-            style="display: none; position: absolute; top: 0; left: 100%; min-width: 180px"
-          >
-            <a class="dropdown-item" data-action="setStatus" data-status="notDelivered">
-              Ikke Indleveret
-            </a>
-            <a class="dropdown-item" data-action="setStatus" data-status="delivered">Indleveret</a>
-            <a class="dropdown-item" data-action="setStatus" data-status="inProgress">
-              Igangværende
-            </a>
-            <a class="dropdown-item" data-action="setStatus" data-status="missingPart">
-              Mangler del
-            </a>
-            <a class="dropdown-item" data-action="setStatus" data-status="finished">Færdig</a>
-            <a class="dropdown-item" data-action="setStatus" data-status="pickedUp">Afhentet</a>
+          <div>
+            <!--          <a href="#" class="btn btn-primary" id="refreshBtn">Opdater</a>-->
           </div>
         </div>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item text-danger" data-action="delete">Slet</a>
-      </div>
 
-      <!-- Create Job Modal -->
-      <div th:replace="~{modals :: create-job-modal}"></div>
-      <div th:replace="~{modals :: full-edit-job-modal}"></div>
+        <div class="h-100" id="calendar"></div>
+
+        <!-- Right-click context menu -->
+        <div id="eventContextMenu" class="event-contextmenu">
+          <a class="dropdown-item" data-action="open">Åbn</a>
+          <a class="dropdown-item" data-action="openNewTab">Åbn i ny fane</a>
+          <a class="dropdown-item" data-action="edit">Rediger</a>
+          <div class="dropdown-item position-relative" id="statusSubmenuRoot">
+            <span>Set Status</span>
+            <span class="fa-solid fa-angle-right"></span>
+            <div
+              id="statusSubmenu"
+              class="event-submenu"
+              style="display: none; position: absolute; top: 0; left: 100%; min-width: 180px"
+            >
+              <a class="dropdown-item" data-action="setStatus" data-status="notDelivered">
+                Ikke Indleveret
+              </a>
+              <a class="dropdown-item" data-action="setStatus" data-status="delivered">
+                Indleveret
+              </a>
+              <a class="dropdown-item" data-action="setStatus" data-status="inProgress">
+                Igangværende
+              </a>
+              <a class="dropdown-item" data-action="setStatus" data-status="missingPart">
+                Mangler del
+              </a>
+              <a class="dropdown-item" data-action="setStatus" data-status="finished">Færdig</a>
+              <a class="dropdown-item" data-action="setStatus" data-status="pickedUp">Afhentet</a>
+            </div>
+          </div>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item text-danger" data-action="delete">Slet</a>
+        </div>
+
+        <!-- Create Job Modal -->
+        <div th:replace="~{modals :: create-job-modal}"></div>
+        <div th:replace="~{modals :: full-edit-job-modal}"></div>
+      </div>
     </div>
-  </div>
     <nav>
       <script src="/js/navbar.js"></script>
     </nav>
@@ -110,12 +112,7 @@
           // If both present: "Job Title — Customer Name"
           // If only customer present: "Customer Name"
           // If only title present: "Job Title"
-          const displayTitle =
-              jobTitle
-                ? jobTitle
-                : customer
-                  ? customer
-                  : 'Job';
+          const displayTitle = jobTitle ? jobTitle : customer ? customer : 'Job';
 
           return {
             id: job.id,
@@ -127,7 +124,7 @@
             backgroundColor: colors.backgroundColor,
             borderColor: colors.borderColor,
             textColor: colors.textColor,
-            classNames: [colors.cssClass],
+            classNames: [`status-${statusName}`],
             extendedProps: {
               // keep original fields available for popover / edit modal
               original_title: job.title || '',
@@ -280,42 +277,38 @@
         // --- Calendar setup ---
         const calendarEl = document.getElementById('calendar');
         const calendar = new FullCalendar.Calendar(calendarEl, {
-            customButtons: {
-                // Custom btn in the full calendar tool line, to open the create job modal
-                createJob: {
-                    text: 'Tilføj reparation',
-                    click: function() {
-                        if (window.openCreateJobModal) window.openCreateJobModal();
-                    }
-                }
+          customButtons: {
+            // Custom btn in the full calendar tool line, to open the create job modal
+            createJob: {
+              text: 'Tilføj reparation',
+              click: function () {
+                if (window.openCreateJobModal) window.openCreateJobModal();
+              },
             },
+          },
           initialView: 'timeGridWeek',
           headerToolbar: {
             left: 'prev,title,next,today',
-              center: 'dayGridMonth,timeGridWeek,timeGridDay',
-              right: 'createJob'
+            center: 'dayGridMonth,timeGridWeek,timeGridDay',
+            right: 'createJob',
           },
           navLinks: true,
-          eventTimeFormat: {
-            // like '14:30'
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false,
-          },
+          displayEventTime: false,
           slotMinTime: '07:00:00',
           slotMaxTime: '17:00:00',
-          height: 'auto',
-            allDaySlot: false,
-            dayHeaderFormat: {
-                weekday: 'short',
-                day: 'numeric',
-                month: 'short'
-            },
-            slotLabelFormat: {
-                hour: 'numeric',
-                minute: '2-digit',
-                omitZeroMinute: false,
-            },
+            height: '100%',
+            expandRows: true,
+          allDaySlot: false,
+          dayHeaderFormat: {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+          },
+          slotLabelFormat: {
+            hour: 'numeric',
+            minute: '2-digit',
+            omitZeroMinute: false,
+          },
           locale: 'da',
 
           buttonText: {
@@ -326,7 +319,7 @@
             list: 'Liste',
           },
 
-            hiddenDays: [0],
+          hiddenDays: [0],
 
           // ENABLE dragging & resizing
           editable: true, // allows events to be dragged/resized
@@ -438,6 +431,37 @@
           eventWillUnmount: function (info) {
             const inst = bootstrap.Popover.getInstance(info.el);
             if (inst) inst.dispose();
+          },
+
+          eventContent: function (arg) {
+            // Pick a color — could also come from your event props (e.g., status color)
+            const color = arg.event.backgroundColor || '#4e73df';
+
+            return {
+              html: `
+        <div class="d-flex flex-column">
+        <div class="d-flex align-items-center">
+          <span
+            class="event-dot"
+            style="
+              display:inline-block;
+              width:10px;
+              height:10px;
+              border-radius:50%;
+              margin-right:6px;
+              flex-shrink:0;
+            "
+          ></span>
+          <span class="event-title">${arg.event.title}</span>
+        </div>
+        ${arg.event.extendedProps.job_description && arg.event.extendedProps.work_time_minutes > 60
+                  ? `<span class="event-description fw-normal">${arg.event.extendedProps.job_description}</span>`
+                  : ''
+              }
+
+       </div>
+      `,
+            };
           },
         });
 
