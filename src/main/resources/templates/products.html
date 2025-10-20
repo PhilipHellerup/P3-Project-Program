@@ -1,19 +1,137 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <!-- Static page title for the product list -->
     <title>Produkter</title>
 
     <!-- Linking -->
-    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/bootstrap.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <script src="/js/bootstrap.js"></script>
     <script src="/js/quote.js"></script>
   </head>
 
   <body>
+  <!-- Navigation: Navbar script injects navigation markup at runtime-->
+  <nav>
+      <script src="/js/navbar.js"></script>
+  </nav>
 
-  <p>Hello World!</p>
+  <!-- Page Container (No Nav Bar): main page content wrapper with margin -->
+  <div class="page-content-container m-4 mt-1 flex-1 p-5">
+      <!-- Page Header -->
+      <div class="page-head d-flex justify-content-end">
+          <button type="button" class="btn btn-primary">Tilføj Produkt</button>
+      </div>
 
+      <div class="search-bar mt-5">
+          <nav class="navbar navbar-light">
+              <form class="d-inline-flex" style="width: 40rem">
+                  <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-dark my-2 my-sm-0 ms-2 p-2" type="submit">
+                    <span class="material-symbols-outlined" aria-hidden="true">
+                        search
+                    </span>
+                  </button>
+              </form>
+          </nav>
+      </div>
+
+      <!-- Product Table Container: lists parts/products -->
+      <div class="mt-6">
+          <table class="table table-striped">
+              <thead>
+                <tr>
+                    <th scope="col">Varenr.</th>
+                    <th scope="col">Navn</th>
+                    <th scope="col">EAN</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Pris</th>
+                </tr>
+              </thead>
+              <tbody>
+              <!-- Product 1 -->
+              <tr>
+                  <td class="fs-5">49323013</td>
+                  <td class="fs-5">Reserve 50cm Hjulsæt</td>
+                  <td class="fs-5">1928574600183</td>
+                  <td class="fs-5">Hjulsæt</td>
+                  <td class="fs-5">14.995,00 kr.</td>
+              </tr>
+              <!-- Product 2 -->
+              <tr>
+                  <td class="fs-5">01923332</td>
+                  <td class="fs-5">Shimano Kæde</td>
+                  <td class="fs-5">9252439122342</td>
+                  <td class="fs-5">Kæde</td>
+                  <td class="fs-5">168,00 kr.</td>
+              </tr>
+              <!-- Product 3 -->
+              <tr>
+                  <td class="fs-5">111923844</td>
+                  <td class="fs-5">Kædevoks Silka</td>
+                  <td class="fs-5">0001232543467</td>
+                  <td class="fs-5">Kæde Voks</td>
+                  <td class="fs-5">349,00 kr.</td>
+              </tr>
+              <!-- Product 4 -->
+              <tr>
+                  <td class="fs-5">00123234</td>
+                  <td class="fs-5">Zipp Frempind</td>
+                  <td class="fs-5">8488847362612</td>
+                  <td class="fs-5">Frempind</td>
+                  <td class="fs-5">479,00 kr.</td>
+              </tr>
+              <!-- Product 5 -->
+              <tr>
+                  <td class="fs-5">84668332</td>
+                  <td class="fs-5">Aerocoach Extentions</td>
+                  <td class="fs-5">9953717273759</td>
+                  <td class="fs-5">Styr</td>
+                  <td class="fs-5">6.195,00 kr.</td>
+              </tr>
+              <!-- Product 6 -->
+              <tr>
+                  <td class="fs-5">98764399</td>
+                  <td class="fs-5">Vittoria Corsa Pro 30mm</td>
+                  <td class="fs-5">1112845473222</td>
+                  <td class="fs-5">Dæk</td>
+                  <td class="fs-5">719,00 kr.</td>
+              </tr>
+              </tbody>
+          </table>
+
+          <!-- Pagination Nav Bar -->
+          <div class="mt-5">
+              <ul class="pagination justify-content-center Page-Navigation-Bar">
+                  <li class="page-item">
+                      <a class="page-link" href="#ProductsPage_X" aria-label="Previous">
+                          <span class="material-symbols-outlined" aria-hidden="true">
+                              chevron_left
+                          </span>
+                      </a>
+                  </li>
+                  <li class="page-item">
+                      <a class="page-link" href="#ProductsPage1">1</a>
+                  </li>
+                  <li class="page-item active">
+                      <a class="page-link" href="#ProductsPage2" aria-current="page">2</a>
+                  </li>
+                  <li class="page-item">
+                      <a class="page-link" href="#ProductsPage3">3</a>
+                  </li>
+                  <li class="page-item">
+                      <a class="page-link" href="#ProductsPage_X" aria-label="Next">
+                          <span class="material-symbols-outlined" aria-hidden="true">
+                              chevron_right
+                          </span>
+                      </a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </div>
   </body>
 </html>

@@ -4738,6 +4738,19 @@ textarea.form-control-lg {
   list-style: none;
 }
 
+.Page-Navigation-Bar {
+    --bs-pagination-hover-color: #ffffff;
+    --bs-pagination-hover-bg: #0d6efd;
+    --bs-pagination-hover-border-color: #0d6efd;
+}
+
+.material-symbols-outlined {
+    font-size: 24px !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+    display: block !important;
+}
+
 .page-link {
   position: relative;
   display: block;
