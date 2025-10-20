@@ -3,40 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Static page title for the jobs list -->
     <title>Job Liste</title>
 
     <!-- Linking -->
     <link rel="stylesheet" href="/css/bootstrap.css" />
-    <script src="/js/bootstrap.js"></script>
-    <script src="/js/quote.js"></script>
-    <script src="/js/html.js"></script>
-    <!-- Move modal module load to the end of body (after fragment is inserted) -->
-    <!-- <script src="/js/modals/create-job-modal.js"></script> -->
   </head>
 
   <body class="d-flex justify-content-center">
-    <!-- Navbar -->
-    <nav>
-      <script src="/js/navbar.js"></script>
-    </nav>
-    <!-- The main part of the page -->
+    <!-- Main container: central column for the jobs listing -->
     <div class="w-85 d-flex flex-column m-5 p-4 border border-secondary-subtle rounded-4 shadow-sm">
-      <!-- Top part of the page -->
+      <!-- Header: page title / quick actions -->
       <div class="d-inline-flex">
         <div class="d-inline-flex gap-4">
           <p class="fs-3 fw-bolder p-0 m-0">Reperationer</p>
         </div>
       </div>
 
-      <!-- search -->
+      <!-- Search / controls area: layout placeholders for search, filter, add button -->
       <div class="d-flex flex-column justify-content-center" style="height: 20rem">
         <div class="d-inline-flex w-100 gap-5">
+          <!-- Button opens the Create Job modal (handler wired at bottom) -->
           <button class="btn btn-primary" id="openCreateJobBtn">Tilføj ny reperation</button>
+
+          <!-- Placeholder for search UI. Replace with an actual <input> + JS for filtering. -->
           <div class="w-30 border border-secondary p-2" style="cursor: pointer">Search bar</div>
+
+          <!-- Placeholder for filter UI. Replace with a dropdown or offcanvas for filters. -->
           <div class="border border-secondary p-2" style="cursor: pointer">filter</div>
         </div>
       </div>
-      <!-- Table to show the actual jobs -->
+
+      <!-- Jobs table: each row is clickable and navigates to job details using data-href attribute -->
       <table class="table table-hover align-middle mt-lg-3">
         <thead>
           <tr>
@@ -47,69 +45,89 @@
           </tr>
         </thead>
         <tbody>
+          <!-- Iterate jobs with Thymeleaf th:each; data-href stores the details URL for row-click navigation -->
           <tr
-            th:each="j : ${jobs}"
-            th:attr="data-href=@{/jobliste/{id}(id=${j.id})}"
+            th:each="job : ${jobs}"
+            th:attr="data-href=@{/jobliste/{id}(id=${job.id})}"
             style="cursor: pointer"
           >
             <td class="w-15">
               <div class="d-flex flex-column gap-1">
-                <p class="fw-bolder mb-1" th:text="${j.title}"></p>
-                <p class="mb-0" th:text="${j.customer_name}"></p>
-                <p th:text="${j.customer_phone}"></p>
+                <!-- Title, customer and phone populated from job -->
+                <p class="fw-bolder mb-1" th:text="${job.title}"></p>
+                <p class="mb-0" th:text="${job.customer_name}"></p>
+                <p th:text="${job.customer_phone}"></p>
               </div>
             </td>
             <td class="w-15">
               <div>
-                <span class="job-status" th:text="${j.status.name}"></span>
+                <!-- Status label. Script below will convert this to a styled badge -->
+                <span class="job-status" th:text="${job.status.name}"></span>
               </div>
             </td>
             <td class="w-30">
               <div class="w-75">
-                <p th:text="${j.job_description}"></p>
+                <!-- Short description snippet -->
+                <p th:text="${job.job_description}"></p>
               </div>
             </td>
-            <td class="w-30" th:text="${#temporals.format(j.date, 'd. MMMM yyyy HH:mm')}"></td>
+            <!-- Date formatted with Thymeleaf temporals utility -->
+            <td class="w-30" th:text="${#temporals.format(job.date, 'd. MMMM yyyy HH:mm')}"></td>
           </tr>
         </tbody>
       </table>
     </div>
-    <!-- Ensure correct Thymeleaf path to the fragment file -->
+
+    <!-- Include the modal fragment so its markup is present in the DOM before modal JS runs -->
     <div th:replace="~{modals :: create-job-modal}"></div>
-    <!-- Load the modal module AFTER the fragment and Bootstrap are present -->
+
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/quote.js"></script>
+    <script src="/js/html.js"></script>
+
+    <!-- Load the modal module AFTER the fragment and Bootstrap are present to avoid race conditions -->
     <script src="/js/modals/create-job-modal.js"></script>
+
+    <!-- Navbar: injected by navbar.js which writes the DOM for the navigation -->
+    <nav>
+        <script src="/js/navbar.js"></script>
+    </nav>
+
+    <!-- Table navigation and status badge wiring. -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Make each <tr data-href> row clickable and navigate to the URL in data-href
+            const rows = document.querySelectorAll('tr[data-href]');
+            rows.forEach((row) => {
+                row.addEventListener('click', () => {
+                    window.location.href = row.getAttribute('data-href');
+                });
+            });
+
+            // Convert plain status text into a visually distinct badge using helper functions if available
+            document.querySelectorAll('.job-status').forEach((el) => {
+                const raw = el.textContent.trim();
+                // statusToColors returns an object { borderColor, backgroundColor, textColor, cssClass }
+                const colors = typeof statusToColors === 'function' ? statusToColors(raw) : {};
+                // translateStatusName is optional and maps internal status names to human-readable labels
+                el.textContent = typeof translateStatusName === 'function' ? translateStatusName(raw) : raw;
+                Object.assign(el.style, {
+                    display: 'inline-block',
+                    padding: '2px 8px',
+                    borderRadius: '3px',
+                    border: `1px solid ${colors.borderColor || '#ccc'}`,
+                    backgroundColor: colors.backgroundColor || '#eee',
+                    color: colors.textColor || '#000',
+                    fontWeight: '600',
+                });
+                if (colors.cssClass) el.classList.add(colors.cssClass);
+            });
+
+            // Use the modal module's openCreateJobModal if provided
+            document.getElementById('openCreateJobBtn')?.addEventListener('click', () => {
+                if (window.openCreateJobModal) window.openCreateJobModal();
+            });
+        });
+    </script>
   </body>
 </html>
-
-<!--Table navigation using Thymeleaf. when licking on a row in a table, use "window.location" to navigate to the jobDetails page with information from the job. -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const rows = document.querySelectorAll('tr[data-href]');
-    rows.forEach((row) => {
-      row.addEventListener('click', () => {
-        window.location.href = row.getAttribute('data-href');
-      });
-    });
-
-    document.querySelectorAll('.job-status').forEach((el) => {
-      const raw = el.textContent.trim();
-      const colors = typeof statusToColors === 'function' ? statusToColors(raw) : {};
-      el.textContent = typeof translateStatusName === 'function' ? translateStatusName(raw) : raw;
-      Object.assign(el.style, {
-        display: 'inline-block',
-        padding: '2px 8px',
-        borderRadius: '3px',
-        border: `1px solid ${colors.borderColor || '#ccc'}`,
-        backgroundColor: colors.backgroundColor || '#eee',
-        color: colors.textColor || '#000',
-        fontWeight: '600',
-      });
-      if (colors.cssClass) el.classList.add(colors.cssClass);
-    });
-
-    // Use the module’s opener; remove duplicate local modal wiring and submit handler
-    document.getElementById('openCreateJobBtn')?.addEventListener('click', () => {
-      if (window.openCreateJobModal) window.openCreateJobModal();
-    });
-  });
-</script>

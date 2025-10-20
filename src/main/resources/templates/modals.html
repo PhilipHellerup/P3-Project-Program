@@ -1,13 +1,16 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
   <body>
-    <!-- Create the Job Modal fragment -->
+    <!-- Create the Job Modal fragment: used to create a new job. Include this fragment where needed with th:replace. -->
     <div th:fragment="create-job-modal">
+      <!-- Bootstrap modal wrapper. ID used by JS to show/hide: #createJobModal -->
       <div class="modal fade" id="createJobModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
+          <!-- Form inside modal: id used by JS to attach submit handler (#createJobForm) -->
           <form id="createJobForm" class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">Opret reparation</h5>
+              <!-- Standard Bootstrap close button -->
               <button
                 type="button"
                 class="btn-close"
@@ -15,19 +18,25 @@
                 aria-label="Close"
               ></button>
             </div>
+
+            <!-- Modal body: input fields for the new job. Use name attributes to submit as form data. -->
             <div class="modal-body">
               <div class="mb-3">
                 <label for="jobTitle" class="form-label">Cykel</label>
                 <input type="text" id="jobTitle" name="title" class="form-control" required />
+                <!-- `required` ensures client-side validation for title -->
               </div>
+
               <div class="mb-3">
                 <label for="customerName" class="form-label">Kunde</label>
                 <input type="text" id="customerName" name="customer_name" class="form-control" />
               </div>
+
               <div class="mb-3">
                 <label for="customerPhone" class="form-label">Telefon</label>
                 <input type="text" id="customerPhone" name="customer_phone" class="form-control" />
               </div>
+
               <div class="mb-3">
                 <label for="jobDescription" class="form-label">Beskrivelse</label>
                 <textarea
@@ -36,7 +45,9 @@
                   class="form-control"
                 ></textarea>
               </div>
+
               <div class="mb-3 row">
+                <!-- Work time and price per minute grouped on one row -->
                 <div class="col">
                   <label for="workTime" class="form-label">Arbejdstid (min)</label>
                   <input
@@ -60,8 +71,10 @@
                   />
                 </div>
               </div>
+
               <div class="mb-3">
                 <label for="jobDate" class="form-label">Start Dato</label>
+                <!-- datetime-local input expects value like 2025-10-14T09:30 -->
                 <input
                   type="datetime-local"
                   id="jobDate"
@@ -70,8 +83,10 @@
                   required
                 />
               </div>
+
               <div class="mb-3">
                 <label for="jobStatus" class="form-label">Status</label>
+                <!-- Status select uses numeric IDs that map to server-side status records -->
                 <select id="jobStatus" name="status_id" class="form-select" required>
                   <option value="1">Ikke Indleveret</option>
                   <option value="2">Indleveret</option>
@@ -82,6 +97,8 @@
                 </select>
               </div>
             </div>
+
+            <!-- Modal footer actions: primary submit button and cancel -->
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary">Opret</button>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -93,7 +110,7 @@
       </div>
     </div>
 
-    <!-- Edit Job Modal fragment -->
+    <!-- Edit Job Modal fragment: shorter modal for quick edits. Prefill fields via JS when opening. -->
     <div th:fragment="edit-job-modal">
       <div class="modal fade" id="editJobModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -103,19 +120,24 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+              <!-- Hidden input to store the job ID when editing -->
               <input type="hidden" id="jobId" />
+
               <div class="mb-3">
                 <label class="form-label">Cykel</label>
                 <input type="text" id="title" class="form-control" />
               </div>
+
               <div class="mb-3">
                 <label class="form-label">Kunde</label>
                 <input type="text" id="customer_name" class="form-control" />
               </div>
+
               <div class="mb-3">
                 <label class="form-label">Telefon</label>
                 <input type="text" id="customer_phone" class="form-control" />
               </div>
+
               <div class="mb-3 row">
                 <div class="col">
                   <label class="form-label">Arbejdstid (min)</label>
@@ -126,10 +148,12 @@
                   <input type="number" step="0.01" id="price_per_minute" class="form-control" />
                 </div>
               </div>
+
               <div class="mb-3">
                 <label class="form-label">Start Dato</label>
                 <input type="datetime-local" id="date" class="form-control" />
               </div>
+
               <div class="mb-3">
                 <label class="form-label">Status</label>
                 <select id="status_id" class="form-select">
@@ -151,7 +175,7 @@
       </div>
     </div>
 
-    <!-- Edit Description Modal fragment -->
+    <!-- Edit Description Modal fragment: only edits the description field for a given job ID -->
     <div th:fragment="edit-description-modal">
       <div class="modal fade" id="descModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -161,6 +185,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+              <!-- Hidden id to associate the description update with the right job -->
               <input type="hidden" id="jobIdDesc" />
               <div class="mb-3">
                 <label class="form-label">Beskrivelse</label>
@@ -176,7 +201,7 @@
       </div>
     </div>
 
-    <!-- Full Edit Job Modal fragment -->
+    <!-- Full Edit Job Modal fragment: larger modal with the same fields plus a big description textarea -->
     <div th:fragment="full-edit-job-modal">
       <div class="modal fade" id="fullEditJobModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -235,6 +260,7 @@
                 <div class="col-md-6">
                   <div class="mb-3 h-100">
                     <label class="form-label">Beskrivelse</label>
+                    <!-- Large textarea for full description; resize disabled for consistent UX -->
                     <textarea
                       id="full_job_description"
                       class="form-control"

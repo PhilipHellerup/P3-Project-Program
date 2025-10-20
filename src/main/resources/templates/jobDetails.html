@@ -3,29 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Page title is populated by Thymeleaf from the job object -->
     <title th:text="${job.title}"></title>
 
-    <!-- Linking -->
+    <!-- Linking: include CSS and JS assets. Keep CSS in <head> for render-blocking styles. -->
     <link rel="stylesheet" href="/css/bootstrap.css" />
-    <script src="/js/bootstrap.js"></script>
-    <script src="/js/html.js"></script>
   </head>
   <body>
-    <nav>
-      <script src="/js/navbar.js"></script>
-    </nav>
-    <!-- Modals must be present before their JS initializes -->
+    <!--
+  Modals must exist in the DOM before their initialization scripts run.
+  Using Thymeleaf th:replace to include modal fragments from a `modals` template.
+-->
     <div th:replace="~{modals :: edit-job-modal}"></div>
     <div th:replace="~{modals :: edit-description-modal}"></div>
-    <!-- Page Container (No Nav Bar) -->
+
+    <!-- Page Container (No Nav Bar): main page content wrapper with margin -->
     <div class="page-content-container m-4">
-      <!-- Card Container -->
+      <!-- Card Container: holds two cards side-by-side (Details and Description) -->
       <div class="d-inline-flex" style="width: 100%">
-        <!-- Details Card -->
+        <!-- Details Card: job metadata and edit button -->
         <div class="card me-2" style="width: 100%">
           <div class="card-header d-inline-flex justify-content-between align-items-center">
+            <!-- Card title (in Danish: "Detaljer") -->
             <h5 class="mb-0">Detaljer</h5>
+
+            <!-- Edit button: opens the edit-job modal. ID used by JS to attach click handler. -->
             <a id="openEditBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
+              <!-- Pencil icon (SVG) visually indicates edit action -->
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -44,17 +48,21 @@
               </svg>
             </a>
           </div>
+
+          <!-- Table content: shows job fields populated by Thymeleaf -->
           <div class="table-content-container">
             <table class="table tableRemoveLastLine mb-1">
               <tbody>
                 <tr>
                   <td><b>Status:</b></td>
+                  <!-- job.status.name is printed here; JS will find #job-status and style it -->
                   <td>
                     <span class="job-status" id="job-status" th:text="${job.status.name}"></span>
                   </td>
                 </tr>
                 <tr>
                   <td><b>Oprettet:</b></td>
+                  <!-- Date formatting using Thymeleaf #temporals utility -->
                   <td th:text="${#temporals.format(job.date, 'd. MMMM yyyy HH:mm')}"></td>
                 </tr>
                 <tr>
@@ -74,10 +82,12 @@
           </div>
         </div>
 
-        <!-- Description Card -->
+        <!-- Description Card: brief job description and its edit button -->
         <div class="card ms-2" style="width: 100%">
           <div class="card-header d-inline-flex justify-content-between align-items-center">
             <h5 class="mb-0">Beskrivelse</h5>
+
+            <!-- Button opens description modal. ID used by JS to attach click handler. -->
             <a id="openDescBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -97,6 +107,8 @@
               </svg>
             </a>
           </div>
+
+          <!-- Description text: filled from job.job_description. ID used to fetch current text when opening modal. -->
           <p
             class="card-text mx-2 my-2"
             id="jobDescriptionText"
@@ -105,7 +117,7 @@
         </div>
       </div>
 
-      <!-- Product Table Container -->
+      <!-- Product Table Container: lists parts/products associated with the job -->
       <div class="product-table-content-container mt-6">
         <table class="table">
           <thead>
@@ -117,9 +129,11 @@
             </tr>
           </thead>
           <tbody>
+            <!-- Iterate over jobParts using Thymeleaf th:each. jp.part.title and jp.quantity used. -->
             <tr th:each="jp : ${jobParts}">
               <td th:text="${jp.part.title}"></td>
               <td th:text="${jp.quantity}"></td>
+              <!-- Concatenate price string; consider formatting numbers server-side for localization -->
               <td th:text="${jp.part.price} + ',-'"></td>
               <td th:text="${jp.quantity * jp.part.price}+ ',-'"></td>
             </tr>
@@ -127,15 +141,15 @@
         </table>
       </div>
 
-      <!-- Button + Final Price Table -->
+      <!-- Button + Final Price Table: action button on left, totals on right -->
       <div
         class="final-table-content-container d-flex justify-content-between align-items-start mt-3"
         style="width: 100%"
       >
-        <!-- Left Side: Button -->
+        <!-- Left Side: Button to add a product. You might wire this to a modal or product selector. -->
         <button type="button" class="btn btn-primary">Tilføj Produkt</button>
 
-        <!-- Right Side: Totals table -->
+        <!-- Right Side: Totals table (static values here). Replace with computed values if needed. -->
         <table class="table table-borderless mb-0" style="width: auto">
           <tbody>
             <tr>
@@ -158,25 +172,37 @@
         </table>
       </div>
     </div>
+
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/html.js"></script>
+
+    <!-- Modal-specific JS: initialize modal behavior after modal markup is included -->
     <script src="/js/modals/edit-job-modal.js"></script>
     <script src="/js/modals/edit-description-modal.js"></script>
+
+    <!-- Navigation: navbar script injects navigation markup at runtime -->
+    <nav>
+        <script src="/js/navbar.js"></script>
+    </nav>
+
+    <!-- Inline script: small DOM manipulation and wiring for edit buttons and status styling -->
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById('job-status');
         if (el) {
           const raw = el.textContent?.trim() ?? '';
 
-          // Format the label if available
+          // Format the label if a translation function is available on window
           const label =
             typeof window.translateStatusName === 'function'
               ? window.translateStatusName(raw)
               : raw;
 
-          // Get colors if available
+          // Get colors mapping (border/background/text) if provided by the app
           const colors =
             typeof window.statusToColors === 'function' ? window.statusToColors(raw) : {};
 
-          // Apply text and styles
+          // Apply text and inline styles to make the status look like a badge
           el.textContent = label;
           Object.assign(el.style, {
             display: 'inline-block',
@@ -188,12 +214,14 @@
             fontWeight: '600',
           });
 
+          // If the color helper provided a CSS class name, add it as well
           if (colors.cssClass) el.classList.add(colors.cssClass);
         }
 
         // Open Edit modal with current job prefilled via the module
         document.getElementById('openEditBtn')?.addEventListener('click', (e) => {
           e.preventDefault();
+          // Collect job values using Thymeleaf inlined expressions (note: these become raw values on the client)
           const job = {
             id: '[[${job.id}]]' || '',
             title: '[[${job.title}]]',
@@ -204,10 +232,11 @@
             date: "[[${#temporals.format(job.date, 'yyyy-MM-dd''T''HH:mm')}]]" || '',
             status: { id: '[[${job.status.id}]]' || 1 },
           };
+          // Call modal opener if available
           if (window.openEditJobModal) window.openEditJobModal(job);
         });
 
-        // Open Description modal
+        // Open Description modal and pass current description text
         document.getElementById('openDescBtn')?.addEventListener('click', (e) => {
           e.preventDefault();
           const id = '[[${job.id}]]' || '';

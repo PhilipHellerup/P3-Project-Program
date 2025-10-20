@@ -1,16 +1,27 @@
 (function () {
+  // Locate the modal element by ID
   const modalEl = document.getElementById('createJobModal');
-  if (!modalEl) return;
+  if (!modalEl) return; // Exit if modal not found (prevents errors on pages without it)
 
+  // Initialize Bootstrap modal instance
   const createModal = new bootstrap.Modal(modalEl);
 
+  /**
+   * Convert a datetime-local input value to a full ISO 8601 string.
+   * Ensures seconds are included (adds ":00" if needed).
+   * @param {string} val - The datetime-local input value
+   * @returns {string|null} ISO-compatible datetime string or null
+   */
   function toIsoLocal(val) {
     if (!val) return null;
     return val.length === 16 ? val + ':00' : val;
   }
 
+  // Attach submit listener to the form (if it exists)
   document.getElementById('createJobForm')?.addEventListener('submit', function (e) {
-    e.preventDefault();
+    e.preventDefault(); // Prevent page reload
+
+    // Collect and sanitize form data into a payload object
     const payload = {
       title: document.getElementById('jobTitle').value,
       customer_name: document.getElementById('customerName').value,
@@ -22,18 +33,20 @@
       status: { id: parseInt(document.getElementById('jobStatus').value, 10) },
     };
 
+    // Send POST request to create a new job entry
     fetch('/api/jobs', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     })
       .then((r) => {
-        if (!r.ok) throw new Error('Create failed');
+        if (!r.ok) throw new Error('Create failed'); // Handle HTTP errors
         return r.json();
       })
       .then((created) => {
-        createModal.hide();
-        // Try to refresh calendar if present, else reload
+        createModal.hide(); // Close the modal on success
+
+        // Refresh calendar view if function available, else reload page
         if (window.refreshCalendarWithJob && typeof window.refreshCalendarWithJob === 'function') {
           window.refreshCalendarWithJob(created);
         } else {
@@ -42,11 +55,14 @@
       })
       .catch((err) => {
         console.error(err);
-        alert('Failed to create job');
+        alert('Failed to create job'); // Notify user of failure
       });
   });
 
-  // Optional: expose an opener for pages with a button
+  /**
+   * Expose a global helper to open the modal and reset the form.
+   * Can be called from buttons or other scripts.
+   */
   window.openCreateJobModal = function () {
     document.getElementById('createJobForm')?.reset();
     createModal.show();

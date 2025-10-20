@@ -9,6 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST controller for managing job-related operations.
+ * Provides endpoints for creating, reading, and updating job records.
+ */
 @Controller
 @RequestMapping("/")
 public class JobController {
@@ -16,27 +20,46 @@ public class JobController {
   private final JobRepository jobRepository;
   private final JobStatusRepository statusRepository;
 
+  /**
+   * Constructor for dependency injection.
+   *
+   * @param jobRepository the repository for job database operations
+   * @param statusRepository the repository for job status database operations
+   */
   public JobController(JobRepository jobRepository, JobStatusRepository statusRepository) {
     this.jobRepository = jobRepository;
     this.statusRepository = statusRepository;
   }
 
-  // REST: list jobs
+  /**
+   * Retrieves all jobs from the database.
+   *
+   * @return a list of all jobs
+   */
   @GetMapping("api/jobs")
   @ResponseBody
   public List<Job> getJobs() {
     return jobRepository.findAll();
   }
 
-  // REST: create a job
+  /**
+   * Creates a new job in the database.
+   * Validates that required fields (date, title) are present and that the status exists.
+   *
+   * @param job the job object to create
+   * @return ResponseEntity containing the created job if successful, or a bad request/error response
+   * @throws IllegalArgumentException if the provided status_id is invalid
+   */
   @PostMapping("api/jobs")
   @ResponseBody
   public ResponseEntity<Job> createJob(@RequestBody Job job) {
+    // Validate required fields
     if (job.getDate() == null || job.getTitle() == null) return ResponseEntity.badRequest().build();
     // Ensure status is valid
     if (job.getStatus() == null || job.getStatus().getId() == null) {
       return ResponseEntity.badRequest().build();
     }
+    // Verify the status exists in the database
     JobStatus status = statusRepository
       .findById(job.getStatus().getId())
       .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
@@ -45,13 +68,22 @@ public class JobController {
     return ResponseEntity.ok(saved);
   }
 
-  // REST: update job
+  /**
+   * Updates an existing job with new information.
+   * All job fields can be updated including title, customer details, pricing, and status.
+   *
+   * @param id the ID of the job to update
+   * @param job the job object containing updated values
+   * @return ResponseEntity containing the updated job if found, or a not found response
+   * @throws IllegalArgumentException if the provided status_id is invalid
+   */
   @PutMapping("api/jobs/{id}")
   @ResponseBody
   public ResponseEntity<Job> updateJob(@PathVariable Integer id, @RequestBody Job job) {
     return jobRepository
       .findById(id)
       .map((existing) -> {
+        // Update all job fields
         existing.setTitle(job.getTitle());
         existing.setCustomer_name(job.getCustomer_name());
         existing.setCustomer_phone(job.getCustomer_phone());
@@ -60,6 +92,7 @@ public class JobController {
         existing.setPrice_per_minute(job.getPrice_per_minute());
         existing.setDate(job.getDate());
 
+        // Update status if provided
         if (job.getStatus() != null && job.getStatus().getId() != null) {
           JobStatus status = statusRepository
             .findById(job.getStatus().getId())
@@ -73,12 +106,21 @@ public class JobController {
       .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
+  /**
+   * Updates only the job description for a specific job.
+   * This is a partial update endpoint focused on the description field.
+   *
+   * @param id the ID of the job to update
+   * @param job the job object containing the new description
+   * @return ResponseEntity containing the updated job if found, or a not found response
+   */
   @PutMapping("api/jobs/{id}/description")
   @ResponseBody
   public ResponseEntity<Job> updateJobDesc(@PathVariable Integer id, @RequestBody Job job) {
     return jobRepository
       .findById(id)
       .map((existing) -> {
+        // Update only the description field
         existing.setJob_description(job.getJob_description());
 
         Job updated = jobRepository.save(existing);
