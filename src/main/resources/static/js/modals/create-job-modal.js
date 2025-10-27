@@ -17,6 +17,7 @@
         return val.length === 16 ? val + ':00' : val;
     }
 
+
     // Attach submit listener to the form (if it exists)
     document.getElementById('createJobForm')?.addEventListener('submit', function (e) {
         e.preventDefault(); // Prevent page reload
@@ -35,6 +36,7 @@
             job_description: document.getElementById('jobDescription').value,
             work_time_minutes: parseInt(document.getElementById('workTime').value || '0', 10),
             price_per_minute: parseFloat(document.getElementById('pricePerMin').value || '0'),
+            duration: parseFloat(document.getElementById('jobDuration').value || '0'),
             date: isoString,
             status: {id: parseInt(document.getElementById('jobStatus').value, 10)},
         };
