@@ -197,6 +197,7 @@ html, body {
   font-weight: 600;
   padding: 6px 14px;
   transition: all 0.15s ease-in-out;
+  --bs-btn-hover-bg: #ff0000;
 }
 
 .fc .fc-createJob-button:hover {

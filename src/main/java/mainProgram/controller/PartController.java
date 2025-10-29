@@ -1,24 +1,25 @@
 package mainProgram.controller;
 
 import java.util.List;
-import mainProgram.repository.PartRepository;
-import mainProgram.table.Part;
+import mainProgram.repository.ProductRepository;
+import mainProgram.table.Product;
 import org.springframework.web.bind.annotation.*;
 
 // This file is optional and is purely if you want to access the table HTTP endpoint
 
 @RestController
-@RequestMapping("/parts_table")
+@RequestMapping("/")
 public class PartController {
 
-  private final PartRepository partRepository;
+  private final ProductRepository productRepository;
 
-  public PartController(PartRepository partRepository) {
-    this.partRepository = partRepository;
+  public PartController(ProductRepository productRepository) {
+    this.productRepository = productRepository;
   }
 
-  @GetMapping
-  public List<Part> getAllParts() {
-    return partRepository.findAll();
+  @GetMapping("api/part")
+  @ResponseBody
+  public List<Product> getAllParts() {
+    return productRepository.findAll();
   }
 }
