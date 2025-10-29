@@ -23,9 +23,55 @@
   <div class="page-content-container m-4 mt-1 flex-1 p-5">
       <!-- Page Header -->
       <div class="page-head d-flex justify-content-end">
-          <button type="button" class="btn btn-primary">Tilføj Produkt</button>
+          <button type="button" class="btn addProductBtn" data-bs-toggle="modal" data-bs-target="#addProductModal">Tilføj Produkt</button>
       </div>
 
+      <!-- Modal (Add Product) -->
+      <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="addProductModalLabel">Tilføj Produkt</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <!-- Modal Body -->
+                  <div class="modal-body">
+                      <form>
+                          <!-- Modal Input -->
+                          <div class="mb-3">
+                              <label for="varenummer-text" class="col-form-label">Varenr.:</label>
+                              <input type="text" class="form-control" id="varenummer-text">
+                          </div>
+                          <div class="mb-3">
+                              <label for="navn-text" class="col-form-label">Navn:</label>
+                              <input type="text" class="form-control" id="navn-text">
+                          </div>
+                          <div class="mb-3">
+                              <label for="EAN-text" class="col-form-label">EAN:</label>
+                              <input type="text" class="form-control" id="EAN-text">
+                          </div>
+                          <div class="mb-3">
+                              <label for="type-text" class="col-form-label">Type</label>
+                              <input type="text" class="form-control" id="type-text">
+                          </div>
+                          <div class="mb-3">
+                              <label for="pris-tal" class="col-form-label">Pris</label>
+                              <input type="number" class="form-control" id="pris-tal">
+                          </div>
+                      </form>
+
+                      <!-- Modal Footer -->
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk</button>
+                          <button type="submit" class="btn addProductBtn">Tilføj Produkt</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- Search Bar -->
       <div class="search-bar mt-5">
           <nav class="navbar navbar-light">
               <form class="d-inline-flex" style="width: 40rem">
@@ -39,66 +85,26 @@
           </nav>
       </div>
 
-      <!-- Product Table Container: lists parts/products -->
+      <!-- Product Table Container: Lists Products (Parts + Services) -->
       <div class="mt-6">
           <table class="table table-striped">
               <thead>
-                <tr>
-                    <th scope="col">Varenr.</th>
-                    <th scope="col">Navn</th>
-                    <th scope="col">EAN</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Pris</th>
-                </tr>
+              <tr>
+                  <th scope="col">Varenr.</th>
+                  <th scope="col">Navn</th>
+                  <th scope="col">EAN</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Pris</th>
+              </tr>
               </thead>
               <tbody>
-              <!-- Product 1 -->
-              <tr>
-                  <td class="fs-5">49323013</td>
-                  <td class="fs-5">Reserve 50cm Hjulsæt</td>
-                  <td class="fs-5">1928574600183</td>
-                  <td class="fs-5">Hjulsæt</td>
-                  <td class="fs-5">14.995,00 kr.</td>
-              </tr>
-              <!-- Product 2 -->
-              <tr>
-                  <td class="fs-5">01923332</td>
-                  <td class="fs-5">Shimano Kæde</td>
-                  <td class="fs-5">9252439122342</td>
-                  <td class="fs-5">Kæde</td>
-                  <td class="fs-5">168,00 kr.</td>
-              </tr>
-              <!-- Product 3 -->
-              <tr>
-                  <td class="fs-5">111923844</td>
-                  <td class="fs-5">Kædevoks Silka</td>
-                  <td class="fs-5">0001232543467</td>
-                  <td class="fs-5">Kæde Voks</td>
-                  <td class="fs-5">349,00 kr.</td>
-              </tr>
-              <!-- Product 4 -->
-              <tr>
-                  <td class="fs-5">00123234</td>
-                  <td class="fs-5">Zipp Frempind</td>
-                  <td class="fs-5">8488847362612</td>
-                  <td class="fs-5">Frempind</td>
-                  <td class="fs-5">479,00 kr.</td>
-              </tr>
-              <!-- Product 5 -->
-              <tr>
-                  <td class="fs-5">84668332</td>
-                  <td class="fs-5">Aerocoach Extentions</td>
-                  <td class="fs-5">9953717273759</td>
-                  <td class="fs-5">Styr</td>
-                  <td class="fs-5">6.195,00 kr.</td>
-              </tr>
-              <!-- Product 6 -->
-              <tr>
-                  <td class="fs-5">98764399</td>
-                  <td class="fs-5">Vittoria Corsa Pro 30mm</td>
-                  <td class="fs-5">1112845473222</td>
-                  <td class="fs-5">Dæk</td>
-                  <td class="fs-5">719,00 kr.</td>
+              <!-- Display products Dynamically from Database -->
+              <tr th:each="product : ${products}">
+                  <td class="fs-5" th:text="${product.productNumber}"></td>
+                  <td class="fs-5" th:text="${product.name}"></td>
+                  <td class="fs-5" th:text="${product.EAN}"></td>
+                  <td class="fs-5" th:text="${product.type}"></td>
+                  <td class="fs-5" th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')} + ' Kr.'"></td>
               </tr>
               </tbody>
           </table>
