@@ -1893,6 +1893,14 @@ progress {
   vertical-align: bottom;
 }
 
+/* Keep the table height consistent for pagination */
+.table-container {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .table-group-divider {
   border-top: calc(var(--bs-border-width) * 2) solid currentcolor;
 }
