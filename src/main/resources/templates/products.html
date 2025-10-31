@@ -25,6 +25,9 @@
 
         <!-- Custom JS: Handles Fetch Errors in both "addProductsModal.js" and "productActions.js" -->
         <script type="module" src="/js/utils/fetchUtils.js"></script>
+
+        <!-- Custom JS: Pagination = Handles client-side page switching -->
+        <script src="/js/productPagination.js"></script>
     </head>
 
     <body>
@@ -142,36 +145,11 @@
                     </tr>
                 </tbody>
             </table>
-
-            <!-- === Pagination Bar === -->
-            <!-- Static example navigation (can be made dynamic later) -->
-            <div class="mt-5">
-                <ul class="pagination justify-content-center Page-Navigation-Bar">
-                    <li class="page-item">
-                        <a class="page-link" href="#ProductsPage_X" aria-label="Previous">
-                            <span class="material-symbols-outlined" aria-hidden="true">
-                                chevron_left
-                            </span>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#ProductsPage1">1</a>
-                    </li>
-                    <li class="page-item active">
-                        <a class="page-link" href="#ProductsPage2" aria-current="page">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#ProductsPage3">3</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#ProductsPage_X" aria-label="Next">
-                            <span class="material-symbols-outlined" aria-hidden="true">
-                                chevron_right
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        </div>
+        <!-- === Pagination Bar === -->
+        <!-- Static example navigation (can be made dynamic later) -->
+        <div class="mt-5">
+            <ul class="pagination justify-content-center Page-Navigation-Bar"></ul>
         </div>
     </div>
     </body>
