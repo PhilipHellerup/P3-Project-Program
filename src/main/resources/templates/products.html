@@ -138,7 +138,7 @@
                         <td class="fs-5" th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')} + ' Kr.'"></td>
                         <td class="fs-5">
                             <!-- Delete Button (Triggers delete request in JS) -->
-                            <button class="btn btn-outline-danger btn-sm delete-btn">
+                            <button class="btn btn-outline-danger btn-sm delete-btn ms-2">
                                 <span class="material-symbols-outlined">delete</span>
                             </button>
                         </td>
@@ -148,7 +148,7 @@
         </div>
         <!-- === Pagination Bar === -->
         <!-- Static example navigation (can be made dynamic later) -->
-        <div class="mt-5">
+        <div class="pagination-css align-content-center">
             <ul class="pagination justify-content-center Page-Navigation-Bar"></ul>
         </div>
     </div>

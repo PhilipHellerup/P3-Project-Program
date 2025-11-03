@@ -2163,6 +2163,12 @@ progress {
     vertical-align: bottom;
 }
 
+.pagination-css {
+    position: fixed;      /* Stay fixed relative to the viewport */
+    bottom: 1.5rem;            /* Stick to the bottom */
+    left: 50%;            /* Move the element’s left edge to the center of the screen */
+}
+
 /* Keep the table height consistent for pagination */
 .table-container {
     min-height: 400px;
