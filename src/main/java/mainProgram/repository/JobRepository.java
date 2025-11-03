@@ -1,6 +1,7 @@
 package mainProgram.repository;
 
 import java.util.List;
+
 import mainProgram.table.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -27,26 +28,26 @@ import org.springframework.stereotype.Repository;
  * @see JpaRepository
  */
 @Repository
-public interface JobRepository extends JpaRepository<Job, Integer> {
-  /**
-   * Retrieves all jobs ordered by date in ascending order (earliest first).
-   *
-   * <p>This is a derived query method - Spring Data JPA automatically generates
-   * the query implementation based on the method name following the convention:
-   * findAllByOrderBy[Property][Direction]</p>
-   *
-   * @return a list of all jobs sorted by date from oldest to newest
-   */
-  List<Job> findAllByOrderByDateAsc();
+public interface JobRepository extends JpaRepository<Job, Integer>, SearchableRepository<Job> {
+    /**
+     * Retrieves all jobs ordered by date in ascending order (earliest first).
+     *
+     * <p>This is a derived query method - Spring Data JPA automatically generates
+     * the query implementation based on the method name following the convention:
+     * findAllByOrderBy[Property][Direction]</p>
+     *
+     * @return a list of all jobs sorted by date from oldest to newest
+     */
+    List<Job> findAllByOrderByDateAsc();
 
-  /**
-   * Retrieves all jobs ordered by date in descending order (newest first).
-   *
-   * <p>This is a derived query method - Spring Data JPA automatically generates
-   * the query implementation based on the method name following the convention:
-   * findAllByOrderBy[Property][Direction]</p>
-   *
-   * @return a list of all jobs sorted by date from newest to oldest
-   */
-  List<Job> findAllByOrderByDateDesc();
+    /**
+     * Retrieves all jobs ordered by date in descending order (newest first).
+     *
+     * <p>This is a derived query method - Spring Data JPA automatically generates
+     * the query implementation based on the method name following the convention:
+     * findAllByOrderBy[Property][Direction]</p>
+     *
+     * @return a list of all jobs sorted by date from newest to oldest
+     */
+    List<Job> findAllByOrderByDateDesc();
 }
