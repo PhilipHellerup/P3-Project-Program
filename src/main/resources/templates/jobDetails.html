@@ -119,7 +119,7 @@
 
       <!-- Product Table Container: lists parts/products associated with the job -->
       <div class="product-table-content-container mt-6">
-        <table class="table">
+        <table class="table align-middle mt-lg-3">
           <thead>
             <tr>
               <th scope="col">Produkter</th>
@@ -129,13 +129,19 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Iterate over jobParts using Thymeleaf th:each. jp.part.title and jp.quantity used. -->
             <tr th:each="jp : ${jobParts}">
-              <td th:text="${jp.part.title}"></td>
-              <td th:text="${jp.quantity}"></td>
-              <!-- Concatenate price string; consider formatting numbers server-side for localization -->
-              <td th:text="${jp.part.price} + ',-'"></td>
-              <td th:text="${jp.quantity * jp.part.price}+ ',-'"></td>
+              <td class="w-15">
+                <p class="m-1" th:text="${jp.product.name}"></p>
+              </td>
+              <td class="w-15">
+                <p class="m-1" th:text="${jp.quantity}"></p>
+              </td>
+              <td class="w-30">
+                <p class="m-1" th:text="${jp.product.price}"></p>
+              </td>
+              <td class="w-30" th:with="result=${jp.product.price * jp.quantity}">
+                <p class="m-1" th:text="${result}"></p>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -145,6 +151,7 @@
       <div
         class="final-table-content-container d-flex justify-content-between align-items-start mt-3"
         style="width: 100%"
+      
       >
         <!-- Left Side: Button to add a product. You might wire this to a modal or product selector. -->
         <button type="button" class="btn btn-primary">Tilføj Produkt</button>

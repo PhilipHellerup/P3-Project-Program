@@ -1,7 +1,13 @@
 package mainProgram.table; // Project Organization
 
 /* --- Imports --- */
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 /* --- JobPart Class --- */
 // Junction/join table entity that links Jobs with Products.
@@ -34,8 +40,12 @@ public class JobPart {
 
     // Methods
     // Getters
-    public Product getPart() {
+    public Product getProduct() {
         return product;
+    }
+
+    public Job getJob() {
+        return job;
     }
 
     public Integer getQuantity() {
@@ -43,11 +53,15 @@ public class JobPart {
     }
 
     // Setters
-    public void setPart() {
+    public void setProduct() {
         this.product = product;
     }
 
     public void setQuantity() {
         this.quantity = quantity;
+    }
+
+    public void setJob() {
+        this.job = job;
     }
 }

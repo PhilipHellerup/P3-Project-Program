@@ -1,11 +1,13 @@
 package mainProgram;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import mainProgram.repository.JobPartRepository;
 import mainProgram.repository.JobRepository;
 import mainProgram.table.Job;
 import mainProgram.table.JobPart;
-import org.springframework.stereotype.Service;
 
 @Service
 public class JobService {
@@ -22,7 +24,7 @@ public class JobService {
     return jobRepository.findById(id).orElseThrow(() -> new RuntimeException("Job not found"));
   }
 
-  public List<JobPart> getPartsForJob(Long jobId) {
+  public List<JobPart> getPartsForJob(int jobId) {
     return jobPartRepository.findByJobId(jobId);
   }
 }

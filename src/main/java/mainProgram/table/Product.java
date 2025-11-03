@@ -1,9 +1,17 @@
 package mainProgram.table; // Project Organization
 
 /* --- Imports --- */
-import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 /* --- Product Class --- */
 @Entity
@@ -20,7 +28,7 @@ public class Product {
     private String EAN;                  // Maps to: EAN (Not ean)
     @Column(name = "category")
     private String type;                 // Maps to: category (Not type)
-    private String price;                // Maps to: price
+    private Integer price;                // Maps to: price
 
     // One-to-Many Relationship: One Product can be associated with many JobParts.
     /**
@@ -43,7 +51,7 @@ public class Product {
     private List<JobPart> jobParts = new ArrayList<>();
 
     // Constructor
-    public Product(String productNumber, String name, String EAN, String type, String price) {
+    public Product(String productNumber, String name, String EAN, String type, Integer price) {
         this.productNumber = productNumber;
         this.name = name;
         this.EAN = EAN;
@@ -72,7 +80,7 @@ public class Product {
       return type;
     }
 
-    public String getPrice() {
+    public Integer getPrice() {
       return price;
     }
 
@@ -93,7 +101,7 @@ public class Product {
           this.type = type;
       }
 
-    public void setPrice(String price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 }
