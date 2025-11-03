@@ -27,7 +27,7 @@ public class Product {
     private String EAN;                  // Maps to: EAN (Not ean)
     @Column(name = "category")           // Maps Java field to Database column named exactly "category" not "type"
     private String type;                 // Maps to: category (Not type)
-    private String price;                // Maps to: price
+    private Double price;                // Maps to: price
 
     // One-to-Many Relationship: One Product can be associated with many JobParts.
     /**
@@ -51,7 +51,7 @@ public class Product {
 
     // Constructor
     // (OPTIONAL) Constructor for manual creation of Product Objects
-    public Product(String productNumber, String name, String EAN, String type, String price) {
+    public Product(String productNumber, String name, String EAN, String type, Double price) {
         this.productNumber = productNumber;
         this.name = name;
         this.EAN = EAN;
@@ -84,7 +84,7 @@ public class Product {
       return type;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
       return price;
     }
 
@@ -105,7 +105,7 @@ public class Product {
           this.type = type;
       }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 }

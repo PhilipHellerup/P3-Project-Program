@@ -5,6 +5,8 @@ import mainProgram.repository.ProductRepository;
 import mainProgram.table.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
+
 
 /* --- PartController --- */
 // REST controller for handling product-related operations.
@@ -17,10 +19,14 @@ public class ProductController {
 
     // Constructor for Dependency Injection
     // Spring automatically provides an instance of ProductRepository at runtime.
-    /** @param productRepository the repository handling CRUD operations for Product entities. **/
+
+    /**
+     * @param productRepository the repository handling CRUD operations for Product entities.
+     **/
     public ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
+
 
     // Methods
     // Creates a new product in the database.
@@ -33,7 +39,9 @@ public class ProductController {
     //  "price": "999.99"
     // }
     /** @param product the product object to create **/
-    /** @return ResponseEntity containing the created product if successful, or a bad request response **/
+    /**
+     * @return ResponseEntity containing the created product if successful, or a bad request response
+     **/
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         // Save the product to the database using the repository and its .save() method.
@@ -42,6 +50,7 @@ public class ProductController {
         // Return the saved product as a JSON response with HTTP 200 OK status.
         return ResponseEntity.ok(savedProduct);
     }
+
 
     // Deletes a specific product from the database based on its ID.
     // Triggered when a DELETE request is sent to "/api/products/{id}"-
@@ -55,10 +64,57 @@ public class ProductController {
 
             // Return HTTP 204: No Content (indicating success, but no response body needed)
             return ResponseEntity.noContent().build(); // 204 No Content
-        }
-        else {
+        } else {
             // Return HTTP 404: Not Found (if the product does not exist in the database)
             return ResponseEntity.notFound().build(); // 404 if not found
         }
+    }
+
+
+    // Updates an existing product in the database.
+    // Receives a JSON map containing only the fields that should be updated
+    // Example request body:
+    // {
+    //  "name": "Shimano Kæde",
+    //  "price": 199.99
+    // }
+    /** @param id the ID of the product to update **/
+    /** @param updates a map of field names to the new values for updating the product**/
+    /** @return ResponseEntity containing the updated product if successful, **/
+    /**         or HTTP 404 Not Found if the product does not exist **/
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editProduct(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        // Find the product in the database by ID
+        return productRepository.findById(id).map(product -> {
+                    // Iterate over each field in the updates map and apply the changes
+                    updates.forEach((field, value) -> {
+                        switch (field) {
+                            case "productNumber" -> product.setProductNumber((String) value);
+                            case "name" -> product.setName((String) value);
+                            case "EAN" -> product.setEAN((String) value);
+                            case "type" -> product.setType((String) value);
+                            case "price" -> {
+                                // Handle price being either a number or string
+                                if (value instanceof Number num) {
+                                    product.setPrice(num.doubleValue());
+                                } else {
+                                    product.setPrice(Double.parseDouble(value.toString()));
+                                }
+                            }
+                            default -> System.out.println("Unknown field: " + field);
+                        }
+                    });
+
+                    // Save the updated product in the database
+                    Product saved = productRepository.save(product);
+
+                    // Return HTTP 200 OK because product updated successfully
+                    return ResponseEntity.ok(saved);
+        })
+        // Product with given ID does not exist
+        .orElseGet(() -> {
+            // Return HTTP 404: Not Found = Product Not Found
+            return ResponseEntity.notFound().build();
+        });
     }
 }
