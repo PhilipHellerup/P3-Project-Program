@@ -11,10 +11,10 @@
     <!-- Calendar CSS -->
     <link href="/css/calendar.css" rel="stylesheet"/>
 </head>
-<body class="">
-<div class="shadow-lg p-5 rounded-3 h-100">
+<body class="d-flex justify-content-center">
+<div class="p-5 rounded-3 h-100">
     <div class="container h-100">
-        <div class="d-flex justify-content-end align-items-center mb-3">
+        <div class="d-flex justify-content-end align-items-center mb-3 h-100">
             <!--These should be rendered in the nav bar, when on the calendar page -->
             <!--          <div>-->
             <!--          <h1 class="h3 mb-0">Kalender</h1>-->
@@ -27,13 +27,16 @@
             <!--            <span class="badge" style="background: #8e44ad; color: #000">Afhentet</span>-->
             <!--          </div>-->
             <!--        </div>-->
+                    
+            <div class="h-100" id="calendar"></div>
 
             <div>
                 <!--          <a href="#" class="btn btn-primary" id="refreshBtn">Opdater</a>-->
             </div>
+            
         </div>
 
-        <div class="h-100" id="calendar"></div>
+        
 
         <!-- Right-click context menu -->
         <div id="eventContextMenu" class="event-contextmenu">
@@ -67,12 +70,12 @@
             <div class="dropdown-divider"></div>
             <a class="dropdown-item text-danger" data-action="delete">Slet</a>
         </div>
-
-        <!-- Create Job Modal -->
-        <div th:replace="~{modals :: create-job-modal}"></div>
-        <div th:replace="~{modals :: full-edit-job-modal}"></div>
     </div>
 </div>
+
+<!-- Create Job Modal -->
+<div th:replace="~{modals :: create-job-modal}"></div>
+<div th:replace="~{modals :: full-edit-job-modal}"></div>
 
 <!-- Navigation Bar -->
 <nav>
@@ -129,7 +132,7 @@
                 title: displayTitle,
                 start: job.date,
                 end: job.date
-                    ? new Date(job.date).getTime() + (job.work_time_minutes || 0) * 60000
+                    ? new Date(new Date(job.date).getTime() + (job.duration || 0) * 60000)
                     : null,
                 backgroundColor: colors.backgroundColor,
                 borderColor: colors.borderColor,
@@ -142,6 +145,7 @@
                     customer_phone: job.customer_phone,
                     job_description: job.job_description,
                     work_time_minutes: job.work_time_minutes,
+                    duration: job.duration,
                     price_per_minute: job.price_per_minute,
                     status: statusName,
                     status_id: statusId,
@@ -209,6 +213,7 @@
                 customer_phone: ep.customer_phone || '',
                 job_description: ep.job_description || '',
                 work_time_minutes: ep.work_time_minutes || 0,
+                duration: ep.duration || 0,
                 price_per_minute: ep.price_per_minute || 0,
                 date: event.start ? formatLocalDateTime(event.start) : null,
                 status: {id: parseInt(statusId, 10)},
@@ -419,7 +424,7 @@
 
             /**
              * Event resize handler - updates job duration when resized.
-             * Calculates new work_time_minutes based on the new end time.
+             * Calculates new duration based on the new end time.
              */
             eventResize: function (info) {
                 const ev = info.event;
@@ -427,7 +432,7 @@
 
                 // Calculate new duration in minutes
                 if (ev.start && ev.end) {
-                    payload.work_time_minutes = Math.round(
+                    payload.duration = Math.round(
                         (ev.end.getTime() - ev.start.getTime()) / 60000,
                     );
                 }
@@ -526,9 +531,10 @@
           ></span>
           <span class="event-title">${arg.event.title}</span>
         </div>
-        ${arg.event.extendedProps.job_description && arg.event.extendedProps.work_time_minutes > 60
-                        ? `<span class="event-description fw-normal">${arg.event.extendedProps.job_description}</span>`
-                        : ''
+        ${
+                        arg.event.extendedProps.job_description && arg.event.extendedProps.duration > 45
+                            ? `<span class="event-description fw-normal">${arg.event.extendedProps.job_description}</span>`
+                            : ''
                     }
 
        </div>
@@ -604,6 +610,7 @@
                     customer_phone: ep.customer_phone || '',
                     job_description: ep.job_description || '',
                     work_time_minutes: ep.work_time_minutes ?? 0,
+                    duration: ep.duration ?? 0,
                     price_per_minute: ep.price_per_minute ?? 0,
                     date: toLocalDatetimeInput(target.start),
                     status: {id: ep.status_id || 1},
@@ -652,6 +659,7 @@
                     customer_phone: ep.customer_phone || '',
                     job_description: ep.job_description || '',
                     work_time_minutes: ep.work_time_minutes ?? 0,
+                    duration: ep.duration ?? 0,
                     price_per_minute: ep.price_per_minute ?? 0,
                     date: toIsoLocal(target.start),
                     status: {id: newStatusId},
@@ -701,18 +709,6 @@
                 }
             }
         });
-
-        // Button Event Handlers
-
-        // Refresh calendar data
-        document.getElementById('refreshBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            fetchJobsAndInit(calendar);
-        });
-
-        window.refreshCalendarWithJob = function (createdJob) {
-            calendar.addEvent(mapJobToEvent(createdJob));
-        };
     });
 </script>
 </body>
