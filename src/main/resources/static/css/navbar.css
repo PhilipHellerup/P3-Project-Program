@@ -127,7 +127,7 @@
 .close-navbar-btn {
   left: 10%;
   border-radius: 50%; /* Makes it circular */
-  transition: left 0.1s;
+  transition: right 0.1s;
 }
 
 .close-navbar-btn:hover {
