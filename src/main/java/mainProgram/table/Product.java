@@ -30,6 +30,7 @@ public class Product {
     private String type;                 // Maps to: category (Not type)
     private Integer price;                // Maps to: price
 
+    /*
     // One-to-Many Relationship: One Product can be associated with many JobParts.
     /**
      * @mappedBy "product"
@@ -47,8 +48,8 @@ public class Product {
      * deleted from the database. This ensures no orphaned JobPart records
      * exist without a parent Product.
     **/
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<JobPart> jobParts = new ArrayList<>();
+    //@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<JobPart> jobParts = new ArrayList<>();
 
     // Constructor
     public Product(String productNumber, String name, String EAN, String type, Integer price) {
