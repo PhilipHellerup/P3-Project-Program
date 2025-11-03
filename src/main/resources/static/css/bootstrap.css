@@ -2163,6 +2163,14 @@ progress {
     vertical-align: bottom;
 }
 
+/* Keep the table height consistent for pagination */
+.table-container {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .table-group-divider {
     border-top: calc(var(--bs-border-width) * 2) solid currentcolor;
 }
@@ -3724,6 +3732,24 @@ textarea.form-control-lg {
     --bs-btn-padding-x: 0.5rem;
     --bs-btn-font-size: 0.875rem;
     --bs-btn-border-radius: var(--bs-border-radius-sm);
+}
+
+/* Create job btn */
+.addProductBtn:hover {
+    background: #247940;
+    color: #fff;
+}
+
+.addProductBtn {
+    background: #32a759;
+    height: 40px;
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    font-weight: 600;
+    padding: 6px 14px;
+    transition: all 0.15s ease-in-out;
+    cursor: pointer;
 }
 
 .fade {
@@ -5295,6 +5321,19 @@ textarea.form-control-lg {
     display: flex;
     padding-left: 0;
     list-style: none;
+}
+
+.Page-Navigation-Bar {
+    --bs-pagination-hover-color: #ffffff;
+    --bs-pagination-hover-bg: #0d6efd;
+    --bs-pagination-hover-border-color: #0d6efd;
+}
+
+.material-symbols-outlined {
+    font-size: 24px !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+    display: block !important;
 }
 
 .page-link {

@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <!-- <li class="nav-item"><a class="nav-link" href="/"><span class="nav-text">Hjem</span></a></li> -->
                     <li class="nav-item"><a class="nav-link" href="/kalender"><span class="nav-text">Kalender</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/jobliste"><span class="nav-text">Job Liste</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/produkter"><span class="nav-text">Produkter</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/produktliste"><span class="nav-text">Produkter</span></a></li>
                 </ul>
             </nav>
         `;

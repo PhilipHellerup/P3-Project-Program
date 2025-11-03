@@ -342,6 +342,8 @@
             displayEventTime: false,
             slotMinTime: '07:00:00',
             slotMaxTime: '17:00:00',
+            snapDuration: '00:15:00',
+            slotDuration: '00:15:00',
             height: '100%',
             expandRows: true,
             allDaySlot: false,
@@ -431,8 +433,6 @@
                         (ev.end.getTime() - ev.start.getTime()) / 60000,
                     );
                 }
-
-                console.log(payload.duration)
 
                 fetch('/api/jobs/' + ev.id, {
                     method: 'PUT',
