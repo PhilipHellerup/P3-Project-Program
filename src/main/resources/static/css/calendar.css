@@ -99,9 +99,10 @@ body {
 .fc .fc-next-button:hover,
 .fc .fc-today-button:hover,
 .fc .fc-today-button:disabled:hover {
-    background: #f8f9fa;
-    border-color: #999;
-    color: #3d3d3d;
+  cursor: pointer;
+  background: #f8f9fa;
+  border-color: #999;
+  color: #3d3d3d;
 }
 
 /* Active/disabled today button */
