@@ -8,47 +8,69 @@
 
     <!-- Linking -->
     <link rel="stylesheet" href="/css/bootstrap.css" />
-      <link rel="stylesheet" href="/css/jobliste.css" />
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <link rel="stylesheet" href="/css/jobliste.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
   </head>
 
   <body class="d-flex justify-content-center">
     <!-- Main container: central column for the jobs listing -->
     <div class="w-85 d-flex flex-column m-5 p-4 border border-secondary-subtle rounded-4 shadow-sm">
       <!-- Header: page title / quick actions -->
-        <!-- Header: page title / quick actions -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="d-inline-flex gap-3">
-                <!-- Active/Completed filter buttons -->
-                <button class="tab-btn" data-filter="active" th:classappend="${currentFilter == 'active' ? 'active' : ''}">Aktive</button>
-                <button class="tab-btn" data-filter="completed" th:classappend="${currentFilter == 'completed' ? 'active' : ''}">Afsluttet</button>
-            </div>
-
-            <!-- Button opens the Create Job modal (handler wired at bottom) -->
-            <button class="btn btn-primary" id="openCreateJobBtn">Tilføj ny reperation</button>
+      <!-- Header: page title / quick actions -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-inline-flex gap-3">
+          <!-- Active/Completed filter buttons -->
+          <button
+            class="tab-btn"
+            data-filter="active"
+            th:classappend="${currentFilter == 'active' ? 'active' : ''}"
+          >
+            Aktive
+          </button>
+          <button
+            class="tab-btn"
+            data-filter="completed"
+            th:classappend="${currentFilter == 'completed' ? 'active' : ''}"
+          >
+            Afsluttet
+          </button>
         </div>
 
-        <!-- Search / controls area: layout placeholders for search, filter, add button -->
-        <div class="d-flex flex-column justify-content-center" style="height: 20rem">
-            <div class="d-inline-flex w-100 gap-5">
-                <!-- search UI. Replace with an actual <input> + JS for filtering. -->
-                <div class="search-bar">
-                    <nav class="navbar navbar-light">
-                        <form class="d-inline-flex" style="width: 40rem">
-                            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-dark my-2 my-sm-0 ms-2 p-2 d-flex align-items-center justify-content-center" type="submit">
-                  <span class="material-symbols-outlined" aria-hidden="true">
-                    search
-                  </span>
-                            </button>
-                        </form>
-                    </nav>
-                </div>
-            </div>
+        <!-- Button opens the Create Job modal (handler wired at bottom) -->
+        <button class="btn btn-primary" id="openCreateJobBtn">Tilføj ny reperation</button>
+      </div>
+
+      <!-- Search / controls area: layout placeholders for search, filter, add button -->
+      <div class="d-flex flex-column justify-content-center" style="height: 20rem">
+        <div class="d-inline-flex w-100 gap-5">
+          <!-- search UI. Replace with an actual <input> + JS for filtering. -->
+          <div class="search-bar">
+            <nav class="navbar navbar-light">
+              <form class="d-inline-flex" style="width: 40rem" id="search-input">
+                <input
+                  class="form-control"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                  id="searchparams"
+                />
+                <button
+                  class="btn btn-dark my-2 my-sm-0 ms-2 p-2 d-flex align-items-center justify-content-center"
+                  type="submit"
+                >
+                  <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                </button>
+              </form>
+            </nav>
+          </div>
         </div>
+      </div>
 
       <!-- Jobs table: each row is clickable and navigates to job details using data-href attribute -->
-      <table class="table table-hover align-middle mt-lg-3">
+      <table class="table table-hover align-middle mt-lg-3" id="table-container">
         <thead>
           <tr>
             <th scope="col">Ordreinformationer</th>
@@ -57,7 +79,7 @@
             <th scope="col">Data og tid</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="table-body">
           <!-- Iterate jobs with Thymeleaf th:each; data-href stores the details URL for row-click navigation -->
           <tr
             th:each="job : ${jobs}"
@@ -85,7 +107,10 @@
               </div>
             </td>
             <!-- Date formatted with Thymeleaf temporals utility -->
-            <td class="w-30" th:text="${#temporals.format(job.date, 'd. MMMM yyyy HH:mm')}"></td>
+            <td
+              class="w-30"
+              th:text="${#temporals.format(job.date, 'd. MMMM yyyy')} + ' kl. ' + ${#temporals.format(job.date, 'HH:mm')}"
+            ></td>
           </tr>
         </tbody>
       </table>
@@ -95,8 +120,8 @@
     <div th:replace="~{modals :: create-job-modal}"></div>
 
     <script src="/js/bootstrap.js"></script>
-    <script src="/js/quote.js"></script>
     <script src="/js/html.js"></script>
+    <script src="/js/jobliste-script.js"></script>
 
     <!-- Load the modal module AFTER the fragment and Bootstrap are present to avoid race conditions -->
     <script src="/js/modals/create-job-modal.js"></script>
@@ -107,41 +132,5 @@
     </nav>
 
     <!-- Table navigation and status badge wiring. -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        // Make each <tr data-href> row clickable and navigate to the URL in data-href
-        const rows = document.querySelectorAll('tr[data-href]');
-        rows.forEach((row) => {
-          row.addEventListener('click', () => {
-            window.location.href = row.getAttribute('data-href');
-          });
-        });
-
-        // Convert plain status text into a visually distinct badge using helper functions if available
-        document.querySelectorAll('.job-status').forEach((el) => {
-          const raw = el.textContent.trim();
-          // statusToColors returns an object { borderColor, backgroundColor, textColor, cssClass }
-          const colors = typeof statusToColors === 'function' ? statusToColors(raw) : {};
-          // translateStatusName is optional and maps internal status names to human-readable labels
-          el.textContent =
-            typeof translateStatusName === 'function' ? translateStatusName(raw) : raw;
-          Object.assign(el.style, {
-            display: 'inline-block',
-            padding: '2px 8px',
-            borderRadius: '3px',
-            border: `1px solid ${colors.borderColor || '#ccc'}`,
-            backgroundColor: colors.backgroundColor || '#eee',
-            color: colors.textColor || '#000',
-            fontWeight: '600',
-          });
-          if (colors.cssClass) el.classList.add(colors.cssClass);
-        });
-
-        // Use the modal module's openCreateJobModal if provided
-        document.getElementById('openCreateJobBtn')?.addEventListener('click', () => {
-          if (window.openCreateJobModal) window.openCreateJobModal();
-        });
-      });
-    </script>
   </body>
 </html>

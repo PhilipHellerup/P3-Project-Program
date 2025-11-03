@@ -27,7 +27,7 @@ import org.springframework.stereotype.Repository;
  * @see JpaRepository
  */
 @Repository
-public interface JobRepository extends JpaRepository<Job, Integer> {
+public interface JobRepository extends JpaRepository<Job, Integer>, SearchableRepository<Job> {
   /**
    * Retrieves all jobs ordered by date in ascending order (earliest first).
    *
