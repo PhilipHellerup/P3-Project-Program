@@ -67,15 +67,8 @@
                     <div class="modal-content">
                         <!-- Modal Header -->
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="addProductModalLabel">
-                                Tilføj Produkt
-                            </h1>
-                            <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                            ></button>
+                            <h1 class="modal-title fs-5" id="addProductModalLabel">Tilføj Produkt</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
                         <!-- Modal Body: Input fields for new product info -->
@@ -84,9 +77,7 @@
                                 <!-- Modal Input -->
                                 <!-- Product Number -->
                                 <div class="mb-3">
-                                    <label for="varenummer-text" class="col-form-label">
-                                        Varenr.:
-                                    </label>
+                                    <label for="varenummer-text" class="col-form-label">Varenr.:</label>
                                     <input type="text" class="form-control" id="varenummer-text" />
                                 </div>
                                 <!-- Product Name -->
@@ -113,18 +104,8 @@
 
                             <!-- Modal Footer: Close and Submit Buttons -->
                             <div class="modal-footer">
-                                <button
-                                    type="button"
-                                    class="btn btn-secondary"
-                                    data-bs-dismiss="modal"
-                                >
-                                    Luk
-                                </button>
-                                <button
-                                    type="submit"
-                                    class="btn addProductBtn"
-                                    id="submitProductBtn"
-                                >
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk</button>
+                                <button type="submit" class="btn addProductBtn" id="submitProductBtn">
                                     Tilføj Produkt
                                 </button>
                             </div>
@@ -138,12 +119,7 @@
                 <nav class="navbar navbar-light">
                     <form class="d-inline-flex" style="width: 40rem">
                         <!-- Search Input -->
-                        <input
-                            class="form-control"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                        />
+                        <input class="form-control" type="search" placeholder="Search" aria-label="Search" />
                         <!-- Search Button with Icon -->
                         <button class="btn btn-dark my-2 my-sm-0 ms-2 p-2" type="submit">
                             <span class="material-symbols-outlined" aria-hidden="true">search</span>
@@ -177,24 +153,9 @@
                                 contenteditable="false"
                                 th:text="${product.productNumber}"
                             ></td>
-                            <td
-                                data-field="name"
-                                class="fs-5"
-                                contenteditable="false"
-                                th:text="${product.name}"
-                            ></td>
-                            <td
-                                data-field="EAN"
-                                class="fs-5"
-                                contenteditable="false"
-                                th:text="${product.EAN}"
-                            ></td>
-                            <td
-                                data-field="type"
-                                class="fs-5"
-                                contenteditable="false"
-                                th:text="${product.type}"
-                            ></td>
+                            <td data-field="name" class="fs-5" contenteditable="false" th:text="${product.name}"></td>
+                            <td data-field="EAN" class="fs-5" contenteditable="false" th:text="${product.EAN}"></td>
+                            <td data-field="type" class="fs-5" contenteditable="false" th:text="${product.type}"></td>
                             <td
                                 data-field="price"
                                 class="fs-5"
@@ -203,21 +164,12 @@
                             ></td>
                             <td class="fs-5">
                                 <!-- Delete Button (Triggers delete request in JS) -->
-                                <button
-                                    class="btn btn-outline-danger btn-sm delete-btn"
-                                    type="button"
-                                >
+                                <button class="btn btn-outline-danger btn-sm delete-btn" type="button">
                                     <span class="material-symbols-outlined">delete</span>
                                 </button>
                                 <!-- Edit Button (Triggers edit request in JS) -->
-                                <button
-                                    class="btn btn-outline-dark btn-sm edit-btn"
-                                    type="button"
-                                    aria-pressed="false"
-                                >
-                                    <span class="material-symbols-outlined edit-btn-icon">
-                                        edit_square
-                                    </span>
+                                <button class="btn btn-outline-dark btn-sm edit-btn" type="button" aria-pressed="false">
+                                    <span class="material-symbols-outlined edit-btn-icon">edit_square</span>
                                 </button>
                             </td>
                         </tr>

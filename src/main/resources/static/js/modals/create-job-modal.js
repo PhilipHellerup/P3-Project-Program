@@ -56,10 +56,7 @@
                 createModal.hide(); // Close the modal on success
 
                 // Refresh calendar view if function available, else reload page
-                if (
-                    window.refreshCalendarWithJob &&
-                    typeof window.refreshCalendarWithJob === 'function'
-                ) {
+                if (window.refreshCalendarWithJob && typeof window.refreshCalendarWithJob === 'function') {
                     window.refreshCalendarWithJob(created);
                 } else {
                     window.location.reload();

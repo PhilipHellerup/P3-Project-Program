@@ -4,14 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const raw = el.textContent?.trim() ?? '';
 
         // Format the label if a translation function is available on window
-        const label =
-            typeof window.translateStatusName === 'function'
-                ? window.translateStatusName(raw)
-                : raw;
+        const label = typeof window.translateStatusName === 'function' ? window.translateStatusName(raw) : raw;
 
         // Get colors mapping (border/background/text) if provided by the app
-        const colors =
-            typeof window.statusToColors === 'function' ? window.statusToColors(raw) : {};
+        const colors = typeof window.statusToColors === 'function' ? window.statusToColors(raw) : {};
 
         // Apply text and inline styles to make the status look like a badge
         el.textContent = label;

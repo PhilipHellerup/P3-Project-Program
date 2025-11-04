@@ -31,11 +31,7 @@ public class JobController {
      * @param jobRepository    the repository for job database operations
      * @param statusRepository the repository for job status database operations
      */
-    public JobController(
-        JobRepository jobRepository,
-        JobStatusRepository statusRepository,
-        JobService jobService
-    ) {
+    public JobController(JobRepository jobRepository, JobStatusRepository statusRepository, JobService jobService) {
         this.jobRepository = jobRepository;
         this.statusRepository = statusRepository;
         this.jobService = jobService;
@@ -64,9 +60,7 @@ public class JobController {
     @ResponseBody
     public ResponseEntity<Job> createJob(@RequestBody Job job) {
         // Validate required fields
-        if (
-            job.getDate() == null || job.getTitle() == null
-        ) return ResponseEntity.badRequest().build();
+        if (job.getDate() == null || job.getTitle() == null) return ResponseEntity.badRequest().build();
         // Ensure status is valid
         if (job.getStatus() == null || job.getStatus().getId() == null) {
             return ResponseEntity.badRequest().build();

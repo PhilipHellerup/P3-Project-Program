@@ -25,9 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const href = '/css/navbar.css';
 
                 // If already present, resolve when it's loaded (or immediately)
-                const existing = Array.from(
-                    document.head.querySelectorAll('link[rel="stylesheet"]'),
-                ).find((l) => (l.getAttribute('href') || l.href) === href);
+                const existing = Array.from(document.head.querySelectorAll('link[rel="stylesheet"]')).find(
+                    (l) => (l.getAttribute('href') || l.href) === href,
+                );
                 if (existing) {
                     // If it's already loaded (sheet available), resolve immediately
                     if (existing.sheet) {

@@ -29,10 +29,7 @@
             title: document.getElementById('title').value,
             customer_name: document.getElementById('customer_name').value,
             customer_phone: document.getElementById('customer_phone').value,
-            work_time_minutes: parseInt(
-                document.getElementById('work_time_minutes').value || '0',
-                10,
-            ),
+            work_time_minutes: parseInt(document.getElementById('work_time_minutes').value || '0', 10),
             price_per_minute: parseFloat(document.getElementById('price_per_minute').value || '0'),
             date: toIsoLocal(document.getElementById('date').value),
             status: { id: parseInt(document.getElementById('status_id').value, 10) },

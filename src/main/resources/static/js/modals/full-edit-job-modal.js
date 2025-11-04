@@ -28,13 +28,8 @@
             customer_name: document.getElementById('full_customer_name').value,
             customer_phone: document.getElementById('full_customer_phone').value,
             job_description: document.getElementById('full_job_description').value || '',
-            work_time_minutes: parseInt(
-                document.getElementById('full_work_time_minutes').value || '0',
-                10,
-            ),
-            price_per_minute: parseFloat(
-                document.getElementById('full_price_per_minute').value || '0',
-            ),
+            work_time_minutes: parseInt(document.getElementById('full_work_time_minutes').value || '0', 10),
+            price_per_minute: parseFloat(document.getElementById('full_price_per_minute').value || '0'),
             date: toIsoLocal(document.getElementById('full_date').value),
             status: { id: parseInt(document.getElementById('full_status_id').value, 10) },
         };

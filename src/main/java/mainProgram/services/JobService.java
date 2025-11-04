@@ -27,9 +27,7 @@ public class JobService implements BaseSearchService<Job> {
     }
 
     public Job getJobById(int id) {
-        return jobRepository
-            .findById(Math.toIntExact(id))
-            .orElseThrow(() -> new RuntimeException("Job not found"));
+        return jobRepository.findById(Math.toIntExact(id)).orElseThrow(() -> new RuntimeException("Job not found"));
     }
 
     /// Find the parts associated with a repair

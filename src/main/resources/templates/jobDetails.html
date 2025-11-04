@@ -23,18 +23,12 @@
             <div class="d-inline-flex" style="width: 100%">
                 <!-- Details Card: job metadata and edit button -->
                 <div class="card me-2" style="width: 100%">
-                    <div
-                        class="card-header d-inline-flex justify-content-between align-items-center"
-                    >
+                    <div class="card-header d-inline-flex justify-content-between align-items-center">
                         <!-- Card title (in Danish: "Detaljer") -->
                         <h5 class="mb-0">Detaljer</h5>
 
                         <!-- Edit button: opens the edit-job modal. ID used by JS to attach click handler. -->
-                        <a
-                            id="openEditBtn"
-                            class="btn btn-primary align-co px-1 py-1 pt-0"
-                            style="width: 2rem"
-                        >
+                        <a id="openEditBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
                             <!-- Pencil icon (SVG) visually indicates edit action -->
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -63,19 +57,13 @@
                                     <td><b>Status:</b></td>
                                     <!-- job.status.name is printed here; JS will find #job-status and style it -->
                                     <td>
-                                        <span
-                                            class="job-status"
-                                            id="job-status"
-                                            th:text="${job.status.name}"
-                                        ></span>
+                                        <span class="job-status" id="job-status" th:text="${job.status.name}"></span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><b>Oprettet:</b></td>
                                     <!-- Date formatting using Thymeleaf #temporals utility -->
-                                    <td
-                                        th:text="${#temporals.format(job.date, 'd. MMMM yyyy HH:mm')}"
-                                    ></td>
+                                    <td th:text="${#temporals.format(job.date, 'd. MMMM yyyy HH:mm')}"></td>
                                 </tr>
                                 <tr>
                                     <td><b>Cykel:</b></td>
@@ -96,17 +84,11 @@
 
                 <!-- Description Card: brief job description and its edit button -->
                 <div class="card ms-2" style="width: 100%">
-                    <div
-                        class="card-header d-inline-flex justify-content-between align-items-center"
-                    >
+                    <div class="card-header d-inline-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Beskrivelse</h5>
 
                         <!-- Button opens description modal. ID used by JS to attach click handler. -->
-                        <a
-                            id="openDescBtn"
-                            class="btn btn-primary align-co px-1 py-1 pt-0"
-                            style="width: 2rem"
-                        >
+                        <a id="openDescBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -127,11 +109,7 @@
                     </div>
 
                     <!-- Description text: filled from job.job_description. ID used to fetch current text when opening modal. -->
-                    <p
-                        class="card-text mx-2 my-2"
-                        id="jobDescriptionText"
-                        th:text="${job.job_description}"
-                    ></p>
+                    <p class="card-text mx-2 my-2" id="jobDescriptionText" th:text="${job.job_description}"></p>
                 </div>
             </div>
 
@@ -218,15 +196,10 @@
 
                     // Format the label if a translation function is available on window
                     const label =
-                        typeof window.translateStatusName === 'function'
-                            ? window.translateStatusName(raw)
-                            : raw;
+                        typeof window.translateStatusName === 'function' ? window.translateStatusName(raw) : raw;
 
                     // Get colors mapping (border/background/text) if provided by the app
-                    const colors =
-                        typeof window.statusToColors === 'function'
-                            ? window.statusToColors(raw)
-                            : {};
+                    const colors = typeof window.statusToColors === 'function' ? window.statusToColors(raw) : {};
 
                     // Apply text and inline styles to make the status look like a badge
                     el.textContent = label;
@@ -266,10 +239,8 @@
                 document.getElementById('openDescBtn')?.addEventListener('click', (e) => {
                     e.preventDefault();
                     const id = '[[${job.id}]]' || '';
-                    const current =
-                        document.getElementById('jobDescriptionText')?.textContent ?? '';
-                    if (window.openDescriptionModal)
-                        window.openDescriptionModal(id, current.trim());
+                    const current = document.getElementById('jobDescriptionText')?.textContent ?? '';
+                    if (window.openDescriptionModal) window.openDescriptionModal(id, current.trim());
                 });
             });
         </script>

@@ -55,10 +55,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editProduct(
-        @PathVariable int id,
-        @RequestBody Map<String, Object> updates
-    ) {
+    public ResponseEntity<?> editProduct(@PathVariable int id, @RequestBody Map<String, Object> updates) {
         // Find the product in the database by ID
         return productRepository
             .findById(id)

@@ -20,10 +20,7 @@ public class PartController {
     private final ProductRepository productRepository;
     private final JobPartRepository jobPartRepository;
 
-    public PartController(
-        ProductRepository productRepository,
-        JobPartRepository jobPartRepository
-    ) {
+    public PartController(ProductRepository productRepository, JobPartRepository jobPartRepository) {
         this.productRepository = productRepository;
         this.jobPartRepository = jobPartRepository;
     }

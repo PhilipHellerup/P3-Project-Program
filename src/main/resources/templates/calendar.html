@@ -12,10 +12,7 @@
         <link href="/css/calendar.css" rel="stylesheet" />
     </head>
     <body class="d-flex justify-content-center">
-        <div
-            class="w-90 p-4 rounded-4 m-5 shadow-sm border secondary-border-subtle"
-            id="calendar-container"
-        >
+        <div class="w-90 p-4 rounded-4 m-5 shadow-sm border secondary-border-subtle" id="calendar-container">
             <div class="container h-100">
                 <div class="d-flex justify-content-end align-items-center mb-3 h-100">
                     <div class="h-100" id="calendar"></div>
@@ -36,48 +33,16 @@
                         <div
                             id="statusSubmenu"
                             class="event-submenu"
-                            style="
-                                display: none;
-                                position: absolute;
-                                top: 0;
-                                left: 100%;
-                                min-width: 180px;
-                            "
+                            style="display: none; position: absolute; top: 0; left: 100%; min-width: 180px"
                         >
-                            <a
-                                class="dropdown-item"
-                                data-action="setStatus"
-                                data-status="notDelivered"
-                            >
+                            <a class="dropdown-item" data-action="setStatus" data-status="notDelivered">
                                 Ikke Indleveret
                             </a>
-                            <a
-                                class="dropdown-item"
-                                data-action="setStatus"
-                                data-status="delivered"
-                            >
-                                Indleveret
-                            </a>
-                            <a
-                                class="dropdown-item"
-                                data-action="setStatus"
-                                data-status="inProgress"
-                            >
-                                Igangværende
-                            </a>
-                            <a
-                                class="dropdown-item"
-                                data-action="setStatus"
-                                data-status="missingPart"
-                            >
-                                Mangler del
-                            </a>
-                            <a class="dropdown-item" data-action="setStatus" data-status="finished">
-                                Færdig
-                            </a>
-                            <a class="dropdown-item" data-action="setStatus" data-status="pickedUp">
-                                Afhentet
-                            </a>
+                            <a class="dropdown-item" data-action="setStatus" data-status="delivered">Indleveret</a>
+                            <a class="dropdown-item" data-action="setStatus" data-status="inProgress">Igangværende</a>
+                            <a class="dropdown-item" data-action="setStatus" data-status="missingPart">Mangler del</a>
+                            <a class="dropdown-item" data-action="setStatus" data-status="finished">Færdig</a>
+                            <a class="dropdown-item" data-action="setStatus" data-status="pickedUp">Afhentet</a>
                         </div>
                     </div>
                     <div class="dropdown-divider"></div>
@@ -121,8 +86,7 @@
                  * @returns {Object} FullCalendar event object with title, dates, colors, and extended properties
                  */
                 function mapJobToEvent(job) {
-                    const statusName =
-                        job.status?.name || statusIdToName[job.status?.id] || 'notDelivered';
+                    const statusName = job.status?.name || statusIdToName[job.status?.id] || 'notDelivered';
                     const statusId = job.status?.id || statusNameToId[statusName] || 1;
                     const colors = statusToColors(statusName);
 
@@ -145,9 +109,7 @@
                         id: job.id,
                         title: displayTitle,
                         start: job.date,
-                        end: job.date
-                            ? new Date(job.date).getTime() + (job.work_time_minutes || 0) * 60000
-                            : null,
+                        end: job.date ? new Date(job.date).getTime() + (job.work_time_minutes || 0) * 60000 : null,
                         backgroundColor: colors.backgroundColor,
                         borderColor: colors.borderColor,
                         textColor: colors.textColor,
@@ -214,9 +176,7 @@
 
                     // Prefer the original raw title (stored separately from display title)
                     const rawTitle =
-                        ep.original_title !== undefined &&
-                        ep.original_title !== null &&
-                        ep.original_title !== ''
+                        ep.original_title !== undefined && ep.original_title !== null && ep.original_title !== ''
                             ? ep.original_title
                             : event.title || '';
 
@@ -259,12 +219,9 @@
                     const title = (ep.original_title || eventApi.title || 'Job').toString();
 
                     // Update menu items with event-specific text
-                    contextMenuEl.querySelector('[data-action="open"]').textContent =
-                        `Åbn "${title}"`;
-                    contextMenuEl.querySelector('[data-action="openNewTab"]').textContent =
-                        `Åbn "${title}" i ny fane`;
-                    contextMenuEl.querySelector('[data-action="edit"]').textContent =
-                        `Rediger "${title}"`;
+                    contextMenuEl.querySelector('[data-action="open"]').textContent = `Åbn "${title}"`;
+                    contextMenuEl.querySelector('[data-action="openNewTab"]').textContent = `Åbn "${title}" i ny fane`;
+                    contextMenuEl.querySelector('[data-action="edit"]').textContent = `Rediger "${title}"`;
 
                     // Hide the current status from the submenu to avoid confusion
                     const currentStatusName = (ep.status || '').toString();
@@ -412,8 +369,7 @@
                             body: JSON.stringify(payload),
                         })
                             .then((response) => {
-                                if (!response.ok)
-                                    throw new Error('Server returned ' + response.status);
+                                if (!response.ok) throw new Error('Server returned ' + response.status);
                                 return response.json();
                             })
                             .then((updated) => {
@@ -447,9 +403,7 @@
 
                         // Calculate new duration in minutes
                         if (ev.start && ev.end) {
-                            payload.work_time_minutes = Math.round(
-                                (ev.end.getTime() - ev.start.getTime()) / 60000,
-                            );
+                            payload.work_time_minutes = Math.round((ev.end.getTime() - ev.start.getTime()) / 60000);
                         }
 
                         fetch('/api/jobs/' + ev.id, {
@@ -458,8 +412,7 @@
                             body: JSON.stringify(payload),
                         })
                             .then((response) => {
-                                if (!response.ok)
-                                    throw new Error('Server returned ' + response.status);
+                                if (!response.ok) throw new Error('Server returned ' + response.status);
                                 return response.json();
                             })
                             .then((updated) => {
@@ -479,9 +432,7 @@
                             .catch((err) => {
                                 console.error('Failed to update on resize:', err);
                                 info.revert(); // Revert the resize operation
-                                alert(
-                                    'Kunne ikke ændre længden på jobbet — opdatering mislykkedes.',
-                                );
+                                alert('Kunne ikke ændre længden på jobbet — opdatering mislykkedes.');
                             })
                             .finally(() => {
                                 // Clean up any open popovers
@@ -500,8 +451,7 @@
                         if (existing) existing.dispose();
 
                         // Create popover with job description
-                        const description =
-                            info.event.extendedProps.job_description || '(Ingen beskrivelse)';
+                        const description = info.event.extendedProps.job_description || '(Ingen beskrivelse)';
                         new bootstrap.Popover(info.el, {
                             title: 'Beskrivelse',
                             content: description,
@@ -551,8 +501,7 @@
           <span class="event-title">${arg.event.title}</span>
         </div>
         ${
-            arg.event.extendedProps.job_description &&
-            arg.event.extendedProps.work_time_minutes > 60
+            arg.event.extendedProps.job_description && arg.event.extendedProps.work_time_minutes > 60
                 ? `<span class="event-description fw-normal">${arg.event.extendedProps.job_description}</span>`
                 : ''
         }
@@ -571,10 +520,7 @@
 
                 // Close menu on click outside
                 document.addEventListener('click', (e) => {
-                    if (
-                        contextMenuEl.style.display === 'block' &&
-                        !contextMenuEl.contains(e.target)
-                    ) {
+                    if (contextMenuEl.style.display === 'block' && !contextMenuEl.contains(e.target)) {
                         hideContextMenu();
                     }
                 });
