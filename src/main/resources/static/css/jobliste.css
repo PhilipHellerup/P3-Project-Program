@@ -8,12 +8,8 @@ body {
 }
 
 /* Main container styling */
-.w-85 {
-  width: 85%;
-  max-width: 1200px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+#main-container {
+  background-color: white;
 }
 
 /* Header section with logo and title */
