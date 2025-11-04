@@ -1,11 +1,15 @@
 package mainProgram.table; // Project Organization
 
 /* --- Imports --- */
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /* --- Product Class --- */
+// Represents a product in the system
+// This entity is mapped to the "products" table in the database.
+// Each Product can be linked to multiple JobParts (via one-to-many relationship).
 @Entity
 @Table(name = "products")
 public class Product {
@@ -49,7 +53,8 @@ public class Product {
     private List<JobPart> jobParts = new ArrayList<>();
 
     // Constructor
-    public Product(String productNumber, String name, String EAN, String type, String price) {
+    // (OPTIONAL) Constructor for manual creation of Product Objects
+    public Product(String productNumber, String name, String EAN, String type, Double price) {
         this.productNumber = productNumber;
         this.name = name;
         this.EAN = EAN;
@@ -62,6 +67,10 @@ public class Product {
 
     // Methods
     // Getters
+    public int getId() {
+        return id;
+    }
+
     public String getProductNumber() {
         return productNumber;
     }
@@ -78,7 +87,7 @@ public class Product {
         return type;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
@@ -99,7 +108,7 @@ public class Product {
         this.type = type;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 }
