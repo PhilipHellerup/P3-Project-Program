@@ -1,9 +1,7 @@
 package mainProgram.repository;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import mainProgram.table.JobPart;
 
 public interface JobPartRepository extends JpaRepository<JobPart, Long> {

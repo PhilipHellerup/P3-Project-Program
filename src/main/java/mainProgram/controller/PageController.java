@@ -32,7 +32,7 @@ public class PageController {
      * @param jobRepository the repository for accessing job data
      * @param jobService the service layer for business logic related to jobs
      * @param productRepository the repository for accessing product data
-     *
+     * @param jobPartRepository the repository for connecting jobs and products
      **/
     public PageController(JobRepository jobRepository, JobService jobService, ProductRepository productRepository, JobPartRepository jobPartRepository) {
         this.jobRepository = jobRepository;
