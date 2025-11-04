@@ -1,12 +1,7 @@
 package mainProgram.table;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+/* --- Imports --- */
+import jakarta.persistence.*;
 
 /**
  * Join table entity representing the association between Jobs and Products.
@@ -31,17 +26,15 @@ public class JobPart {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    // Number of units of the product used in the job
-    private Integer quantity;
-
-    // Constructors
-    public JobPart() {}
-
+    // Constructor
     public JobPart(Job job, Product product, Integer quantity) {
         this.job = job;
         this.product = product;
         this.quantity = quantity;
     }
+
+    // Number of units of this product used in the job
+    private Integer quantity;
 
     // Getters
     public int getId() {

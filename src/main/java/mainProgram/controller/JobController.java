@@ -5,6 +5,8 @@ import mainProgram.repository.JobRepository;
 import mainProgram.repository.JobStatusRepository;
 import mainProgram.table.Job;
 import mainProgram.table.JobStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +19,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/")
 public class JobController {
 
+  private static final Logger log = LoggerFactory.getLogger(JobController.class);
   private final JobRepository jobRepository;
   private final JobStatusRepository statusRepository;
 
   /**
    * Constructor for dependency injection.
    *
-   * @param jobRepository the repository for job database operations
+   * @param jobRepository    the repository for job database operations
    * @param statusRepository the repository for job status database operations
    */
   public JobController(JobRepository jobRepository, JobStatusRepository statusRepository) {
@@ -72,7 +75,7 @@ public class JobController {
    * Updates an existing job with new information.
    * All job fields can be updated including title, customer details, pricing, and status.
    *
-   * @param id the ID of the job to update
+   * @param id  the ID of the job to update
    * @param job the job object containing updated values
    * @return ResponseEntity containing the updated job if found, or a not found response
    * @throws IllegalArgumentException if the provided status_id is invalid
@@ -89,6 +92,7 @@ public class JobController {
         existing.setCustomer_phone(job.getCustomer_phone());
         existing.setJob_description(job.getJob_description());
         existing.setWork_time_minutes(job.getWork_time_minutes());
+        existing.setDuration(job.getDuration());
         existing.setPrice_per_minute(job.getPrice_per_minute());
         existing.setDate(job.getDate());
 
@@ -110,7 +114,7 @@ public class JobController {
    * Updates only the job description for a specific job.
    * This is a partial update endpoint focused on the description field.
    *
-   * @param id the ID of the job to update
+   * @param id  the ID of the job to update
    * @param job the job object containing the new description
    * @return ResponseEntity containing the updated job if found, or a not found response
    */
