@@ -20,9 +20,7 @@ public class ProductController {
     // Constructor for Dependency Injection
     // Spring automatically provides an instance of ProductRepository at runtime.
 
-    /**
-     * @param productRepository the repository handling CRUD operations for Product entities.
-     **/
+    /** @param productRepository the repository handling CRUD operations for Product entities. **/
     public ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
@@ -39,9 +37,7 @@ public class ProductController {
     //  "price": "999.99"
     // }
     /** @param product the product object to create **/
-    /**
-     * @return ResponseEntity containing the created product if successful, or a bad request response
-     **/
+    /** @return ResponseEntity containing the created product if successful, or a bad request response **/
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         // Save the product to the database using the repository and its .save() method.
