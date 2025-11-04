@@ -12,6 +12,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "job_part_jointable")
 public class JobPart {
+
     // Attributes
     // Unique identifier for this job-product association
     @Id

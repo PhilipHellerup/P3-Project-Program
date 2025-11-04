@@ -3,7 +3,6 @@ package mainProgram.controller; // Project Organization
 /* --- Imports --- */
 
 import java.util.List;
-
 import mainProgram.repository.JobRepository;
 import mainProgram.repository.ProductRepository;
 import mainProgram.services.JobService;
@@ -35,9 +34,9 @@ public class PageController {
      * @param productRepository the repository for accessing product data
      **/
     public PageController(
-            JobRepository jobRepository,
-            JobService jobService,
-            ProductRepository productRepository
+        JobRepository jobRepository,
+        JobService jobService,
+        ProductRepository productRepository
     ) {
         this.jobRepository = jobRepository;
         this.jobService = jobService;
