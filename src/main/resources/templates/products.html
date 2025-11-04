@@ -1,160 +1,234 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Static page title shown on the webpage -->
-    <title>Produkter</title>
+        <!-- Static page title shown on the webpage -->
+        <title>Produkter</title>
 
-    <!-- === Styles and Scripts === -->
-    <!-- Bootstrap Styling -->
-    <link rel="stylesheet" href="/css/bootstrap.css"/>
+        <!-- === Styles and Scripts === -->
+        <!-- Bootstrap Styling -->
+        <link rel="stylesheet" href="/css/bootstrap.css" />
 
-    <!-- Google Material Icons (used for delete and search icons) -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+        <!-- Google Material Icons (used for delete and search icons) -->
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        />
 
-    <!-- Bootstrap JavaScript (for modals, dropdowns, etc.) -->
-    <script type="module" src="/js/bootstrap.js"></script>
+        <!-- Bootstrap JavaScript (for modals, dropdowns, etc.) -->
+        <script type="module" src="/js/bootstrap.js"></script>
 
-    <!-- Custom JS: Handles delete button and other product actions -->
-    <script type="module" src="/js/productActions.js"></script>
+        <!-- Custom JS: Handles delete button and other product actions -->
+        <script type="module" src="/js/productActions.js"></script>
 
-    <!-- Custom JS: Handles the 'Add Product' modal form behavior -->
-    <script type="module" src="/js/modals/addProductsModal.js"></script>
+        <!-- Custom JS: Handles the 'Add Product' modal form behavior -->
+        <script type="module" src="/js/modals/addProductsModal.js"></script>
 
-    <!-- Custom JS: Handles Fetch Errors in both "addProductsModal.js" and "productActions.js" -->
-    <script type="module" src="/js/utils/fetchUtils.js"></script>
+        <!-- Custom JS: Handles Fetch Errors in both "addProductsModal.js" and "productActions.js" -->
+        <script type="module" src="/js/utils/fetchUtils.js"></script>
 
-    <!-- Custom JS: Pagination = Handles client-side page switching -->
-    <script src="/js/productPagination.js"></script>
-</head>
+        <!-- Custom JS: Pagination = Handles client-side page switching -->
+        <script src="/js/productPagination.js"></script>
+    </head>
 
-<body>
-<!-- === Navbar Section === -->
-<!-- Navigation bar dynamically injected at runtime via navbar.js -->
-<nav>
-    <script src="/js/navbar.js"></script>
-</nav>
+    <body>
+        <!-- === Navbar Section === -->
+        <!-- Navigation bar dynamically injected at runtime via navbar.js -->
+        <nav>
+            <script src="/js/navbar.js"></script>
+        </nav>
 
-<!-- === Main Page Container (No Nav Bar) === -->
-<div class="page-content-container m-4 mt-1 flex-1 p-5">
-    <!-- Page Header -->
-    <div class="page-head d-flex justify-content-end">
-        <!-- "Add Product" button opens the modal below -->
-        <button type="button" class="btn addProductBtn" data-bs-toggle="modal" data-bs-target="#addProductModal">Tilføj Produkt</button>
-    </div>
+        <!-- === Main Page Container (No Nav Bar) === -->
+        <div class="page-content-container m-4 mt-1 flex-1 p-5">
+            <!-- Page Header -->
+            <div class="page-head d-flex justify-content-end">
+                <!-- "Add Product" button opens the modal below -->
+                <button
+                    type="button"
+                    class="btn addProductBtn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addProductModal"
+                >
+                    Tilføj Produkt
+                </button>
+            </div>
 
-    <!-- === Add Product Modal === -->
-    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addProductModalLabel">Tilføj Produkt</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <!-- Modal Body: Input fields for new product info -->
-                <div class="modal-body">
-                    <form>
-                        <!-- Modal Input -->
-                        <!-- Product Number -->
-                        <div class="mb-3">
-                            <label for="varenummer-text" class="col-form-label">Varenr.:</label>
-                            <input type="text" class="form-control" id="varenummer-text">
+            <!-- === Add Product Modal === -->
+            <div
+                class="modal fade"
+                id="addProductModal"
+                tabindex="-1"
+                aria-labelledby="addProductModalLabel"
+                aria-hidden="true"
+            >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="addProductModalLabel">
+                                Tilføj Produkt
+                            </h1>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            ></button>
                         </div>
-                        <!-- Product Name -->
-                        <div class="mb-3">
-                            <label for="navn-text" class="col-form-label">Navn:</label>
-                            <input type="text" class="form-control" id="navn-text">
-                        </div>
-                        <!-- EAN Code -->
-                        <div class="mb-3">
-                            <label for="EAN-text" class="col-form-label">EAN:</label>
-                            <input type="text" class="form-control" id="EAN-text">
-                        </div>
-                        <!-- Product Type -->
-                        <div class="mb-3">
-                            <label for="type-text" class="col-form-label">Type</label>
-                            <input type="text" class="form-control" id="type-text">
-                        </div>
-                        <!-- Product Price -->
-                        <div class="mb-3">
-                            <label for="pris-tal" class="col-form-label">Pris</label>
-                            <input type="number" class="form-control" id="pris-tal">
-                        </div>
-                    </form>
 
-                    <!-- Modal Footer: Close and Submit Buttons -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk</button>
-                        <button type="submit" class="btn addProductBtn" id="submitProductBtn">Tilføj Produkt</button>
+                        <!-- Modal Body: Input fields for new product info -->
+                        <div class="modal-body">
+                            <form>
+                                <!-- Modal Input -->
+                                <!-- Product Number -->
+                                <div class="mb-3">
+                                    <label for="varenummer-text" class="col-form-label">
+                                        Varenr.:
+                                    </label>
+                                    <input type="text" class="form-control" id="varenummer-text" />
+                                </div>
+                                <!-- Product Name -->
+                                <div class="mb-3">
+                                    <label for="navn-text" class="col-form-label">Navn:</label>
+                                    <input type="text" class="form-control" id="navn-text" />
+                                </div>
+                                <!-- EAN Code -->
+                                <div class="mb-3">
+                                    <label for="EAN-text" class="col-form-label">EAN:</label>
+                                    <input type="text" class="form-control" id="EAN-text" />
+                                </div>
+                                <!-- Product Type -->
+                                <div class="mb-3">
+                                    <label for="type-text" class="col-form-label">Type</label>
+                                    <input type="text" class="form-control" id="type-text" />
+                                </div>
+                                <!-- Product Price -->
+                                <div class="mb-3">
+                                    <label for="pris-tal" class="col-form-label">Pris</label>
+                                    <input type="number" class="form-control" id="pris-tal" />
+                                </div>
+                            </form>
+
+                            <!-- Modal Footer: Close and Submit Buttons -->
+                            <div class="modal-footer">
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal"
+                                >
+                                    Luk
+                                </button>
+                                <button
+                                    type="submit"
+                                    class="btn addProductBtn"
+                                    id="submitProductBtn"
+                                >
+                                    Tilføj Produkt
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- === Search Bar Section === -->
+            <div class="search-bar mt-5">
+                <nav class="navbar navbar-light">
+                    <form class="d-inline-flex" style="width: 40rem">
+                        <!-- Search Input -->
+                        <input
+                            class="form-control"
+                            type="search"
+                            placeholder="Search"
+                            aria-label="Search"
+                        />
+                        <!-- Search Button with Icon -->
+                        <button class="btn btn-dark my-2 my-sm-0 ms-2 p-2" type="submit">
+                            <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                        </button>
+                    </form>
+                </nav>
+            </div>
+
+            <!-- === Product Table === -->
+            <!-- Displays a list of products dynamically rendered by Thymeleaf -->
+            <div class="mt-6">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Varenr.</th>
+                            <th scope="col">Navn</th>
+                            <th scope="col">EAN</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Pris</th>
+                            <th scope="col">Handling</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <!-- Thymeleaf loop: Generates one <tr> per product in 'products' list -->
+                        <!-- data-id attribute is set dynamically to product.id (used by JS delete logic) -->
+                        <tr th:each="product : ${products}" th:attrappend="data-id=${product.id}">
+                            <td
+                                data-field="productNumber"
+                                class="fs-5"
+                                contenteditable="false"
+                                th:text="${product.productNumber}"
+                            ></td>
+                            <td
+                                data-field="name"
+                                class="fs-5"
+                                contenteditable="false"
+                                th:text="${product.name}"
+                            ></td>
+                            <td
+                                data-field="EAN"
+                                class="fs-5"
+                                contenteditable="false"
+                                th:text="${product.EAN}"
+                            ></td>
+                            <td
+                                data-field="type"
+                                class="fs-5"
+                                contenteditable="false"
+                                th:text="${product.type}"
+                            ></td>
+                            <td
+                                data-field="price"
+                                class="fs-5"
+                                contenteditable="false"
+                                th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')} + ' Kr.'"
+                            ></td>
+                            <td class="fs-5">
+                                <!-- Delete Button (Triggers delete request in JS) -->
+                                <button
+                                    class="btn btn-outline-danger btn-sm delete-btn"
+                                    type="button"
+                                >
+                                    <span class="material-symbols-outlined">delete</span>
+                                </button>
+                                <!-- Edit Button (Triggers edit request in JS) -->
+                                <button
+                                    class="btn btn-outline-dark btn-sm edit-btn"
+                                    type="button"
+                                    aria-pressed="false"
+                                >
+                                    <span class="material-symbols-outlined edit-btn-icon">
+                                        edit_square
+                                    </span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- === Pagination Bar === -->
+            <!-- Static example navigation (can be made dynamic later) -->
+            <div class="pagination-css align-content-center">
+                <ul class="pagination justify-content-center Page-Navigation-Bar"></ul>
+            </div>
         </div>
-    </div>
-
-    <!-- === Search Bar Section === -->
-    <div class="search-bar mt-5">
-        <nav class="navbar navbar-light">
-            <form class="d-inline-flex" style="width: 40rem">
-                <!-- Search Input -->
-                <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                <!-- Search Button with Icon -->
-                <button class="btn btn-dark my-2 my-sm-0 ms-2 p-2" type="submit">
-                        <span class="material-symbols-outlined" aria-hidden="true">
-                            search
-                        </span>
-                </button>
-            </form>
-        </nav>
-    </div>
-
-    <!-- === Product Table === -->
-    <!-- Displays a list of products dynamically rendered by Thymeleaf -->
-    <div class="mt-6">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">Varenr.</th>
-                <th scope="col">Navn</th>
-                <th scope="col">EAN</th>
-                <th scope="col">Type</th>
-                <th scope="col">Pris</th>
-                <th scope="col">Handling</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <!-- Thymeleaf loop: Generates one <tr> per product in 'products' list -->
-            <!-- data-id attribute is set dynamically to product.id (used by JS delete logic) -->
-            <tr th:each="product : ${products}" th:attrappend="data-id=${product.id}">
-                <td data-field="productNumber" class="fs-5" contenteditable="false" th:text="${product.productNumber}"></td>
-                <td data-field="name" class="fs-5" contenteditable="false" th:text="${product.name}"></td>
-                <td data-field="EAN" class="fs-5" contenteditable="false" th:text="${product.EAN}"></td>
-                <td data-field="type" class="fs-5" contenteditable="false" th:text="${product.type}"></td>
-                <td data-field="price" class="fs-5" contenteditable="false" th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')} + ' Kr.'"></td>
-                <td class="fs-5">
-                    <!-- Delete Button (Triggers delete request in JS) -->
-                    <button class="btn btn-outline-danger btn-sm delete-btn" type="button">
-                        <span class="material-symbols-outlined">delete</span>
-                    </button>
-                    <!-- Edit Button (Triggers edit request in JS) -->
-                    <button class="btn btn-outline-dark btn-sm edit-btn" type="button" aria-pressed="false">
-                        <span class="material-symbols-outlined edit-btn-icon">edit_square</span>
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <!-- === Pagination Bar === -->
-    <!-- Static example navigation (can be made dynamic later) -->
-    <div class="pagination-css align-content-center">
-        <ul class="pagination justify-content-center Page-Navigation-Bar"></ul>
-    </div>
-</div>
-</body>
+    </body>
 </html>

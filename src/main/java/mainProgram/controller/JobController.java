@@ -1,7 +1,6 @@
 package mainProgram.controller;
 
 import java.util.List;
-
 import mainProgram.repository.JobRepository;
 import mainProgram.repository.JobStatusRepository;
 import mainProgram.services.JobService;
@@ -32,7 +31,11 @@ public class JobController {
      * @param jobRepository    the repository for job database operations
      * @param statusRepository the repository for job status database operations
      */
-    public JobController(JobRepository jobRepository, JobStatusRepository statusRepository, JobService jobService) {
+    public JobController(
+        JobRepository jobRepository,
+        JobStatusRepository statusRepository,
+        JobService jobService
+    ) {
         this.jobRepository = jobRepository;
         this.statusRepository = statusRepository;
         this.jobService = jobService;
@@ -61,15 +64,17 @@ public class JobController {
     @ResponseBody
     public ResponseEntity<Job> createJob(@RequestBody Job job) {
         // Validate required fields
-        if (job.getDate() == null || job.getTitle() == null) return ResponseEntity.badRequest().build();
+        if (
+            job.getDate() == null || job.getTitle() == null
+        ) return ResponseEntity.badRequest().build();
         // Ensure status is valid
         if (job.getStatus() == null || job.getStatus().getId() == null) {
             return ResponseEntity.badRequest().build();
         }
         // Verify the status exists in the database
         JobStatus status = statusRepository
-                .findById(job.getStatus().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
+            .findById(job.getStatus().getId())
+            .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
         job.setStatus(status);
         Job saved = jobRepository.save(job);
         return ResponseEntity.ok(saved);
@@ -88,30 +93,30 @@ public class JobController {
     @ResponseBody
     public ResponseEntity<Job> updateJob(@PathVariable Integer id, @RequestBody Job job) {
         return jobRepository
-                .findById(id)
-                .map((existing) -> {
-                    // Update all job fields
-                    existing.setTitle(job.getTitle());
-                    existing.setCustomer_name(job.getCustomer_name());
-                    existing.setCustomer_phone(job.getCustomer_phone());
-                    existing.setJob_description(job.getJob_description());
-                    existing.setWork_time_minutes(job.getWork_time_minutes());
-                    existing.setDuration(job.getDuration());
-                    existing.setPrice_per_minute(job.getPrice_per_minute());
-                    existing.setDate(job.getDate());
+            .findById(id)
+            .map((existing) -> {
+                // Update all job fields
+                existing.setTitle(job.getTitle());
+                existing.setCustomer_name(job.getCustomer_name());
+                existing.setCustomer_phone(job.getCustomer_phone());
+                existing.setJob_description(job.getJob_description());
+                existing.setWork_time_minutes(job.getWork_time_minutes());
+                existing.setDuration(job.getDuration());
+                existing.setPrice_per_minute(job.getPrice_per_minute());
+                existing.setDate(job.getDate());
 
-                    // Update status if provided
-                    if (job.getStatus() != null && job.getStatus().getId() != null) {
-                        JobStatus status = statusRepository
-                                .findById(job.getStatus().getId())
-                                .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
-                        existing.setStatus(status);
-                    }
+                // Update status if provided
+                if (job.getStatus() != null && job.getStatus().getId() != null) {
+                    JobStatus status = statusRepository
+                        .findById(job.getStatus().getId())
+                        .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
+                    existing.setStatus(status);
+                }
 
-                    Job updated = jobRepository.save(existing);
-                    return ResponseEntity.ok(updated);
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                Job updated = jobRepository.save(existing);
+                return ResponseEntity.ok(updated);
+            })
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     /**
@@ -126,26 +131,25 @@ public class JobController {
     @ResponseBody
     public ResponseEntity<Job> updateJobDesc(@PathVariable Integer id, @RequestBody Job job) {
         return jobRepository
-                .findById(id)
-                .map((existing) -> {
-                    // Update only the description field
-                    existing.setJob_description(job.getJob_description());
+            .findById(id)
+            .map((existing) -> {
+                // Update only the description field
+                existing.setJob_description(job.getJob_description());
 
-                    Job updated = jobRepository.save(existing);
-                    return ResponseEntity.ok(updated);
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                Job updated = jobRepository.save(existing);
+                return ResponseEntity.ok(updated);
+            })
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 
     ///  Send a request in the form e.g. fetch(`/api/repairs/{id}/products?productId={product_id}&quantity={quantity}`)
     // todo: Aad logic so that if the "link" already exists, a new should not be added but the amount should be updated.
     @PostMapping("api/repairs/{repair_id}/products")
     public ResponseEntity<String> addProductToRepair(
-            @PathVariable Integer repair_id,
-            @RequestParam Integer productId,
-            @RequestParam(defaultValue = "1") int quantity) {
-
+        @PathVariable Integer repair_id,
+        @RequestParam Integer productId,
+        @RequestParam(defaultValue = "1") int quantity
+    ) {
         jobService.addProductToRepair(repair_id, productId, quantity);
         return ResponseEntity.ok("Product added to repair successfully");
     }

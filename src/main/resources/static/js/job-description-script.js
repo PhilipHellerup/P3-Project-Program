@@ -11,9 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Get colors mapping (border/background/text) if provided by the app
         const colors =
-            typeof window.statusToColors === 'function'
-                ? window.statusToColors(raw)
-                : {};
+            typeof window.statusToColors === 'function' ? window.statusToColors(raw) : {};
 
         // Apply text and inline styles to make the status look like a badge
         el.textContent = label;
@@ -43,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             work_time_minutes: '[[${job.work_time_minutes}]]' || 0,
             price_per_minute: '[[${job.price_per_minute}]]' || 0,
             date: "[[${#temporals.format(job.date, 'yyyy-MM-dd''T''HH:mm')}]]" || '',
-            status: {id: '[[${job.status.id}]]' || 1},
+            status: { id: '[[${job.status.id}]]' || 1 },
         };
         // Call modal opener if available
         if (window.openEditJobModal) window.openEditJobModal(job);
@@ -53,10 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('openDescBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
         const id = '[[${job.id}]]' || '';
-        const current =
-            document.getElementById('jobDescriptionText')?.textContent ?? '';
-        if (window.openDescriptionModal)
-            window.openDescriptionModal(id, current.trim());
+        const current = document.getElementById('jobDescriptionText')?.textContent ?? '';
+        if (window.openDescriptionModal) window.openDescriptionModal(id, current.trim());
     });
 
     // Event listener for the "tilføj product" btn
@@ -64,8 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // todo: do some data validation and erro handling
     document.getElementById('add-product-btn').addEventListener('click', async (e) => {
         await fetch(`/api/repairs/8/products?productId=1&quantity=2`, {
-            method: 'POST'
-        })
-    })
-
+            method: 'POST',
+        });
+    });
 });

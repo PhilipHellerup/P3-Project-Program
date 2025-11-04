@@ -6,7 +6,7 @@ import { handleFetchErrors } from '/js/utils/fetchUtils.js';
 document.addEventListener('DOMContentLoaded', () => {
     // Select all elements with the class "delete-btn" (trash can buttons)
     // and loop through them to attach an event listener
-    document.querySelectorAll('.delete-btn').forEach(button => {
+    document.querySelectorAll('.delete-btn').forEach((button) => {
         // Add a click event listener to each delete button
         button.addEventListener('click', async (e) => {
             // Prevent the default form submission behavior (meaning that the page will now not reload on submission)
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 // Send a DELETE request to the backend API "ProductController.java" to remove the product
                 const response = await fetch(`/api/products/${productId}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
                 });
 
                 // Validate and throw specific error if necessary
@@ -36,9 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Success: Remove product row
                 row.remove();
-            }
+            } catch (error) {
                 // Catch any network or fetch-related errors and log them for debugging
-            catch (error) {
                 console.error('Error deleting product:', error);
             }
         });
@@ -50,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     // Select all elements with the class "edit-btn" (pencil buttons)
     // and loop through them to attach an event listener
-    document.querySelectorAll('.edit-btn').forEach(button => {
+    document.querySelectorAll('.edit-btn').forEach((button) => {
         // Add a click event listener to each edit button
         button.addEventListener('click', async (e) => {
             // Prevent page reload
@@ -69,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Toggle edit mode: adds/removes the "editing" CSS class
-            const isEditing = row.classList.toggle(`editing`) // Toggles CSS class
+            const isEditing = row.classList.toggle(`editing`); // Toggles CSS class
 
             // Select only the cells within that row that has a data-field (desired editable fields)
             const cells = row.querySelectorAll('td[data-field]');
@@ -90,9 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.classList.replace(`btn-outline-dark`, `btn-dark`);
 
                 // Enable editing for each editable cell
-                cells.forEach(cell => {
+                cells.forEach((cell) => {
                     // Make the cell content editable
-                    cell.setAttribute('contenteditable', 'true')
+                    cell.setAttribute('contenteditable', 'true');
 
                     // Store the original value in a data attribute for comparison later
                     cell.dataset.originalValue = cell.textContent;
@@ -124,8 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
                 });
-            }
-            else {
+            } else {
                 /* --- EXIT EDIT MODE --- */
                 // Remove visual highlight
                 row.classList.remove('table-warning');
@@ -137,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.classList.replace('btn-dark', 'btn-outline-dark');
 
                 // Disable editing for all cells and remove original value data
-                cells.forEach(cell => {
+                cells.forEach((cell) => {
                     cell.removeAttribute('contenteditable'); // Removes editing ability
                     delete cell.dataset.originalValue; // Removing original value data
                 });
@@ -157,7 +155,7 @@ async function updateProduct(productId, updatedData) {
         const response = await fetch(`/api/products/${productId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedData)
+            body: JSON.stringify(updatedData),
         });
         // Extra NOTES:
         // "method" HTTP Method: (Get, Post, Put, Delete)
@@ -168,9 +166,7 @@ async function updateProduct(productId, updatedData) {
 
         // Handle any fetch errors (network issues, server errors)
         await handleFetchErrors(response);
-
-    }
-    catch (error) {
+    } catch (error) {
         // Log error
         console.error('Error updating product:', error);
     }
