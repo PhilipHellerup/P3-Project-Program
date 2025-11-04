@@ -42,9 +42,9 @@ public class ProductController {
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteProduct(@PathVariable int id) {
     // Check if a product with the given ID exists before attempting deletion
-    if (productRepository.existsById((int) id)) {
+    if (productRepository.existsById(id)) {
       // If the product exists, delete it from the database
-      productRepository.deleteById((int) id);
+      productRepository.deleteById(id);
 
       // Return HTTP 204: No Content (indicating success, but no response body needed)
       return ResponseEntity.noContent().build(); // 204 No Content

@@ -148,8 +148,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* --- CONTROLLER CALL: PUT PRODUCT UPDATE --- */
 // Sends a PUT request to update a product field in the backend "Product Controller"
-/** @param {string} productId ID of the product to update**/
-/** @param {Object} updatedData Object containing field(s) and value(s) to update**/
+/** @param {string} productId ID of the product to update
+ * @param {Object} updatedData Object containing field(s) and value(s) to update
+ */
 async function updateProduct(productId, updatedData) {
     try {
         // Send PUT request to the backend API
