@@ -65,7 +65,9 @@ document.addEventListener('DOMContentLoaded', function () {
       const navbarHTML = `
             <nav class="sidebar-nav" aria-hidden="false">
                 <div class="nav-header">
+                  <a href="/kalender">
                     <img src="/images/Perform_logo_white.avif" alt="Perform" class="logo">
+                  </a>
                 </div>
                 <ul class="nav-menu">
                     <!-- <li class="nav-item"><a class="nav-link" href="/"><span class="nav-text">Hjem</span></a></li> -->
