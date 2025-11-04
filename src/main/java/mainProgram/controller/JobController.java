@@ -142,8 +142,8 @@ public class JobController {
     // todo: Aad logic so that if the "link" already exists, a new should not be added but the amount should be updated.
     @PostMapping("api/repairs/{repair_id}/products")
     public ResponseEntity<String> addProductToRepair(
-            @PathVariable Long repair_id,
-            @RequestParam Long productId,
+            @PathVariable Integer repair_id,
+            @RequestParam Integer productId,
             @RequestParam(defaultValue = "1") int quantity) {
 
         jobService.addProductToRepair(repair_id, productId, quantity);

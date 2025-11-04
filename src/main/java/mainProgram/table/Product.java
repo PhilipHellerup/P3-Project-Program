@@ -30,8 +30,9 @@ public class Product {
     @Column(name = "category")
     private String type; // Maps to: category (Not type)
 
-    private String price; // Maps to: price
+    private Double price; // Maps to: price
 
+    /*
     // One-to-Many Relationship: One Product can be associated with many JobParts.
     /**
      * @mappedBy "product"
@@ -48,9 +49,9 @@ public class Product {
      * If a JobPart is removed from this list, it will be automatically
      * deleted from the database. This ensures no orphaned JobPart records
      * exist without a parent Product.
-     **/
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<JobPart> jobParts = new ArrayList<>();
+    **/
+    //@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<JobPart> jobParts = new ArrayList<>();
 
     // Constructor
     // (OPTIONAL) Constructor for manual creation of Product Objects

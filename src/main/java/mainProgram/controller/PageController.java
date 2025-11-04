@@ -1,18 +1,18 @@
 package mainProgram.controller; // Project Organization
 
 /* --- Imports --- */
-
 import java.util.List;
-import mainProgram.repository.JobRepository;
-import mainProgram.repository.ProductRepository;
-import mainProgram.services.JobService;
-import mainProgram.table.Job;
-import mainProgram.table.JobPart;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import mainProgram.services.JobService;
+import mainProgram.repository.JobPartRepository;
+import mainProgram.repository.JobRepository;
+import mainProgram.repository.ProductRepository;
+import mainProgram.table.Job;
 
 /* --- PageController Class --- */
 // Controller responsible for serving HTML pages (views) for the application.
@@ -21,26 +21,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/")
 public class PageController {
-
     // Attributes
     private final JobRepository jobRepository;
     private final JobService jobService;
     private final ProductRepository productRepository;
+    private final JobPartRepository jobPartRepository;
 
     // Constructor for Dependency Injection
-    /** @param jobRepository the repository for accessing job data **/
-    /** @param jobService the service layer for business logic related to jobs **/
     /**
+     * @param jobRepository the repository for accessing job data
+     * @param jobService the service layer for business logic related to jobs
      * @param productRepository the repository for accessing product data
+     * @param jobPartRepository the repository for connecting jobs and products
      **/
-    public PageController(
-        JobRepository jobRepository,
-        JobService jobService,
-        ProductRepository productRepository
-    ) {
+    public PageController(JobRepository jobRepository, JobService jobService, ProductRepository productRepository, JobPartRepository jobPartRepository) {
         this.jobRepository = jobRepository;
         this.jobService = jobService;
         this.productRepository = productRepository;
+        this.jobPartRepository = jobPartRepository;
     }
 
     // Methods
@@ -111,16 +109,16 @@ public class PageController {
      * @return the name of the job details template (jobDetails.html)
      **/
     @GetMapping("jobliste/{id}")
-    public String jobDetails(@PathVariable Long id, Model model) {
+    public String jobDetails(@PathVariable int id, Model model) {
         // Retrieve the job by ID
         Job job = jobService.getJobById(id);
 
         // Retrieve all parts associated with this job
-        List<JobPart> jobParts = jobService.getPartsForJob((long) id);
+        // List<JobPart> jobParts = jobService.getPartsForJob((long) id);
 
         // Add data to the model for rendering in the template
         model.addAttribute("job", job);
-        model.addAttribute("jobParts", jobParts);
+        model.addAttribute("jobParts", jobPartRepository.findByJobId(id));
 
         return "jobDetails";
     }

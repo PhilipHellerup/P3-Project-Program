@@ -1,34 +1,29 @@
-package mainProgram.table; // Project Organization
+package mainProgram.table;
 
 /* --- Imports --- */
-
 import jakarta.persistence.*;
 
-/* --- JobPart Class --- */
-// Junction/join table entity that links Jobs with Products.
-// Represents a many-to-many relationship: A Job can have many Products,
-// and a Product can be used in many Jobs.
-// Also stores the quantity of each product used in a specific job.
+/**
+ * Join table entity representing the association between Jobs and Products.
+ *
+ * <p>Each record indicates a Product used in a Job, including the quantity.</p>
+ */
 @Entity
 @Table(name = "job_part_jointable")
 public class JobPart {
 
-    // Attributes
-    // Unique identifier for this job-product association
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // Reference to the Job that uses this product.
-    // Many JobParts can belong to one Job.
+    // Reference to the Job
     @ManyToOne
-    @JoinColumn(name = "job_id")
+    @JoinColumn(name = "job_id", nullable = false)
     private Job job;
 
-    // Reference to the Product being used in the job.
-    // Many JobParts can reference the same Product.
+    // Reference to the Product
     @ManyToOne
-    @JoinColumn(name = "part_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     // Constructor
@@ -41,9 +36,20 @@ public class JobPart {
     // Number of units of this product used in the job
     private Integer quantity;
 
-    // Methods
+    public JobPart() {
+
+    }
+
     // Getters
-    public Product getPart() {
+    public int getId() {
+        return id;
+    }
+
+    public Job getJob() {
+        return job;
+    }
+
+    public Product getProduct() {
         return product;
     }
 
@@ -52,11 +58,15 @@ public class JobPart {
     }
 
     // Setters
-    public void setPart() {
+    public void setJob(Job job) {
+        this.job = job;
+    }
+
+    public void setProduct(Product product) {
         this.product = product;
     }
 
-    public void setQuantity() {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 }
