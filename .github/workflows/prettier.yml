@@ -1,116 +1,116 @@
 name: Prettier
 
 on:
-  pull_request:
-    branches: [master]
+    pull_request:
+        branches: [master]
 
 jobs:
-  prettier:
-    name: Prettier Check
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
+    prettier:
+        name: Prettier Check
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            pull-requests: write
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
 
-      - name: Install dependencies
-        run: npm ci
+            - name: Install dependencies
+              run: npm ci
 
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-        with:
-          files: |
-            **/*.js
-            **/*.jsx
-            **/*.ts
-            **/*.tsx
-            **/*.css
-            **/*.scss
-            **/*.md
-            **/*.html
-            **/*.json
-            **/*.yml
-            **/*.yaml
-            **/*.java
+            - name: Get changed files
+              id: changed-files
+              uses: tj-actions/changed-files@v45
+              with:
+                  files: |
+                      **/*.js
+                      **/*.jsx
+                      **/*.ts
+                      **/*.tsx
+                      **/*.css
+                      **/*.scss
+                      **/*.md
+                      **/*.html
+                      **/*.json
+                      **/*.yml
+                      **/*.yaml
+                      **/*.java
 
-      - name: Run Prettier check on changed files
-        id: prettier
-        if: steps.changed-files.outputs.all_changed_files != ''
-        run: |
-          echo "Checking formatting for changed files:"
-          echo "${{ steps.changed-files.outputs.all_changed_files }}"
-          npx prettier --check ${{ steps.changed-files.outputs.all_changed_files }}
-        continue-on-error: true
+            - name: Run Prettier check on changed files
+              id: prettier
+              if: steps.changed-files.outputs.all_changed_files != ''
+              run: |
+                  echo "Checking formatting for changed files:"
+                  echo "${{ steps.changed-files.outputs.all_changed_files }}"
+                  npx prettier --check ${{ steps.changed-files.outputs.all_changed_files }}
+              continue-on-error: true
 
-      - name: Find Prettier comment if it exists and fails
-        if: steps.prettier.outcome == 'failure'
-        uses: peter-evans/find-comment@v3
-        id: find-comment-fail
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: '<!-- prettier-check-comment -->'
-        continue-on-error: true
+            - name: Find Prettier comment if it exists and fails
+              if: steps.prettier.outcome == 'failure'
+              uses: peter-evans/find-comment@v3
+              id: find-comment-fail
+              with:
+                  issue-number: ${{ github.event.pull_request.number }}
+                  comment-author: 'github-actions[bot]'
+                  body-includes: '<!-- prettier-check-comment -->'
+              continue-on-error: true
 
-      - name: Update old Prettier comment if it exists and fails
-        if: steps.prettier.outcome == 'failure' && steps.find-comment-fail.outputs.comment-id != ''
-        uses: peter-evans/create-or-update-comment@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          body: |
-            **Prettier formatting check failed!**
-            Please run: `npm run prettier:write` to automatically fix formatting issues.
+            - name: Update old Prettier comment if it exists and fails
+              if: steps.prettier.outcome == 'failure' && steps.find-comment-fail.outputs.comment-id != ''
+              uses: peter-evans/create-or-update-comment@v5
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  body: |
+                      **Prettier formatting check failed!**
+                      Please run: `npm run prettier:write` to automatically fix formatting issues.
 
-            <!-- prettier-check-comment -->
-          comment-id: ${{ steps.find-comment-fail.outputs.comment-id }}
-          edit-mode: replace
+                      <!-- prettier-check-comment -->
+                  comment-id: ${{ steps.find-comment-fail.outputs.comment-id }}
+                  edit-mode: replace
 
-      - name: Add PR comment if Prettier fails
-        if: steps.prettier.outcome == 'failure' && steps.find-comment-fail.outputs.comment-id == ''
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            **Prettier formatting check failed!**
-            Please run: `npm run prettier:write` to automatically fix formatting issues.
+            - name: Add PR comment if Prettier fails
+              if: steps.prettier.outcome == 'failure' && steps.find-comment-fail.outputs.comment-id == ''
+              uses: peter-evans/create-or-update-comment@v4
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  issue-number: ${{ github.event.pull_request.number }}
+                  body: |
+                      **Prettier formatting check failed!**
+                      Please run: `npm run prettier:write` to automatically fix formatting issues.
 
-            <!-- prettier-check-comment -->
+                      <!-- prettier-check-comment -->
 
-      - name: Find Old Prettier comment if it passes
-        if: steps.prettier.outcome == 'success'
-        uses: peter-evans/find-comment@v3
-        id: find-comment-pass
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: '<!-- prettier-check-comment -->'
+            - name: Find Old Prettier comment if it passes
+              if: steps.prettier.outcome == 'success'
+              uses: peter-evans/find-comment@v3
+              id: find-comment-pass
+              with:
+                  issue-number: ${{ github.event.pull_request.number }}
+                  comment-author: 'github-actions[bot]'
+                  body-includes: '<!-- prettier-check-comment -->'
 
-      - name: Update old Prettier comment
-        if: steps.find-comment-pass.outputs.comment-id != ''
-        uses: peter-evans/create-or-update-comment@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          body: |
-            **Prettier formatting check succeeded!**
+            - name: Update old Prettier comment
+              if: steps.find-comment-pass.outputs.comment-id != ''
+              uses: peter-evans/create-or-update-comment@v5
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  body: |
+                      **Prettier formatting check succeeded!**
 
-            <!-- prettier-check-comment -->
-          comment-id: ${{ steps.find-comment-pass.outputs.comment-id }}
-          edit-mode: replace
+                      <!-- prettier-check-comment -->
+                  comment-id: ${{ steps.find-comment-pass.outputs.comment-id }}
+                  edit-mode: replace
 
-      - name: Fail if Prettier failed
-        if: steps.prettier.outcome == 'failure'
-        run: |
-          echo "Prettier check failed. See comment above."
-          exit 1
+            - name: Fail if Prettier failed
+              if: steps.prettier.outcome == 'failure'
+              run: |
+                  echo "Prettier check failed. See comment above."
+                  exit 1

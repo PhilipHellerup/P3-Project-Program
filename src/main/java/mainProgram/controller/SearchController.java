@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class SearchController {
 
-  private final JobService jobService;
+    private final JobService jobService;
 
-  public SearchController(JobService jobService) {
-    this.jobService = jobService;
-  }
+    public SearchController(JobService jobService) {
+        this.jobService = jobService;
+    }
 
-  @GetMapping("/job")
-  public List<Job> searchItems(@RequestParam String q) {
-    return jobService.search(q);
-  }
+    @GetMapping("/job")
+    public List<Job> searchItems(@RequestParam String q) {
+        return jobService.search(q);
+    }
 }

@@ -17,14 +17,20 @@ public class JobService implements BaseSearchService<Job> {
     private final JobPartRepository jobPartRepository;
     private final ProductRepository productRepository;
 
-    public JobService(JobRepository jobRepository, JobPartRepository jobPartRepository, ProductRepository productRepository) {
+    public JobService(
+            JobRepository jobRepository,
+            JobPartRepository jobPartRepository,
+            ProductRepository productRepository
+    ) {
         this.jobRepository = jobRepository;
         this.jobPartRepository = jobPartRepository;
         this.productRepository = productRepository;
     }
 
     public Job getJobById(Long id) {
-        return jobRepository.findById(Math.toIntExact(id)).orElseThrow(() -> new RuntimeException("Job not found"));
+        return jobRepository
+                .findById(Math.toIntExact(id))
+                .orElseThrow(() -> new RuntimeException("Job not found"));
     }
 
     /// Find the parts associated with a repair
@@ -32,11 +38,12 @@ public class JobService implements BaseSearchService<Job> {
         return jobPartRepository.findByJobId(jobId);
     }
 
-
     /// Add a new product to a repair, using the JobPart join-table
     public void addProductToRepair(Long repairId, Long productId, int quantity) {
         Job repair = getJobById(repairId);
-        Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
+        Product product = productRepository
+                .findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
 
         // Create a new job-part object and add it to the join-table
         JobPart jobpart = new JobPart(repair, product, quantity);

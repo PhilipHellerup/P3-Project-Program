@@ -25,12 +25,12 @@
  */
 // Status mappings
 const statusNameToId = {
-  notDelivered: 1,
-  delivered: 2,
-  inProgress: 3,
-  missingPart: 4,
-  finished: 5,
-  pickedUp: 6,
+    notDelivered: 1,
+    delivered: 2,
+    inProgress: 3,
+    missingPart: 4,
+    finished: 5,
+    pickedUp: 6,
 };
 
 /**
@@ -80,58 +80,58 @@ const statusIdToName = Object.fromEntries(Object.entries(statusNameToId).map(([k
  * // }
  */
 function statusToColors(statusName) {
-  switch (statusName) {
-    case 'notDelivered':
-      return {
-        backgroundColor: '#ffffff',
-        borderColor: '#F65D60',
-        textColor: '#F65D60',
-        cssClass: 'status-notDelivered',
-      };
-    case 'delivered':
-      return {
-        backgroundColor: '#ffffff',
-        borderColor: '#FEB568',
-        textColor: '#FEB568',
-        cssClass: 'status-delivered',
-      };
-    case 'inProgress':
-      return {
-        backgroundColor: '#ffffff',
-        borderColor: '#0088FF',
-        textColor: '#0088FF',
-        cssClass: 'status-inProgress',
-      };
-    case 'missingPart':
-      return {
-        backgroundColor: '#ffffff',
-        borderColor: '#4B41C8',
-        textColor: '#4B41C8',
-        cssClass: 'status-missingPart',
-      };
-    case 'finished':
-      return {
-        backgroundColor: '#ffffff',
-        borderColor: '#32A759',
-        textColor: '#32A759',
-        cssClass: 'status-finished',
-      };
-    case 'pickedUp':
-      return {
-        backgroundColor: '#ffffff',
-        borderColor: '#939292',
-        textColor: '#939292',
-        cssClass: 'status-pickedUp',
-      };
-    default:
-      // Default to 'finished' appearance for unknown statuses
-      return {
-        backgroundColor: '#ffffff',
-        borderColor: '#858796',
-        textColor: '#858796',
-        cssClass: 'status-finished',
-      };
-  }
+    switch (statusName) {
+        case 'notDelivered':
+            return {
+                backgroundColor: '#ffffff',
+                borderColor: '#F65D60',
+                textColor: '#F65D60',
+                cssClass: 'status-notDelivered',
+            };
+        case 'delivered':
+            return {
+                backgroundColor: '#ffffff',
+                borderColor: '#FEB568',
+                textColor: '#FEB568',
+                cssClass: 'status-delivered',
+            };
+        case 'inProgress':
+            return {
+                backgroundColor: '#ffffff',
+                borderColor: '#0088FF',
+                textColor: '#0088FF',
+                cssClass: 'status-inProgress',
+            };
+        case 'missingPart':
+            return {
+                backgroundColor: '#ffffff',
+                borderColor: '#4B41C8',
+                textColor: '#4B41C8',
+                cssClass: 'status-missingPart',
+            };
+        case 'finished':
+            return {
+                backgroundColor: '#ffffff',
+                borderColor: '#32A759',
+                textColor: '#32A759',
+                cssClass: 'status-finished',
+            };
+        case 'pickedUp':
+            return {
+                backgroundColor: '#ffffff',
+                borderColor: '#939292',
+                textColor: '#939292',
+                cssClass: 'status-pickedUp',
+            };
+        default:
+            // Default to 'finished' appearance for unknown statuses
+            return {
+                backgroundColor: '#ffffff',
+                borderColor: '#858796',
+                textColor: '#858796',
+                cssClass: 'status-finished',
+            };
+    }
 }
 
 /**
@@ -162,13 +162,13 @@ function statusToColors(statusName) {
  * // Returns: ''
  */
 function escapeHtml(str) {
-  if (str === null || str === undefined) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/>/g, '&gt;')
-    .replace(/</g, '&lt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/>/g, '&gt;')
+        .replace(/</g, '&lt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 /**
@@ -193,11 +193,11 @@ function escapeHtml(str) {
  * formatStatusName(null)             // Returns: ''
  */
 function formatStatusName(status) {
-  if (!status) return '';
-  // Split camelCase or PascalCase into words and capitalize each
-  return status
-    .replace(/([a-z0-9])([A-Z])/g, '$1 $2') // split camelCase
-    .replace(/^./, (s) => s.toUpperCase()); // capitalize first letter
+    if (!status) return '';
+    // Split camelCase or PascalCase into words and capitalize each
+    return status
+        .replace(/([a-z0-9])([A-Z])/g, '$1 $2') // split camelCase
+        .replace(/^./, (s) => s.toUpperCase()); // capitalize first letter
 }
 
 /**
@@ -230,34 +230,34 @@ function formatStatusName(status) {
  * translateStatusName(null)            // Returns: ''
  */
 function translateStatusName(input) {
-  if (input == null) return '';
+    if (input == null) return '';
 
-  // Normalize input to string and trim whitespace
-  const value = String(input).trim();
+    // Normalize input to string and trim whitespace
+    const value = String(input).trim();
 
-  // Check if input is a numeric ID (supports both number and string numbers)
-  const id = Number.isFinite(+value) ? String(+value) : null;
+    // Check if input is a numeric ID (supports both number and string numbers)
+    const id = Number.isFinite(+value) ? String(+value) : null;
 
-  // Danish translations by numeric ID
-  const byId = {
-    1: 'Ikke Indleveret',
-    2: 'Indleveret',
-    3: 'Igangværende',
-    4: 'Mangler del',
-    5: 'Færdig',
-    6: 'Afhentet',
-  };
+    // Danish translations by numeric ID
+    const byId = {
+        1: 'Ikke Indleveret',
+        2: 'Indleveret',
+        3: 'Igangværende',
+        4: 'Mangler del',
+        5: 'Færdig',
+        6: 'Afhentet',
+    };
 
-  // Danish translations by English camelCase name
-  const byEn = {
-    notDelivered: 'Ikke Indleveret',
-    delivered: 'Indleveret',
-    inProgress: 'Igangværende',
-    missingPart: 'Mangler Del',
-    finished: 'Færdig',
-    pickedUp: 'Afhentet',
-  };
+    // Danish translations by English camelCase name
+    const byEn = {
+        notDelivered: 'Ikke Indleveret',
+        delivered: 'Indleveret',
+        inProgress: 'Igangværende',
+        missingPart: 'Mangler Del',
+        finished: 'Færdig',
+        pickedUp: 'Afhentet',
+    };
 
-  // Try ID lookup first, then English name lookup, finally return original value
-  return (id && byId[id]) || byEn[value] || value;
+    // Try ID lookup first, then English name lookup, finally return original value
+    return (id && byId[id]) || byEn[value] || value;
 }

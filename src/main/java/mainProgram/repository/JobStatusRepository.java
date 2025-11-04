@@ -32,5 +32,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface JobStatusRepository extends JpaRepository<JobStatus, Short> {
-  // No custom query methods needed - all operations use inherited CRUD methods
+    // No custom query methods needed - all operations use inherited CRUD methods
 }

@@ -7,31 +7,31 @@ import mainProgram.table.Job;
 // Day Class
 public class Day {
 
-  // Attributes
-  private int id;
-  private List<Job> listOfJobs = new ArrayList<>();
+    // Attributes
+    private int id;
+    private List<Job> listOfJobs = new ArrayList<>();
 
-  // Constructor
-  public Day(int id, List<Job> listOfJobs) {
-    this.id = id;
-    this.listOfJobs = new ArrayList<>(listOfJobs);
-  }
+    // Constructor
+    public Day(int id, List<Job> listOfJobs) {
+        this.id = id;
+        this.listOfJobs = new ArrayList<>(listOfJobs);
+    }
 
-  // Getters
-  public int getId() {
-    return id;
-  }
+    // Getters
+    public int getId() {
+        return id;
+    }
 
-  public List<Job> getListOfJobs() {
-    return new ArrayList<>(listOfJobs);
-  }
+    public List<Job> getListOfJobs() {
+        return new ArrayList<>(listOfJobs);
+    }
 
-  // Setters
-  public void setId(int id) {
-    this.id = id;
-  }
+    // Setters
+    public void setId(int id) {
+        this.id = id;
+    }
 
-  public void setListOfJobs(List<Job> listOfJobs) {
-    this.listOfJobs = new ArrayList<>(listOfJobs);
-  }
+    public void setListOfJobs(List<Job> listOfJobs) {
+        this.listOfJobs = new ArrayList<>(listOfJobs);
+    }
 }
