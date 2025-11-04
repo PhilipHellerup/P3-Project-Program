@@ -14,8 +14,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/products") // Base path for all API routes in this controller
 public class ProductController {
-    // Attributes
-    private final ProductRepository productRepository; // Injected repository used for database operations CRUD
 
     // Constructor for Dependency Injection
     // Spring automatically provides an instance of ProductRepository at runtime.
@@ -47,9 +45,26 @@ public class ProductController {
         // Save the product to the database using the repository and its .save() method.
         Product savedProduct = productRepository.save(product);
 
-        // Return the saved product as a JSON response with HTTP 200 OK status.
-        return ResponseEntity.ok(savedProduct);
-    }
+  // Methods
+  // Creates a new product in the database.
+  // Example:
+  // {
+  //  "productNumber": "12345678",
+  //  "name": "Shimano Kæde",
+  //  "EAN": "987654321",
+  //  "type": "Kæde",
+  //  "price": "999.99"
+  // }
+  /** @param product the product object to create **/
+  /** @return ResponseEntity containing the created product if successful, or a bad request response **/
+  @PostMapping
+  public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    // Save the product to the database using the repository and its .save() method.
+    Product savedProduct = productRepository.save(product);
+
+    // Return the saved product as a JSON response with HTTP 200 OK status.
+    return ResponseEntity.ok(savedProduct);
+  }
 
 
     // Deletes a specific product from the database based on its ID.
