@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
             <nav class="sidebar-nav" aria-hidden="false">
                 <div class="nav-header">
                     <img src="/images/Perform_logo_white.avif" alt="Perform" class="logo">
-                    <button id="close-navbar" class="close-navbar-btn fa-solid fa-angles-left" aria-label="Close navbar"></button>
                 </div>
                 <ul class="nav-menu">
                     <!-- <li class="nav-item"><a class="nav-link" href="/"><span class="nav-text">Hjem</span></a></li> -->
@@ -83,7 +82,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
       navbar.style.transform = 'translateX(0)';
 
-      const closeBtn = document.getElementById('close-navbar');
+      // Dynamic navbar
+      /** const closeBtn = document.getElementById('close-navbar');
       if (closeBtn) {
         closeBtn.addEventListener('click', function () {
           const navbar = document.querySelector('.sidebar-nav');
@@ -98,10 +98,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 300);
           }
         });
-      }
+      } **/
     }
 
-    function showOpenButton() {
+    /** function showOpenButton() {
       if (!document.getElementById('open-navbar')) {
         const openBtn = document.createElement('button');
         openBtn.id = 'open-navbar';
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(() => insertNavbar());
         });
       }
-    }
+    } **/
 
     // Ensure CSS is loaded before inserting the navbar (prevents flash / 404 issues due to relative path)
     ensureNavbarCss()
