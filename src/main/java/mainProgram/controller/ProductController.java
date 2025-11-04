@@ -5,6 +5,7 @@ import mainProgram.repository.ProductRepository;
 import mainProgram.table.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 /* --- PartController --- */
 // REST controller for handling product-related operations.
@@ -24,15 +25,6 @@ public class ProductController {
   }
 
   // Methods
-  // Creates a new product in the database.
-  // Example:
-  // {
-  //  "productNumber": "12345678",
-  //  "name": "Shimano Kæde",
-  //  "EAN": "987654321",
-  //  "type": "Kæde",
-  //  "price": "999.99"
-  // }
   /** @param product the product object to create **/
   /** @return ResponseEntity containing the created product if successful, or a bad request response **/
   @PostMapping
@@ -61,4 +53,40 @@ public class ProductController {
       return ResponseEntity.notFound().build(); // 404 if not found
     }
   }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editProduct(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        // Find the product in the database by ID
+        return productRepository.findById(id).map(product -> {
+                    // Iterate over each field in the updates map and apply the changes
+                    updates.forEach((field, value) -> {
+                        switch (field) {
+                            case "productNumber" -> product.setProductNumber((String) value);
+                            case "name" -> product.setName((String) value);
+                            case "EAN" -> product.setEAN((String) value);
+                            case "type" -> product.setType((String) value);
+                            case "price" -> {
+                                // Handle price being either a number or string
+                                if (value instanceof Number num) {
+                                    product.setPrice(num.doubleValue());
+                                } else {
+                                    product.setPrice(Double.parseDouble(value.toString()));
+                                }
+                            }
+                            default -> System.out.println("Unknown field: " + field);
+                        }
+                    });
+
+                    // Save the updated product in the database
+                    Product saved = productRepository.save(product);
+
+                    // Return HTTP 200 OK because product updated successfully
+                    return ResponseEntity.ok(saved);
+                })
+                // Product with given ID does not exist
+                .orElseGet(() -> {
+                    // Return HTTP 404: Not Found = Product Not Found
+                    return ResponseEntity.notFound().build();
+                });
+    }
 }
