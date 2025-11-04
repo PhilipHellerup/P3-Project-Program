@@ -1,15 +1,11 @@
 package mainProgram.table; // Project Organization
 
 /* --- Imports --- */
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /* --- Product Class --- */
-// Represents a product in the system
-// This entity is mapped to the "products" table in the database.
-// Each Product can be linked to multiple JobParts (via one-to-many relationship).
 @Entity
 @Table(name = "products")
 public class Product {

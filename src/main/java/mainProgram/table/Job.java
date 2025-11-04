@@ -56,7 +56,7 @@ public class Job {
   private String job_description;
 
   /**
-   * Total time allocated or spent on the job, measured in minutes.
+   * Total working hours charged for a job, measured in minutes
    */
   private Integer work_time_minutes;
 
@@ -66,6 +66,11 @@ public class Job {
    * <p>Total job cost can be calculated as: work_time_minutes × price_per_minute</p>
    */
   private Double price_per_minute;
+
+  /**
+   * Total time allocated for a job, measured in minutes.
+   */
+  private Integer duration;
 
   /**
    * Date and time when the job was created or scheduled.
@@ -208,6 +213,24 @@ public class Job {
    */
   public void setPrice_per_minute(Double price_per_minute) {
     this.price_per_minute = price_per_minute;
+  }
+
+  /**
+   * Gets the duration in minutes.
+   *
+   * @return the duration of the job in minutes
+   */
+  public Integer getDuration() {
+    return duration;
+  }
+
+  /**
+   * Sets the duration in minutes.
+   *
+   * @param duration the work time in minutes to set
+   */
+  public void setDuration(Integer duration) {
+    this.duration = duration;
   }
 
   /**
