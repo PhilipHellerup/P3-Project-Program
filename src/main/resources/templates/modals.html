@@ -464,7 +464,7 @@
         <div class="modal-dialog">
             <form class="modal-content" id="addProductToRepairForm">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tilføj et Product Til Reparationen</h5>
+                    <h5 class="modal-title">Tilføj et product til reparationen</h5>
                     <button
                             type="button"
                             class="btn-close"
@@ -472,7 +472,7 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <div class="h-25">
+                    <div class="h-25 position-relative">
                         <input
                                 class="form-control ps-2 mt-4"
                                 type="search"
@@ -481,6 +481,12 @@
                                 autocomplete="off"
                                 id="searchBar"
                         />
+                        <table id="search-table" class="table table-bordered table-hover border position-absolute"
+                               style="display: none">
+                            <tbody id="search-results" class="w-100">
+                            <!-- Products are dynamically placed here using javascript on search -->
+                            </tbody>
+                        </table>
                     </div>
                     <div style="height: 20rem" class="d-flex flex-column">
                         <div id="product-table-container">
@@ -494,7 +500,7 @@
                                 </tr>
                                 </thead>
                                 <tbody id="table-body">
-                                <!-- Products are dynamically placed here using javascript -->
+                                <!-- Products are dynamically placed here using javascript when chosen from the search -->
                                 </tbody>
                             </table>
                         </div>

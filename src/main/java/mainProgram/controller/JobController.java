@@ -141,12 +141,15 @@ public class JobController {
 
     // todo: Aad logic so that if the "link" already exists, a new should not be added but the amount should be updated.
     @PostMapping("/api/repairs/addProduct")
-    public ResponseEntity<String> addProductToRepair(@RequestBody Map<String, Object> data) {
-        Integer repairID = (Integer) data.get("repairID");
-        Integer productId = (Integer) data.get("productId");
-        Integer quantity = (Integer) data.getOrDefault("quantity", 1);
+    public ResponseEntity<String> addProductsToRepair(@RequestBody List<Map<String, Object>> dataList) {
+        for (Map<String, Object> data : dataList) {
+            Integer repairId = (Integer) data.get("repairId");
+            Integer productId = (Integer) data.get("productId");
+            Integer quantity = (Integer) data.getOrDefault("quantity", 1);
 
-        jobService.addProductToRepair(repairID, productId, quantity);
-        return ResponseEntity.ok("Product added to repair successfully");
+            jobService.addProductToRepair(repairId, productId, quantity);
+        }
+
+        return ResponseEntity.ok("Products added to repair successfully");
     }
 }
