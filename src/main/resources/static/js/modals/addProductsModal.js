@@ -28,8 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             // Send an asynchronous POST request to the server API endpoint ("/api/products") in "ProductController.java"
             // The `await` keyword pauses execution until the fetch completes
-            console.log(JSON.stringify(productData)); //#TODO DELETE THIS LATER IF YOU SEE THIS!
-
             const response = await fetch('/api/products', {
                 method: 'POST', // HTTP method for creating new resources.
                 headers: {
