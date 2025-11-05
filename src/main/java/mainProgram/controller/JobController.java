@@ -1,6 +1,7 @@
 package mainProgram.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import mainProgram.repository.JobRepository;
 import mainProgram.repository.JobStatusRepository;
@@ -138,15 +139,14 @@ public class JobController {
     }
 
 
-    ///  Send a request in the form e.g. fetch(`/api/repairs/{id}/products?productId={product_id}&quantity={quantity}`)
     // todo: Aad logic so that if the "link" already exists, a new should not be added but the amount should be updated.
-    @PostMapping("api/repairs/{repair_id}/products")
-    public ResponseEntity<String> addProductToRepair(
-            @PathVariable Integer repair_id,
-            @RequestParam Integer productId,
-            @RequestParam(defaultValue = "1") int quantity) {
+    @PostMapping("/api/repairs/addProduct")
+    public ResponseEntity<String> addProductToRepair(@RequestBody Map<String, Object> data) {
+        Integer repairID = (Integer) data.get("repairID");
+        Integer productId = (Integer) data.get("productId");
+        Integer quantity = (Integer) data.getOrDefault("quantity", 1);
 
-        jobService.addProductToRepair(repair_id, productId, quantity);
+        jobService.addProductToRepair(repairID, productId, quantity);
         return ResponseEntity.ok("Product added to repair successfully");
     }
 }
