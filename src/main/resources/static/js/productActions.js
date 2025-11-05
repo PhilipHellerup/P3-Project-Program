@@ -175,3 +175,5 @@ async function updateProduct(productId, updatedData) {
         console.error('Error updating product:', error);
     }
 }
+
+// #TODO (PHILIP) MAKE CUSTOM FUNCTION THAT HANDLES THE PRICE INPUT AND TRIMS OF THE NECESSARY LETTERS IN THE INPUT SO THERE IS ONLY NUMBERS TO SENDS AS IT IS REQUESTING A DOUBLE NOT A STRING
