@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const completedBtn = document.getElementById('completed-btn');
     const activeBtn = document.getElementById('active-btn');
     const tableBody = document.getElementById('table-body');
-    
+
     // Make each <tr data-href> row clickable and navigate to the URL in data-href
     const rows = document.querySelectorAll('tr[data-href]');
     rows.forEach((row) => {
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Filter for sorting active and completed jobs
-    // Normalize the job statuses to string and clean 
+    // Normalize the job statuses to string and clean
     function normalizeStatus(s) {
         return (s || '').toString().trim().toLowerCase().replace(/[_-]/g, ' ');
     }
@@ -33,11 +33,10 @@ document.addEventListener('DOMContentLoaded', function () {
         return /picked\s*up/.test(st) || st === 'afhentet' || st === 'pickedup';
     }
 
-
     function getRowStatus(row) {
         if (row.dataset && row.dataset.status) return normalizeStatus(row.dataset.status);
         const el = row.querySelector('.job-status');
-        return el ? normalizeStatus(el.textContent) : ';'
+        return el ? normalizeStatus(el.textContent) : ';';
     }
 
     // Function for checking whether the status is "afhentet"
@@ -45,23 +44,19 @@ document.addEventListener('DOMContentLoaded', function () {
     function applyFilter(filter) {
         if (!tableBody) return;
         const rows = tableBody.querySelectorAll('tr');
-        rows.forEach(row => {
+        rows.forEach((row) => {
             const status = getRowStatus(row);
-            const show = (filter === 'active') ? !isPickedUp(status)
-                        : (filter === 'completed') ? isPickedUp(status)
-                        : true;
+            const show = filter === 'active' ? !isPickedUp(status) : filter === 'completed' ? isPickedUp(status) : true;
             row.classList.toggle('d-none', !show);
         });
-    activeBtn?.classList.toggle('active', filter === 'active');
-    completedBtn?.classList.toggle('active', filter === 'completed');
+        activeBtn?.classList.toggle('active', filter === 'active');
+        completedBtn?.classList.toggle('active', filter === 'completed');
     }
     applyFilter('active');
 
     // Listens for filter buttons
     activeBtn?.addEventListener('click', () => applyFilter('active'));
-    completedBtn?.addEventListener('click', () => applyFilter('completed'))
-
-
+    completedBtn?.addEventListener('click', () => applyFilter('completed'));
 });
 
 // Eventlistener for the seach-input form
