@@ -474,16 +474,30 @@
                 <div class="modal-body">
                     <div class="h-25">
                         <input
-                                class="form-control"
+                                class="form-control ps-2 mt-4"
                                 type="search"
                                 placeholder="Søg efter produkter"
                                 aria-label="Search"
                                 autocomplete="off"
-                                id="searchparams"
+                                id="searchBar"
                         />
                     </div>
-                    <div style="height: 4rem">
-
+                    <div style="height: 20rem" class="d-flex flex-column">
+                        <div id="product-table-container">
+                            <table class="table align-middle mt-5">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Antal</th>
+                                    <th scope="col">Styk Pris</th>
+                                    <th scope="col">Total Pris</th>
+                                </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                <!-- Products are dynamically placed here using javascript -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
