@@ -2,16 +2,20 @@ package mainProgram.controller; // Project Organization
 
 /* --- Imports --- */
 import java.util.List;
-import mainProgram.repository.JobPartRepository;
-import mainProgram.repository.JobRepository;
-import mainProgram.repository.ProductRepository;
-import mainProgram.services.JobService;
-import mainProgram.table.Job;
+
+import mainProgram.table.Product;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import mainProgram.services.JobService;
+import mainProgram.repository.JobPartRepository;
+import mainProgram.repository.JobRepository;
+import mainProgram.repository.ProductRepository;
+import mainProgram.table.Job;
 
 /* --- PageController Class --- */
 // Controller responsible for serving HTML pages (views) for the application.
@@ -20,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/")
 public class PageController {
-
     // Attributes
     private final JobRepository jobRepository;
     private final JobService jobService;
@@ -34,12 +37,7 @@ public class PageController {
      * @param productRepository the repository for accessing product data
      * @param jobPartRepository the repository for connecting jobs and products
      **/
-    public PageController(
-        JobRepository jobRepository,
-        JobService jobService,
-        ProductRepository productRepository,
-        JobPartRepository jobPartRepository
-    ) {
+    public PageController(JobRepository jobRepository, JobService jobService, ProductRepository productRepository, JobPartRepository jobPartRepository) {
         this.jobRepository = jobRepository;
         this.jobService = jobService;
         this.productRepository = productRepository;
@@ -78,17 +76,24 @@ public class PageController {
         return "jobDetails";
     }
 
-    // Displays the product list page with all products.
-    // Populates the model with a list of all products for rendering in the template.
-    /** @param model the Spring MVC model to pass data to the view **/
-    /**
-     * @return the name of the product list template (products.html)
-     **/
-    @GetMapping("produktliste")
+    // This method prepares the data and view for displaying a list of all products.
+    // It fetches all products from the database, sorts them by ascending ID,
+    // and adds them to the Spring MVC model so that the Thymeleaf template can render them.
+    /** @param model the Spring MVC model used to pass data to the view **/
+    /** @return the name of the Thymeleaf template ("products.html") to render **/
+    @GetMapping("products")
     public String products(Model model) {
-        // Fetch all products from the database
-        model.addAttribute("products", productRepository.findAll());
+        // Retrieve all products from the repository and sort by ID in ascending order.
+        // Sorting by ID ensures consistent ordering in the product table on the product page.
+        List<Product> products = productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
 
+        // Add the list of products to the model with the key "products".
+        // This allows the Thymeleaf template (products.html) to access the products
+        // using the variable name "products" for rendering in tables, forms, etc.
+        model.addAttribute("products", products);
+
+        // Return the name of the template to be rendered.
+        // Spring resolves this to "templates/products.html" by default.
         return "products";
     }
 
