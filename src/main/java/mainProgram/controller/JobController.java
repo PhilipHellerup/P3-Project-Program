@@ -3,6 +3,7 @@ package mainProgram.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import mainProgram.repository.JobRepository;
 import mainProgram.repository.JobServiceRepository;
@@ -95,7 +96,7 @@ public class JobController {
      * @return ResponseEntity containing the updated job if found, or a not found response
      * @throws IllegalArgumentException if the provided status_id is invalid
      */
-    @PostMapping("/api/jobs")
+    @PostMapping("/api/jobs/create")
     @ResponseBody
     public ResponseEntity<Job> createJob(@RequestBody Map<String, Object> body) {
         try {
@@ -182,11 +183,18 @@ public class JobController {
             Integer repairId = (Integer) data.get("repairId");
             Integer productId = (Integer) data.get("productId");
             Integer quantity = (Integer) data.getOrDefault("quantity", 1);
+            String productType = (String) data.get("type");
 
-            jobService.addProductToRepair(repairId, productId, quantity);
+            if (Objects.equals(productType, "service")) {
+                jobService.addServiceToRepair(repairId, productId, quantity);
+            } else if (Objects.equals(productType, "part")) {
+                jobService.addPartToRepair(repairId, productId, quantity);
+            } else {
+                throw new Error("undefined product type");
+            }
+
         }
 
         return ResponseEntity.ok("Products added to repair successfully");
     }
-
 }

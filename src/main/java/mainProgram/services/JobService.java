@@ -33,7 +33,7 @@ public class JobService implements BaseSearchService<Job> {
     }
 
 
-    /// Add a new product to a repair, using the JobPart join-table
+    /// We dont use this anymore
     public void addProductToRepair(int repairId, int productId, int quantity) {
         // Check if the repair and product exist
         Job repair = getJobById(repairId);

@@ -133,7 +133,7 @@ let totalWorkCost = document.getElementById('workTotalCost');
         console.log(payload);
 
         // Send POST request to create a new job entry
-        fetch('/api/jobs', {
+        fetch('/api/jobs/create', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload),

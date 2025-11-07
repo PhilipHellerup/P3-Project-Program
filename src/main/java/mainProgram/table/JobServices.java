@@ -28,6 +28,10 @@ public class JobServices {
         this.quantity = quantity;
     }
 
+    public JobServices() {
+
+    }
+
     // Getters and setters
     public int getId() {
         return id;

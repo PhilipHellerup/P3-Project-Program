@@ -46,12 +46,14 @@ let modalProducts = [];
                 let newResult = document.createElement('tr')
                 newResult.addEventListener('click', (e) => {
                     // The if the product is already on the list. If it is, increate the quantity by one. If not, add the products to the list.
-                    const existing = modalProducts.find(p => p.product.id === match.id);
+                    const existing = modalProducts.find(
+                        p => p.product.id === match.id && p.product.type === match.type
+                    );
 
                     if (existing) {
                         existing.quantity += 1;
                     } else {
-                        modalProducts.push({product: match, quantity: 1, productType: "part"});
+                        modalProducts.push({product: match, quantity: 1, productType: match.type});
                     }
                     // Add the product to modal UI and update the UI
                     renderProductTable()
@@ -64,6 +66,9 @@ let modalProducts = [];
                         <div>
                            <p class="fs-6 mb-0">${match.name}</p>
                            <p class="text-secondary mb-0 fs-7">${match.type}</p>
+                        </div>
+                        <div>
+                           <p class="fs-6 mb-0 text-secondary">${match.type === "service" ? "Ydelse" : match.type === "part" ? "Reservedel" : "Udefineret type"}</p>
                         </div>
                     <div class="d-flex justify-content-between gap-5">
                         <div>
@@ -176,7 +181,7 @@ function renderProductTable() {
 async function fetchSearchMatches(searchParam) {
     try {
         // Send PUT request to update the job entry
-        const r1 = await fetch('/api/search/repair?q=' + searchParam, {
+        const r1 = await fetch('/api/search/products?q=' + searchParam, {
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
         });
