@@ -2,7 +2,11 @@ package mainProgram.controller; // Project Organization
 
 /* --- Imports --- */
 import java.util.List;
-
+import mainProgram.repository.JobPartRepository;
+import mainProgram.repository.JobRepository;
+import mainProgram.repository.ProductRepository;
+import mainProgram.services.JobService;
+import mainProgram.table.Job;
 import mainProgram.table.Product;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -11,12 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import mainProgram.services.JobService;
-import mainProgram.repository.JobPartRepository;
-import mainProgram.repository.JobRepository;
-import mainProgram.repository.ProductRepository;
-import mainProgram.table.Job;
-
 /* --- PageController Class --- */
 // Controller responsible for serving HTML pages (views) for the application.
 // This controller handles navigation and prepares model data for Thymeleaf templates.
@@ -24,6 +22,7 @@ import mainProgram.table.Job;
 @Controller
 @RequestMapping("/")
 public class PageController {
+
     // Attributes
     private final JobRepository jobRepository;
     private final JobService jobService;
@@ -37,7 +36,12 @@ public class PageController {
      * @param productRepository the repository for accessing product data
      * @param jobPartRepository the repository for connecting jobs and products
      **/
-    public PageController(JobRepository jobRepository, JobService jobService, ProductRepository productRepository, JobPartRepository jobPartRepository) {
+    public PageController(
+        JobRepository jobRepository,
+        JobService jobService,
+        ProductRepository productRepository,
+        JobPartRepository jobPartRepository
+    ) {
         this.jobRepository = jobRepository;
         this.jobService = jobService;
         this.productRepository = productRepository;
