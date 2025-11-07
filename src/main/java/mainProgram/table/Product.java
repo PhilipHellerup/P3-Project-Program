@@ -1,8 +1,12 @@
 package mainProgram.table; // Project Organization
 
 /* --- Imports --- */
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /* --- Product Class --- */
 // Represents a product in the system
@@ -19,7 +23,7 @@ public class Product {
 
     @Column(name = "\"productNumber\"")
     private String productNumber; // Maps to: productNumber (Not product_number)
-
+    
     private String name; // Maps to: name
 
     @JsonProperty("EAN") // Ensures Jackson matches the JSON key "EAN" (with uppercase letters)
@@ -65,7 +69,8 @@ public class Product {
     }
 
     // No-Parameter constructor required by JPA/Hibernate, when fetching Product objects from the database
-    public Product() {}
+    public Product() {
+    }
 
     // Methods
     // Getters
