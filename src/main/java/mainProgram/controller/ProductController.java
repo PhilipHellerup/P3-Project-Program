@@ -5,6 +5,8 @@ import mainProgram.repository.ProductRepository;
 import mainProgram.table.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 import java.util.Map;
 
 /* --- PartController --- */
@@ -13,7 +15,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/products") // Base path for all API routes in this controller
 public class ProductController {
-
   // Attributes
   private final ProductRepository productRepository; // Injected repository used for database operations CRUD
 
@@ -54,40 +55,49 @@ public class ProductController {
     }
   }
 
+    // Handles HTTP PUT requests to update a product by its ID.
+    // Base path: /api/products/{id}
+    // The frontend sends a JSON body containing the fields to update (name, price, etc.)
     @PutMapping("/{id}")
     public ResponseEntity<?> editProduct(@PathVariable int id, @RequestBody Map<String, Object> updates) {
-        // Find the product in the database by ID
+        // Look up the product in the database by ID
         return productRepository.findById(id).map(product -> {
-                    // Iterate over each field in the updates map and apply the changes
-                    updates.forEach((field, value) -> {
-                        switch (field) {
-                            case "productNumber" -> product.setProductNumber((String) value);
-                            case "name" -> product.setName((String) value);
-                            case "EAN" -> product.setEAN((String) value);
-                            case "type" -> product.setType((String) value);
-                            case "price" -> {
-                                // Handle price being either a number or string
-                                if (value instanceof Number num) {
-                                    product.setPrice(num.doubleValue());
-                                } else {
-                                    product.setPrice(Double.parseDouble(value.toString()));
-                                }
-                            }
-                            default -> System.out.println("Unknown field: " + field);
+            // Iterate over each field in the updates map
+            // The map comes from the frontend and contains key/value pairs of fields to update
+            updates.forEach((field, value) -> {
+                switch (field) {
+                    case "productNumber" -> product.setProductNumber((String) value);
+                    case "name" -> product.setName((String) value);
+                    case "EAN" -> product.setEAN((String) value);
+                    case "type" -> product.setType((String) value);
+                    case "price" -> {
+                        // Handle price being either a number or string
+                        // Frontend sends a numeric value (Double) after parsing EU/US formats
+                        if (value instanceof Number num) {
+                            product.setPrice(num.doubleValue()); // Store numeric value directly
+                        } else {
+                            // Safety fallback: Parse string as Double
+                            product.setPrice(Double.parseDouble(value.toString()));
                         }
-                    });
+                        // Note (DO NOT DELETE!):
+                        // This prevents the "300,00 -> 30.000" problem when reloading the product page, because the numeric value
+                        // is already correct, thus no string formatting is applied on save.
+                    }
+                    default -> System.out.println("Unknown field: " + field);
+                }
+            });
+            // Save the updated product in the database
+            Product saved = productRepository.save(product);
 
-                    // Save the updated product in the database
-                    Product saved = productRepository.save(product);
+            // Return HTTP 200 OK because the product updated successfully
+            return ResponseEntity.ok(saved);
+        })
 
-                    // Return HTTP 200 OK because product updated successfully
-                    return ResponseEntity.ok(saved);
-                })
-                // Product with given ID does not exist
-                .orElseGet(() -> {
-                    // Return HTTP 404: Not Found = Product Not Found
-                    return ResponseEntity.notFound().build();
-                });
+        // Product with given ID does not exist
+        .orElseGet(() -> {
+            // Return HTTP 404: Not Found = Product Not Found
+            return ResponseEntity.notFound().build();
+        });
     }
 }
 
