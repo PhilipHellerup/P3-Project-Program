@@ -99,6 +99,29 @@ public class JobService implements BaseSearchService<Job> {
         }
     }
 
+    ///  Remove a part from a repair
+    public void removePartFromRepair(int repairId, int partId) {
+        if (!jobRepository.existsById(repairId)) {
+            throw new RuntimeException("Repair not found: " + repairId);
+        }
+        if (!productRepository.existsById(partId)) {
+            throw new RuntimeException("Part not found: " + partId);
+        }
+        jobPartRepository.deleteByJobIdAndProductId(repairId, partId);
+    }
+
+    ///  Remove a service from a repair
+    public void removeServiceFromRepair(int repairId, int serviceId) {
+        if (!jobRepository.existsById(repairId)) {
+            throw new RuntimeException("Repair not found: " + repairId);
+        }
+        if (!productRepository.existsById(serviceId)) {
+            throw new RuntimeException("Part not found: " + serviceId);
+        }
+        jobServiceRepository.deleteByJobIdAndServiceId(repairId, serviceId);
+
+    }
+
 
     /// Custom search function for job/ repair
     @Override

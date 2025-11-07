@@ -14,6 +14,7 @@ import mainProgram.table.Job;
 import mainProgram.table.JobServices;
 import mainProgram.table.JobStatus;
 import mainProgram.table.Services;
+import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -61,41 +62,6 @@ public class JobController {
         return jobRepository.findAll();
     }
 
-    /**
-     * Creates a new job in the database.
-     * Validates that required fields (date, title) are present and that the status exists.
-     *
-     * @param job the job object to create
-     * @return ResponseEntity containing the created job if successful, or a bad request/error response
-     * @throws IllegalArgumentException if the provided status_id is invalid
-     */
-//    @PostMapping("api/jobs")
-//    @ResponseBody
-//    public ResponseEntity<Job> createJob(@RequestBody Job job) {
-//        // Validate required fields
-//        if (job.getDate() == null || job.getTitle() == null) return ResponseEntity.badRequest().build();
-//        // Ensure status is valid
-//        if (job.getStatus() == null || job.getStatus().getId() == null) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//        // Verify the status exists in the database
-//        JobStatus status = statusRepository
-//                .findById(job.getStatus().getId())
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
-//        job.setStatus(status);
-//        Job saved = jobRepository.save(job);
-//        return ResponseEntity.ok(saved);
-//    }
-
-    /**
-     * Updates an existing job with new information.
-     * All job fields can be updated including title, customer details, pricing, and status.
-     *
-     * @param id  the ID of the job to update
-     * @param job the job object containing updated values
-     * @return ResponseEntity containing the updated job if found, or a not found response
-     * @throws IllegalArgumentException if the provided status_id is invalid
-     */
     @PostMapping("/api/jobs/create")
     @ResponseBody
     public ResponseEntity<Job> createJob(@RequestBody Map<String, Object> body) {
@@ -196,5 +162,25 @@ public class JobController {
         }
 
         return ResponseEntity.ok("Products added to repair successfully");
+    }
+
+    @PostMapping("/api/repairs/removeProduct")
+    public ResponseEntity<String> removeProductFromRepair(@RequestBody List<Map<String, Object>> dataList) {
+        for (Map<String, Object> data : dataList) {
+            Integer repairId = (Integer) data.get("repairId");
+            Integer productId = (Integer) data.get("ProductId");
+            String productType = (String) data.get("type");
+
+
+            if (Objects.equals(productType, "service")) {
+                jobService.removeServiceFromRepair(repairId, productId);
+            } else if (Objects.equals(productType, "part")) {
+                jobService.removePartFromRepair(repairId, productId);
+            } else {
+                throw new Error("undefined product type");
+            }
+        }
+
+        return ResponseEntity.ok("Product(s) removed from repair successfully");
     }
 }

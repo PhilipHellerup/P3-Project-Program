@@ -1,5 +1,8 @@
 // A list of products to be added by the current modal. When the modal is opened again, the list of products are reset.
 let modalProducts = [];
+let searchTable = document.getElementById('search-table');
+let searchResults = document.getElementById('search-results');
+let searchBar = document.getElementById('searchBar');
 
 (function () {
     const modalEl = document.getElementById('addProductToRepair');
@@ -27,9 +30,6 @@ let modalProducts = [];
     });
 
     // Add an eventListener to the search bar
-    let searchTable = document.getElementById('search-table')
-    let searchResults = document.getElementById('search-results')
-    let searchBar = document.getElementById('searchBar')
     searchBar.addEventListener('input', async (e) => {
         e.preventDefault()
 
@@ -44,7 +44,7 @@ let modalProducts = [];
         } else {
             matches.forEach(match => {
                 let newResult = document.createElement('tr')
-                newResult.addEventListener('click', (e) => {
+                newResult.addEventListener('click', () => {
                     // The if the product is already on the list. If it is, increate the quantity by one. If not, add the products to the list.
                     const existing = modalProducts.find(
                         p => p.product.id === match.id && p.product.type === match.type
