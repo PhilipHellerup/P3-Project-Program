@@ -37,16 +37,26 @@ public class JobService implements BaseSearchService<Job> {
 
     /// Add a new product to a repair, using the JobPart join-table
     public void addProductToRepair(int repairId, int productId, int quantity) {
+        // Check if the repair and product exist
         Job repair = getJobById(repairId);
         Product product = productRepository
             .findById(productId)
             .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        // Create a new job-part object and add it to the join-table
-        JobPart jobpart = new JobPart(repair, product, quantity);
+        // Check if the product is already linked to the part, if so adjust only the amount. If not, create a new jobPart
+        JobPart existingProduct = jobPartRepository.findByJobId(repairId)
+                .stream()
+                .filter(jobpart -> jobpart.getProduct().getId() == (productId))
+                .findFirst()
+                .orElse(null);
 
-        // Save the job to the database
-        jobPartRepository.save(jobpart);
+        if (existingProduct != null) {
+            existingProduct.addQuantity(quantity);
+            jobPartRepository.save(existingProduct); // ensure updated quantity persisted
+        } else {
+            jobPartRepository.save(new JobPart(repair, product, quantity));
+        }
+
     }
 
     /// Custom search function for job/ repair

@@ -53,10 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event listener for the "tilføj product" btn
     // todo: show to the user that the product was added
-    // todo: do some data validation and erro handling
+    // todo: do some data validation and error handling
     document.getElementById('add-product-btn').addEventListener('click', async (e) => {
-        await fetch(`/api/repairs/8/products?productId=1&quantity=2`, {
-            method: 'POST',
-        });
-    });
+        window.openAddProductToRepairModal()
+    })
+
 });

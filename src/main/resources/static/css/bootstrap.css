@@ -2164,9 +2164,9 @@ progress {
 }
 
 .pagination-css {
-    position: fixed;      /* Stay fixed relative to the viewport */
-    bottom: 1.5rem;            /* Stick to the bottom */
-    left: 50%;            /* Move the element’s left edge to the center of the screen */
+    position: fixed; /* Stay fixed relative to the viewport */
+    bottom: 1.5rem; /* Stick to the bottom */
+    left: 50%; /* Move the element’s left edge to the center of the screen */
 }
 
 /* Keep the table height consistent for pagination */
@@ -9273,6 +9273,10 @@ textarea.form-control-lg {
 
 .fs-6 {
     font-size: 1rem !important;
+}
+
+.fs-7 {
+    font-size: 0.9rem !important;
 }
 
 .fst-italic {

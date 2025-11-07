@@ -1,6 +1,7 @@
 package mainProgram.table;
 
 /* --- Imports --- */
+
 import jakarta.persistence.*;
 
 /**
@@ -36,7 +37,13 @@ public class JobPart {
     // Number of units of this product used in the job
     private Integer quantity;
 
-    public JobPart() {}
+    public JobPart() {
+    }
+
+    // Method to increase the quantity
+    public void addQuantity(int amount) {
+        this.quantity += amount;
+    }
 
     // Getters
     public int getId() {
