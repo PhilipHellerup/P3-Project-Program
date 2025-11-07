@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // todo: show to the user that the product was added
     // todo: do some data validation and error handling
     document.getElementById('add-product-btn').addEventListener('click', async (e) => {
-        window.openAddProductToRepairModal()
-    })
-
+        window.openAddProductToRepairModal();
+    });
 });

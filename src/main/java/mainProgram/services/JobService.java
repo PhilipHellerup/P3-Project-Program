@@ -44,11 +44,12 @@ public class JobService implements BaseSearchService<Job> {
             .orElseThrow(() -> new RuntimeException("Product not found"));
 
         // Check if the product is already linked to the part, if so adjust only the amount. If not, create a new jobPart
-        JobPart existingProduct = jobPartRepository.findByJobId(repairId)
-                .stream()
-                .filter(jobpart -> jobpart.getProduct().getId() == (productId))
-                .findFirst()
-                .orElse(null);
+        JobPart existingProduct = jobPartRepository
+            .findByJobId(repairId)
+            .stream()
+            .filter((jobpart) -> jobpart.getProduct().getId() == (productId))
+            .findFirst()
+            .orElse(null);
 
         if (existingProduct != null) {
             existingProduct.addQuantity(quantity);
@@ -56,7 +57,6 @@ public class JobService implements BaseSearchService<Job> {
         } else {
             jobPartRepository.save(new JobPart(repair, product, quantity));
         }
-
     }
 
     /// Custom search function for job/ repair

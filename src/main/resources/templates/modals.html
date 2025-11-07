@@ -1,429 +1,251 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<body>
-<!-- Create the Job Modal fragment: used to create a new job. Include this fragment where needed with th:replace. -->
-<div th:fragment="create-job-modal">
-    <div class="modal fade" id="createJobModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl p-5">
-            <form id="createJobForm" class="modal-content p-5">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title fs-4 fw-bolder">Ny reparation</h5>
-                    <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                    ></button>
-                </div>
-
-                <div class="modal-body d-flex flex-column gap-4">
-                    <!-- BASIS INFORMATIONER -->
-                    <section class="p-4 pt-5 rounded-3 border bg-white shadow-sm">
-                        <h6 class="fw-bold mb-5">Basis informationer</h6>
-
-                        <!-- Customer name + phone -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="customerName" class="form-label">
-                                    Kunde navn
-                                </label>
-                                <input
-                                        type="text"
-                                        id="customerName"
-                                        name="customer_name"
-                                        class="form-control"
-                                        placeholder="Angiv kundens navn"
-                                        required
-                                />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="customerPhone" class="form-label">
-                                    Kunde telefonnummer
-                                </label>
-                                <input
-                                        type="text"
-                                        id="customerPhone"
-                                        name="customer_phone"
-                                        class="form-control"
-                                        placeholder="Angiv kundens telefonnummer"
-                                        required
-                                />
-                            </div>
+    <body>
+        <!-- Create the Job Modal fragment: used to create a new job. Include this fragment where needed with th:replace. -->
+        <div th:fragment="create-job-modal">
+            <div class="modal fade" id="createJobModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-xl p-5">
+                    <form id="createJobForm" class="modal-content p-5">
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title fs-4 fw-bolder">Ny reparation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
-                        <!-- Bike title + date/time -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="jobTitle" class="form-label">Cykel titel</label>
-                                <input
-                                        type="text"
-                                        id="jobTitle"
-                                        name="bike_title"
+                        <div class="modal-body d-flex flex-column gap-4">
+                            <!-- BASIS INFORMATIONER -->
+                            <section class="p-4 pt-5 rounded-3 border bg-white shadow-sm">
+                                <h6 class="fw-bold mb-5">Basis informationer</h6>
+
+                                <!-- Customer name + phone -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="customerName" class="form-label">Kunde navn</label>
+                                        <input
+                                            type="text"
+                                            id="customerName"
+                                            name="customer_name"
+                                            class="form-control"
+                                            placeholder="Angiv kundens navn"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="customerPhone" class="form-label">Kunde telefonnummer</label>
+                                        <input
+                                            type="text"
+                                            id="customerPhone"
+                                            name="customer_phone"
+                                            class="form-control"
+                                            placeholder="Angiv kundens telefonnummer"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <!-- Bike title + date/time -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="jobTitle" class="form-label">Cykel titel</label>
+                                        <input
+                                            type="text"
+                                            id="jobTitle"
+                                            name="bike_title"
+                                            class="form-control"
+                                            placeholder="Angiv cykel mærke/ model"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="jobDate" class="form-label">Dato og tid</label>
+                                        <div class="input-group">
+                                            <input type="date" id="jobDate" name="date" class="form-control" required />
+                                            <input type="time" id="jobTime" name="time" class="form-control" required />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="mb-3">
+                                    <label for="jobDescription" class="form-label">Beskrivelse</label>
+                                    <textarea
+                                        id="jobDescription"
+                                        name="job_description"
                                         class="form-control"
-                                        placeholder="Angiv cykel mærke/ model"
+                                        rows="4"
+                                        placeholder="Giv reparationen en beskrivelse"
                                         required
-                                />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="jobDate" class="form-label">Dato og tid</label>
-                                <div class="input-group">
+                                    ></textarea>
+                                </div>
+                                <!-- Status -->
+                                <div class="mb-3">
+                                    <label for="jobStatus" class="form-label">Status</label>
+                                    <!-- Status select uses numeric IDs that map to server-side status records -->
+                                    <select id="jobStatus" name="status_id" class="form-select" required>
+                                        <option value="1">Ikke Indleveret</option>
+                                        <option value="2">Indleveret</option>
+                                        <option value="3">Igangværende</option>
+                                        <option value="4">Mangler del</option>
+                                        <option value="5">Færdig</option>
+                                        <option value="6">Afhentet</option>
+                                    </select>
+                                </div>
+                            </section>
+
+                            <!-- TILFØJ YDELSER -->
+                            <section class="p-4 pt-5 rounded-3 border bg-white shadow-sm">
+                                <h6 class="fw-bold mb-5">Tilføj ydelser</h6>
+
+                                <div class="mb-4">
+                                    <label for="serviceSearch" class="form-label">Søg efter ydelse</label>
                                     <input
-                                            type="date"
-                                            id="jobDate"
-                                            name="date"
-                                            class="form-control"
-                                            required
-                                    />
-                                    <input
-                                            type="time"
-                                            id="jobTime"
-                                            name="time"
-                                            class="form-control"
-                                            required
+                                        type="text"
+                                        id="serviceSearch"
+                                        class="form-control w-50"
+                                        placeholder="Ydelses navn"
                                     />
                                 </div>
-                            </div>
-                        </div>
 
-                        <!-- Description -->
-                        <div class="mb-3">
-                            <label for="jobDescription" class="form-label">
-                                Beskrivelse
-                            </label>
-                            <textarea
-                                    id="jobDescription"
-                                    name="job_description"
-                                    class="form-control"
-                                    rows="4"
-                                    placeholder="Giv reparationen en beskrivelse"
-                                    required
-                            ></textarea>
-                        </div>
-                        <!-- Status -->
-                        <div class="mb-3">
-                            <label for="jobStatus" class="form-label">Status</label>
-                            <!-- Status select uses numeric IDs that map to server-side status records -->
-                            <select
-                                    id="jobStatus"
-                                    name="status_id"
-                                    class="form-select"
-                                    required
-                            >
-                                <option value="1">Ikke Indleveret</option>
-                                <option value="2">Indleveret</option>
-                                <option value="3">Igangværende</option>
-                                <option value="4">Mangler del</option>
-                                <option value="5">Færdig</option>
-                                <option value="6">Afhentet</option>
-                            </select>
-                        </div>
-                    </section>
+                                <!-- Services Table -->
+                                <div class="table-responsive">
+                                    <table class="table align-middle">
+                                        <thead>
+                                            <tr class="fw-semibold text-muted">
+                                                <th>Produkt/ service</th>
+                                                <th style="width: 120px">Antal</th>
+                                                <th>Arbejdstid</th>
+                                                <th>Pris</th>
+                                                <th>I alt</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Timeløn</td>
+                                                <td>
+                                                    <input
+                                                        type="number"
+                                                        class="form-control form-control-sm w-50 d-inline qty-input"
+                                                        id="workTime"
+                                                        value="15"
+                                                    />
+                                                    <p class="d-inline ms-1">min</p>
+                                                </td>
+                                                <td></td>
+                                                <td>
+                                                    <span class="price" id="pricePerMin">8,00</span>
+                                                    kr.
+                                                </td>
+                                                <td class="fw-bold total">147,50 kr.</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Skift af kæde</td>
+                                                <td>
+                                                    <input
+                                                        type="number"
+                                                        class="form-control form-control-sm d-inline w-50"
+                                                        value="1"
+                                                    />
+                                                    <a href="#" class="text-decoration-none text-danger ms-1">fjern</a>
+                                                </td>
+                                                <td>15 min</td>
+                                                <td>250,00 kr.</td>
+                                                <td class="fw-bold">250,00 kr.</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Lubrikation af lejer</td>
+                                                <td>
+                                                    <input
+                                                        type="number"
+                                                        class="form-control form-control-sm d-inline w-50"
+                                                        value="1"
+                                                    />
+                                                    <a href="#" class="text-decoration-none text-danger ms-1">fjern</a>
+                                                </td>
+                                                <td>30 min</td>
+                                                <td>300,00 kr.</td>
+                                                <td class="fw-bold">300,00 kr.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
 
-                    <!-- TILFØJ YDELSER -->
-                    <section class="p-4 pt-5 rounded-3 border bg-white shadow-sm">
-                        <h6 class="fw-bold mb-5">Tilføj ydelser</h6>
+                                <!-- Totals -->
+                                <div class="d-flex justify-content-between mt-4">
+                                    <p class="fw-semibold">Totalpris med moms:</p>
+                                    <p id="grandTotal" class="fw-bold">000,000 kr.</p>
+                                </div>
 
-                        <div class="mb-4">
-                            <label for="serviceSearch" class="form-label">
-                                Søg efter ydelse
-                            </label>
-                            <input
-                                    type="text"
-                                    id="serviceSearch"
-                                    class="form-control w-50"
-                                    placeholder="Ydelses navn"
-                            />
-                        </div>
-
-                        <!-- Services Table -->
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead>
-                                <tr class="fw-semibold text-muted">
-                                    <th>Produkt/ service</th>
-                                    <th style="width: 120px">Antal</th>
-                                    <th>Arbejdstid</th>
-                                    <th>Pris</th>
-                                    <th>I alt</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>Timeløn</td>
-                                    <td>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="fw-semibold">Varighed:</p>
+                                    <div class="d-flex align-items-center gap-2">
                                         <input
-                                                type="number"
-                                                class="form-control form-control-sm w-50 d-inline qty-input"
-                                                id="workTime"
-                                                value="15"
+                                            type="number"
+                                            class="form-control form-control-sm"
+                                            id="jobDuration"
+                                            value="45"
+                                            style="width: 70px"
                                         />
-                                        <p class="d-inline ms-1">min</p>
-                                    </td>
-                                    <td></td>
-                                    <td>
-                                        <span class="price" id="pricePerMin">8,00</span>
-                                        kr.
-                                    </td>
-                                    <td class="fw-bold total">147,50 kr.</td>
-                                </tr>
-                                <tr>
-                                    <td>Skift af kæde</td>
-                                    <td>
-                                        <input
-                                                type="number"
-                                                class="form-control form-control-sm d-inline w-50"
-                                                value="1"
-                                        />
-                                        <a
-                                                href="#"
-                                                class="text-decoration-none text-danger ms-1"
-                                        >
-                                            fjern
-                                        </a>
-                                    </td>
-                                    <td>15 min</td>
-                                    <td>250,00 kr.</td>
-                                    <td class="fw-bold">250,00 kr.</td>
-                                </tr>
-                                <tr>
-                                    <td>Lubrikation af lejer</td>
-                                    <td>
-                                        <input
-                                                type="number"
-                                                class="form-control form-control-sm d-inline w-50"
-                                                value="1"
-                                        />
-                                        <a
-                                                href="#"
-                                                class="text-decoration-none text-danger ms-1"
-                                        >
-                                            fjern
-                                        </a>
-                                    </td>
-                                    <td>30 min</td>
-                                    <td>300,00 kr.</td>
-                                    <td class="fw-bold">300,00 kr.</td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                        min
+                                    </div>
+                                </div>
+                            </section>
                         </div>
 
-                        <!-- Totals -->
-                        <div class="d-flex justify-content-between mt-4">
-                            <p class="fw-semibold">Totalpris med moms:</p>
-                            <p id="grandTotal" class="fw-bold">000,000 kr.</p>
+                        <div class="modal-footer border-0">
+                            <button type="submit" class="btn btn-primary">Opret</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuller</button>
                         </div>
-
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="fw-semibold">Varighed:</p>
-                            <div class="d-flex align-items-center gap-2">
-                                <input
-                                        type="number"
-                                        class="form-control form-control-sm"
-                                        id="jobDuration"
-                                        value="45"
-                                        style="width: 70px"
-                                />
-                                min
-                            </div>
-                        </div>
-                    </section>
+                    </form>
                 </div>
-
-                <div class="modal-footer border-0">
-                    <button type="submit" class="btn btn-primary">Opret</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Annuller
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
 
-<!-- Edit Job Modal fragment: shorter modal for quick edits. Prefill fields via JS when opening. -->
-<div th:fragment="edit-job-modal">
-    <div class="modal fade" id="editJobModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" id="editJobForm">
-                <div class="modal-header">
-                    <h5 class="modal-title">Rediger Reparation</h5>
-                    <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Hidden input to store the job ID when editing -->
-                    <input type="hidden" id="jobId"/>
-
-                    <div class="mb-3">
-                        <label class="form-label">Cykel</label>
-                        <input type="text" id="title" class="form-control"/>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Kunde</label>
-                        <input type="text" id="customer_name" class="form-control"/>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Telefon</label>
-                        <input type="text" id="customer_phone" class="form-control"/>
-                    </div>
-
-                    <div class="mb-3 row">
-                        <div class="col">
-                            <label class="form-label">Arbejdstid (min)</label>
-                            <input
-                                    type="number"
-                                    id="work_time_minutes"
-                                    class="form-control"
-                            />
+        <!-- Edit Job Modal fragment: shorter modal for quick edits. Prefill fields via JS when opening. -->
+        <div th:fragment="edit-job-modal">
+            <div class="modal fade" id="editJobModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form class="modal-content" id="editJobForm">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Rediger Reparation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
-                        <div class="col">
-                            <label class="form-label">Pris pr. min</label>
-                            <input
-                                    type="number"
-                                    step="0.01"
-                                    id="price_per_minute"
-                                    class="form-control"
-                            />
-                        </div>
-                    </div>
+                        <div class="modal-body">
+                            <!-- Hidden input to store the job ID when editing -->
+                            <input type="hidden" id="jobId" />
 
-                    <div class="mb-3">
-                        <label class="form-label">Start Dato</label>
-                        <input type="datetime-local" id="date" class="form-control"/>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select id="status_id" class="form-select">
-                            <option value="1">Ikke Indleveret</option>
-                            <option value="2">Indleveret</option>
-                            <option value="3">Igangværende</option>
-                            <option value="4">Mangler del</option>
-                            <option value="5">Færdig</option>
-                            <option value="6">Afhentet</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit">Gem</button>
-                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
-                        Luk
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Edit Description Modal fragment: only edits the description field for a given job ID -->
-<div th:fragment="edit-description-modal">
-    <div class="modal fade" id="descModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" id="editDescForm">
-                <div class="modal-header">
-                    <h5 class="modal-title">Rediger Beskrivelse</h5>
-                    <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Hidden id to associate the description update with the right job -->
-                    <input type="hidden" id="jobIdDesc"/>
-                    <div class="mb-3">
-                        <label class="form-label">Beskrivelse</label>
-                        <textarea
-                                id="job_description_desc"
-                                class="form-control"
-                                rows="6"
-                        ></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit">Gem</button>
-                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
-                        Luk
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Full Edit Job Modal fragment: larger modal with the same fields plus a big description textarea -->
-<div th:fragment="full-edit-job-modal">
-    <div class="modal fade" id="fullEditJobModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form class="modal-content" id="fullEditJobForm">
-                <div class="modal-header">
-                    <h5 class="modal-title">Rediger Reparation</h5>
-                    <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="full_jobId"/>
-                    <div class="row">
-                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Cykel</label>
-                                <input type="text" id="full_title" class="form-control"/>
+                                <input type="text" id="title" class="form-control" />
                             </div>
+
                             <div class="mb-3">
                                 <label class="form-label">Kunde</label>
-                                <input
-                                        type="text"
-                                        id="full_customer_name"
-                                        class="form-control"
-                                />
+                                <input type="text" id="customer_name" class="form-control" />
                             </div>
+
                             <div class="mb-3">
                                 <label class="form-label">Telefon</label>
-                                <input
-                                        type="text"
-                                        id="full_customer_phone"
-                                        class="form-control"
-                                />
+                                <input type="text" id="customer_phone" class="form-control" />
                             </div>
+
                             <div class="mb-3 row">
                                 <div class="col">
                                     <label class="form-label">Arbejdstid (min)</label>
-                                    <input
-                                            type="number"
-                                            id="full_work_time_minutes"
-                                            class="form-control"
-                                    />
+                                    <input type="number" id="work_time_minutes" class="form-control" />
                                 </div>
                                 <div class="col">
                                     <label class="form-label">Pris pr. min</label>
-                                    <input
-                                            type="number"
-                                            step="0.01"
-                                            id="full_price_per_minute"
-                                            class="form-control"
-                                    />
+                                    <input type="number" step="0.01" id="price_per_minute" class="form-control" />
                                 </div>
                             </div>
+
                             <div class="mb-3">
                                 <label class="form-label">Start Dato</label>
-                                <input
-                                        type="datetime-local"
-                                        id="full_date"
-                                        class="form-control"
-                                />
+                                <input type="datetime-local" id="date" class="form-control" />
                             </div>
+
                             <div class="mb-3">
                                 <label class="form-label">Status</label>
-                                <select id="full_status_id" class="form-select">
+                                <select id="status_id" class="form-select">
                                     <option value="1">Ikke Indleveret</option>
                                     <option value="2">Indleveret</option>
                                     <option value="3">Igangværende</option>
@@ -433,88 +255,176 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3 h-100">
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="submit">Gem</button>
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Luk</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Description Modal fragment: only edits the description field for a given job ID -->
+        <div th:fragment="edit-description-modal">
+            <div class="modal fade" id="descModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form class="modal-content" id="editDescForm">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Rediger Beskrivelse</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Hidden id to associate the description update with the right job -->
+                            <input type="hidden" id="jobIdDesc" />
+                            <div class="mb-3">
                                 <label class="form-label">Beskrivelse</label>
-                                <!-- Large textarea for full description; resize disabled for consistent UX -->
-                                <textarea
-                                        id="full_job_description"
-                                        class="form-control"
-                                        rows="18"
-                                        style="height: 91%; resize: none"
-                                ></textarea>
+                                <textarea id="job_description_desc" class="form-control" rows="6"></textarea>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit">Gem</button>
-                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
-                        Luk
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal to add a product to a repair -->
-<div th:fragment="add-product-to-repair-modal">
-    <div class="modal fade" id="addProductToRepair" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" id="addProductToRepairForm">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tilføj et product til reparationen</h5>
-                    <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <div class="h-25 position-relative">
-                        <input
-                                class="form-control ps-2 mt-4"
-                                type="search"
-                                placeholder="Søg efter produkter"
-                                aria-label="Search"
-                                autocomplete="off"
-                                id="searchBar"
-                        />
-                        <table id="search-table" class="table table-bordered table-hover border position-absolute"
-                               style="display: none">
-                            <tbody id="search-results" class="w-100">
-                            <!-- Products are dynamically placed here using javascript on search -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div style="height: 20rem" class="d-flex flex-column">
-                        <div id="product-table-container">
-                            <table class="table align-middle mt-5">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Product</th>
-                                    <th scope="col">Antal</th>
-                                    <th scope="col">Styk Pris</th>
-                                    <th scope="col">Total Pris</th>
-                                </tr>
-                                </thead>
-                                <tbody id="table-body">
-                                <!-- Products are dynamically placed here using javascript when chosen from the search -->
-                                </tbody>
-                            </table>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="submit">Gem</button>
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Luk</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" id="confirm-add-product-btn" type="button">Tilføj Produkter</button>
-                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
-                        Luk
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
-</body>
+
+        <!-- Full Edit Job Modal fragment: larger modal with the same fields plus a big description textarea -->
+        <div th:fragment="full-edit-job-modal">
+            <div class="modal fade" id="fullEditJobModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <form class="modal-content" id="fullEditJobForm">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Rediger Reparation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="full_jobId" />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Cykel</label>
+                                        <input type="text" id="full_title" class="form-control" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Kunde</label>
+                                        <input type="text" id="full_customer_name" class="form-control" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Telefon</label>
+                                        <input type="text" id="full_customer_phone" class="form-control" />
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <div class="col">
+                                            <label class="form-label">Arbejdstid (min)</label>
+                                            <input type="number" id="full_work_time_minutes" class="form-control" />
+                                        </div>
+                                        <div class="col">
+                                            <label class="form-label">Pris pr. min</label>
+                                            <input
+                                                type="number"
+                                                step="0.01"
+                                                id="full_price_per_minute"
+                                                class="form-control"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Start Dato</label>
+                                        <input type="datetime-local" id="full_date" class="form-control" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Status</label>
+                                        <select id="full_status_id" class="form-select">
+                                            <option value="1">Ikke Indleveret</option>
+                                            <option value="2">Indleveret</option>
+                                            <option value="3">Igangværende</option>
+                                            <option value="4">Mangler del</option>
+                                            <option value="5">Færdig</option>
+                                            <option value="6">Afhentet</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3 h-100">
+                                        <label class="form-label">Beskrivelse</label>
+                                        <!-- Large textarea for full description; resize disabled for consistent UX -->
+                                        <textarea
+                                            id="full_job_description"
+                                            class="form-control"
+                                            rows="18"
+                                            style="height: 91%; resize: none"
+                                        ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="submit">Gem</button>
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Luk</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal to add a product to a repair -->
+        <div th:fragment="add-product-to-repair-modal">
+            <div class="modal fade" id="addProductToRepair" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form class="modal-content" id="addProductToRepairForm">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Tilføj et product til reparationen</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="h-25 position-relative">
+                                <input
+                                    class="form-control ps-2 mt-4"
+                                    type="search"
+                                    placeholder="Søg efter produkter"
+                                    aria-label="Search"
+                                    autocomplete="off"
+                                    id="searchBar"
+                                />
+                                <table
+                                    id="search-table"
+                                    class="table table-bordered table-hover border position-absolute"
+                                    style="display: none"
+                                >
+                                    <tbody id="search-results" class="w-100">
+                                        <!-- Products are dynamically placed here using javascript on search -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div style="height: 20rem" class="d-flex flex-column">
+                                <div id="product-table-container">
+                                    <table class="table align-middle mt-5">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Product</th>
+                                                <th scope="col">Antal</th>
+                                                <th scope="col">Styk Pris</th>
+                                                <th scope="col">Total Pris</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="table-body">
+                                            <!-- Products are dynamically placed here using javascript when chosen from the search -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" id="confirm-add-product-btn" type="button">
+                                Tilføj Produkter
+                            </button>
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Luk</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

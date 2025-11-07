@@ -2,7 +2,6 @@ package mainProgram.controller;
 
 import java.util.List;
 import java.util.Map;
-
 import mainProgram.repository.JobRepository;
 import mainProgram.repository.JobStatusRepository;
 import mainProgram.services.JobService;
@@ -137,7 +136,6 @@ public class JobController {
             })
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 
     // todo: Aad logic so that if the "link" already exists, a new should not be added but the amount should be updated.
     @PostMapping("/api/repairs/addProduct")

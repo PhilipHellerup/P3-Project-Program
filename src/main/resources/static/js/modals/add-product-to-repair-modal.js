@@ -4,7 +4,7 @@ let modalProducts = [];
 (function () {
     const modalEl = document.getElementById('addProductToRepair');
     if (!modalEl) {
-        console.warn("Modal element #addProductToRepair not found");
+        console.warn('Modal element #addProductToRepair not found');
         return;
     }
     const createModal = new bootstrap.Modal(modalEl);
@@ -27,38 +27,38 @@ let modalProducts = [];
     });
 
     // Add an eventListener to the search bar
-    let searchTable = document.getElementById('search-table')
-    let searchResults = document.getElementById('search-results')
-    let searchBar = document.getElementById('searchBar')
+    let searchTable = document.getElementById('search-table');
+    let searchResults = document.getElementById('search-results');
+    let searchBar = document.getElementById('searchBar');
     searchBar.addEventListener('input', async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         // Get search results using the search Controller API
         let searchParams = document.getElementById('searchBar').value;
-        let matches = await fetchSearchMatches(searchParams)
+        let matches = await fetchSearchMatches(searchParams);
 
         // Show search results as a dropdown below the search bar
-        searchResults.innerHTML = ''
+        searchResults.innerHTML = '';
         if (!matches) {
-            searchTable.style.display = "none"
+            searchTable.style.display = 'none';
         } else {
-            matches.forEach(match => {
-                let newResult = document.createElement('tr')
+            matches.forEach((match) => {
+                let newResult = document.createElement('tr');
                 newResult.addEventListener('click', (e) => {
                     // The if the product is already on the list. If it is, increate the quantity by one. If not, add the products to the list.
-                    const existing = modalProducts.find(p => p.product.id === match.id);
+                    const existing = modalProducts.find((p) => p.product.id === match.id);
 
                     if (existing) {
                         existing.quantity += 1;
                     } else {
-                        modalProducts.push({product: match, quantity: 1});
+                        modalProducts.push({ product: match, quantity: 1 });
                     }
                     // Add the product to modal UI and update the UI
-                    renderProductTable()
+                    renderProductTable();
                     searchBar.value = '';
                     searchBar.select();
-                    hideSearchResults(searchTable)
-                })
+                    hideSearchResults(searchTable);
+                });
                 newResult.innerHTML = `
                     <td class="d-flex justify-content-between">
                         <div>
@@ -76,49 +76,49 @@ let modalProducts = [];
                         </div>
                      </div>
                     </td>
-                `
-                searchResults.appendChild(newResult)
-                showSearchResults(searchTable)
-            })
+                `;
+                searchResults.appendChild(newResult);
+                showSearchResults(searchTable);
+            });
         }
-    })
-
+    });
 
     // Show search results, when clicking the search bar which already has a value
     searchBar.addEventListener('click', (e) => {
         if (e.target.value) {
-            showSearchResults(searchTable)
+            showSearchResults(searchTable);
         }
-    })
+    });
 
     // Add eventListener to the "add product" btn, which sends a HTTP request to the JobController API endpoint, for a product to be added to a specific job.
     document.getElementById('confirm-add-product-btn').addEventListener('click', async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         // Define the payload from the products in modalProducts and get their id. Also get the repair id. Quantity is set to 1, but should be changed to match the modal
         // Get the repairId from the url
         const repairId = getRepairIdFromUrl();
-        const payload = modalProducts.map(item => ({
+        const payload = modalProducts.map((item) => ({
             repairId: repairId,
             productId: item.product.id,
-            quantity: item.quantity
-        }))
+            quantity: item.quantity,
+        }));
 
-        console.log(JSON.stringify(payload))
+        console.log(JSON.stringify(payload));
 
         // Create a request to send the paylond to the jobController
         fetch('/api/repairs/addProduct', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(payload)
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
         })
             .then((r) => {
-                if (!r.ok) throw new Error("Failed to add product to repair")
-            }).then(() => {
-            createModal.hide() // Hide the modal, when the repair has been added successfully
-            window.location.reload();
-        })
-    })
+                if (!r.ok) throw new Error('Failed to add product to repair');
+            })
+            .then(() => {
+                createModal.hide(); // Hide the modal, when the repair has been added successfully
+                window.location.reload();
+            });
+    });
 })();
 
 function renderProductTable() {
@@ -128,7 +128,7 @@ function renderProductTable() {
     modalProducts.forEach((item) => {
         const row = document.createElement('tr');
         // Set the productid of the row, so that the remove buttons knows which product to remove from modalProducts
-        row.dataset.productId = item.product.id
+        row.dataset.productId = item.product.id;
         row.innerHTML = `
         <td class="w-15">
             <p class="mt-0">${item.product.name}</p>
@@ -154,7 +154,7 @@ function renderProductTable() {
             const newQty = parseInt(e.target.value, 10);
 
             const id = parseInt(row.dataset.productId, 10);
-            const productItem = modalProducts.find(p => p.product.id === id);
+            const productItem = modalProducts.find((p) => p.product.id === id);
             if (productItem) {
                 productItem.quantity = newQty;
             }
@@ -162,14 +162,13 @@ function renderProductTable() {
 
         row.querySelector('.remove-btn').addEventListener('click', () => {
             const id = parseInt(row.dataset.productId, 10);
-            modalProducts = modalProducts.filter(p => p.id !== id);
-            renderProductTable(modalProducts)
+            modalProducts = modalProducts.filter((p) => p.id !== id);
+            renderProductTable(modalProducts);
         });
 
         tableBody.appendChild(row);
     });
 }
-
 
 // Seach in product using the productController API endpoint
 async function fetchSearchMatches(searchParam) {
@@ -177,7 +176,7 @@ async function fetchSearchMatches(searchParam) {
         // Send PUT request to update the job entry
         const r1 = await fetch('/api/search/repair?q=' + searchParam, {
             method: 'GET',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
         });
 
         // Get the matches from the response and update the page to show matches
@@ -192,7 +191,8 @@ async function fetchSearchMatches(searchParam) {
 // The listener that checks if user clicked outside
 function handleClickOutside(event) {
     const clickedOutside =
-        !document.getElementById('search-results').contains(event.target) && !document.getElementById('searchBar').contains(event.target);
+        !document.getElementById('search-results').contains(event.target) &&
+        !document.getElementById('searchBar').contains(event.target);
 
     if (clickedOutside) {
         hideSearchResults(document.getElementById('search-table'));
@@ -254,5 +254,3 @@ function addNewProductToTable(name, amount, productPrice) {
     tableBody.appendChild(newProduct);
 }
 */
-
-

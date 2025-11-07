@@ -1,7 +1,6 @@
 package mainProgram.controller;
 
 import java.util.List;
-
 import mainProgram.services.JobService;
 import mainProgram.services.productService;
 import mainProgram.table.Job;

@@ -1,199 +1,195 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <!-- Page title is populated by Thymeleaf from the job object -->
-    <title th:text="${job.title}"></title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Page title is populated by Thymeleaf from the job object -->
+        <title th:text="${job.title}"></title>
 
-    <!-- Linking: include CSS and JS assets. Keep CSS in <head> for render-blocking styles. -->
-    <link rel="stylesheet" href="/css/bootstrap.css"/>
-</head>
-<body>
-<!--
+        <!-- Linking: include CSS and JS assets. Keep CSS in <head> for render-blocking styles. -->
+        <link rel="stylesheet" href="/css/bootstrap.css" />
+    </head>
+    <body>
+        <!--
 Modals must exist in the DOM before their initialization scripts run.
 Using Thymeleaf th:replace to include modal fragments from a `modals` template.
 -->
-<div th:replace="~{modals :: edit-job-modal}"></div>
-<div th:replace="~{modals :: edit-description-modal}"></div>
+        <div th:replace="~{modals :: edit-job-modal}"></div>
+        <div th:replace="~{modals :: edit-description-modal}"></div>
 
-<!-- Page Container (No Nav Bar): main page content wrapper with margin -->
-<div class="page-content-container m-4">
-    <!-- Card Container: holds two cards side-by-side (Details and Description) -->
-    <div class="d-inline-flex" style="width: 100%">
-        <!-- Details Card: job metadata and edit button -->
-        <div class="card me-2" style="width: 100%">
-            <div class="card-header d-inline-flex justify-content-between align-items-center">
-                <!-- Card title (in Danish: "Detaljer") -->
-                <h5 class="mb-0">Detaljer</h5>
+        <!-- Page Container (No Nav Bar): main page content wrapper with margin -->
+        <div class="page-content-container m-4">
+            <!-- Card Container: holds two cards side-by-side (Details and Description) -->
+            <div class="d-inline-flex" style="width: 100%">
+                <!-- Details Card: job metadata and edit button -->
+                <div class="card me-2" style="width: 100%">
+                    <div class="card-header d-inline-flex justify-content-between align-items-center">
+                        <!-- Card title (in Danish: "Detaljer") -->
+                        <h5 class="mb-0">Detaljer</h5>
 
-                <!-- Edit button: opens the edit-job modal. ID used by JS to attach click handler. -->
-                <a id="openEditBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
-                    <!-- Pencil icon (SVG) visually indicates edit action -->
-                    <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            class="bi bi-pencil-square"
-                            viewBox="0 0 16 16"
-                    >
-                        <path
-                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                        />
-                        <path
-                                fill-rule="evenodd"
-                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                        />
-                    </svg>
-                </a>
+                        <!-- Edit button: opens the edit-job modal. ID used by JS to attach click handler. -->
+                        <a id="openEditBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
+                            <!-- Pencil icon (SVG) visually indicates edit action -->
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                class="bi bi-pencil-square"
+                                viewBox="0 0 16 16"
+                            >
+                                <path
+                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                                />
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                                />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Table content: shows job fields populated by Thymeleaf -->
+                    <div class="table-content-container">
+                        <table class="table tableRemoveLastLine mb-1">
+                            <tbody>
+                                <tr>
+                                    <td><b>Status:</b></td>
+                                    <!-- job.status.name is printed here; JS will find #job-status and style it -->
+                                    <td>
+                                        <span class="job-status" id="job-status" th:text="${job.status.name}"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>Oprettet:</b></td>
+                                    <!-- Date formatting using Thymeleaf #temporals utility -->
+                                    <td th:text="${#temporals.format(job.date, 'd. MMMM yyyy HH:mm')}"></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Cykel:</b></td>
+                                    <td th:text="${job.title}"></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Kunde:</b></td>
+                                    <td th:text="${job.customer_name}"></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Telefon:</b></td>
+                                    <td th:text="${job.customer_phone}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Description Card: brief job description and its edit button -->
+                <div class="card ms-2" style="width: 100%">
+                    <div class="card-header d-inline-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Beskrivelse</h5>
+
+                        <!-- Button opens description modal. ID used by JS to attach click handler. -->
+                        <a id="openDescBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                class="bi bi-pencil-square"
+                                viewBox="0 0 16 16"
+                            >
+                                <path
+                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                                />
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                                />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Description text: filled from job.job_description. ID used to fetch current text when opening modal. -->
+                    <p class="card-text mx-2 my-2" id="jobDescriptionText" th:text="${job.job_description}"></p>
+                </div>
             </div>
 
-            <!-- Table content: shows job fields populated by Thymeleaf -->
-            <div class="table-content-container">
-                <table class="table tableRemoveLastLine mb-1">
+            <!-- Product Table Container: lists parts/products associated with the job -->
+            <div class="product-table-content-container mt-6">
+                <table class="table align-middle mt-lg-3">
+                    <thead>
+                        <tr>
+                            <th scope="col">Produkter</th>
+                            <th scope="col">Antal</th>
+                            <th scope="col">Styk Pris</th>
+                            <th scope="col">Total Pris</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                    <tr>
-                        <td><b>Status:</b></td>
-                        <!-- job.status.name is printed here; JS will find #job-status and style it -->
-                        <td>
-                            <span class="job-status" id="job-status" th:text="${job.status.name}"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><b>Oprettet:</b></td>
-                        <!-- Date formatting using Thymeleaf #temporals utility -->
-                        <td th:text="${#temporals.format(job.date, 'd. MMMM yyyy HH:mm')}"></td>
-                    </tr>
-                    <tr>
-                        <td><b>Cykel:</b></td>
-                        <td th:text="${job.title}"></td>
-                    </tr>
-                    <tr>
-                        <td><b>Kunde:</b></td>
-                        <td th:text="${job.customer_name}"></td>
-                    </tr>
-                    <tr>
-                        <td><b>Telefon:</b></td>
-                        <td th:text="${job.customer_phone}"></td>
-                    </tr>
+                        <tr th:each="jp : ${jobParts}">
+                            <td class="w-15">
+                                <p class="m-1" th:text="${jp.product.name}"></p>
+                            </td>
+                            <td class="w-15">
+                                <p class="m-1" th:text="${jp.quantity}"></p>
+                            </td>
+                            <td class="w-30">
+                                <p class="m-1" th:text="${jp.product.price}"></p>
+                            </td>
+                            <td class="w-30" th:with="result=${jp.product.price * jp.quantity}">
+                                <p class="m-1" th:text="${result}"></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Button + Final Price Table: action button on left, totals on right -->
+            <div
+                class="final-table-content-container d-flex justify-content-between align-items-start mt-3"
+                style="width: 100%"
+            >
+                <!-- Left Side: Button to add a product. You might wire this to a modal or product selector. -->
+                <button id="add-product-btn" type="button" class="btn btn-primary">Tilføj Produkt</button>
+
+                <!-- Right Side: Totals table (static values here). Replace with computed values if needed. -->
+                <table class="table table-borderless mb-0" style="width: auto">
+                    <tbody>
+                        <tr>
+                            <td class="fs-5"><b>Pris:</b></td>
+                            <td class="fs-5">1.539,90 Kr.</td>
+                        </tr>
+                        <tr>
+                            <td class="fs-5"><b>Moms:</b></td>
+                            <td class="fs-5">384,98 Kr.</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="fs-5"><b>Total:</b></td>
+                            <td class="fs-5"><b>1.924,88 Kr.</b></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+        <div th:replace="~{modals :: add-product-to-repair-modal}"></div>
 
-        <!-- Description Card: brief job description and its edit button -->
-        <div class="card ms-2" style="width: 100%">
-            <div class="card-header d-inline-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Beskrivelse</h5>
+        <script src="/js/bootstrap.js"></script>
+        <script src="/js/html.js"></script>
 
-                <!-- Button opens description modal. ID used by JS to attach click handler. -->
-                <a id="openDescBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
-                    <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            class="bi bi-pencil-square"
-                            viewBox="0 0 16 16"
-                    >
-                        <path
-                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                        />
-                        <path
-                                fill-rule="evenodd"
-                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                        />
-                    </svg>
-                </a>
-            </div>
+        <!-- Modal-specific JS: initialize modal behavior after modal markup is included -->
+        <script src="/js/modals/edit-job-modal.js"></script>
+        <script src="/js/modals/edit-description-modal.js"></script>
+        <script src="/js/modals/add-product-to-repair-modal.js"></script>
 
-            <!-- Description text: filled from job.job_description. ID used to fetch current text when opening modal. -->
-            <p
-                    class="card-text mx-2 my-2"
-                    id="jobDescriptionText"
-                    th:text="${job.job_description}"
-            ></p>
-        </div>
-    </div>
+        <!-- Navigation: navbar script injects navigation markup at runtime -->
+        <nav>
+            <script src="/js/navbar.js"></script>
+        </nav>
 
-    <!-- Product Table Container: lists parts/products associated with the job -->
-    <div class="product-table-content-container mt-6">
-        <table class="table align-middle mt-lg-3">
-            <thead>
-            <tr>
-                <th scope="col">Produkter</th>
-                <th scope="col">Antal</th>
-                <th scope="col">Styk Pris</th>
-                <th scope="col">Total Pris</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="jp : ${jobParts}">
-                <td class="w-15">
-                    <p class="m-1" th:text="${jp.product.name}"></p>
-                </td>
-                <td class="w-15">
-                    <p class="m-1" th:text="${jp.quantity}"></p>
-                </td>
-                <td class="w-30">
-                    <p class="m-1" th:text="${jp.product.price}"></p>
-                </td>
-                <td class="w-30" th:with="result=${jp.product.price * jp.quantity}">
-                    <p class="m-1" th:text="${result}"></p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Button + Final Price Table: action button on left, totals on right -->
-    <div
-            class="final-table-content-container d-flex justify-content-between align-items-start mt-3"
-            style="width: 100%"
-    >
-        <!-- Left Side: Button to add a product. You might wire this to a modal or product selector. -->
-        <button id="add-product-btn" type="button" class="btn btn-primary">Tilføj Produkt</button>
-
-        <!-- Right Side: Totals table (static values here). Replace with computed values if needed. -->
-        <table class="table table-borderless mb-0" style="width: auto">
-            <tbody>
-            <tr>
-                <td class="fs-5"><b>Pris:</b></td>
-                <td class="fs-5">1.539,90 Kr.</td>
-            </tr>
-            <tr>
-                <td class="fs-5"><b>Moms:</b></td>
-                <td class="fs-5">384,98 Kr.</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="fs-5"><b>Total:</b></td>
-                <td class="fs-5"><b>1.924,88 Kr.</b></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-<div th:replace="~{modals :: add-product-to-repair-modal}"></div>
-
-<script src="/js/bootstrap.js"></script>
-<script src="/js/html.js"></script>
-
-<!-- Modal-specific JS: initialize modal behavior after modal markup is included -->
-<script src="/js/modals/edit-job-modal.js"></script>
-<script src="/js/modals/edit-description-modal.js"></script>
-<script src="/js/modals/add-product-to-repair-modal.js"></script>
-
-<!-- Navigation: navbar script injects navigation markup at runtime -->
-<nav>
-    <script src="/js/navbar.js"></script>
-</nav>
-
-<!-- Inline script: small DOM manipulation and wiring for edit buttons and status styling -->
-<script src="/js/job-description-script.js"></script>
-</body>
+        <!-- Inline script: small DOM manipulation and wiring for edit buttons and status styling -->
+        <script src="/js/job-description-script.js"></script>
+    </body>
 </html>
