@@ -116,11 +116,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         // Only send update/PUT request if the value is actually changed
                         if (newValue !== oldValue) {
-                            // Send the update to the backend via PUT request
-                            await updateProduct(productId, { [field]: newValue });
+                            // Check if the edited field is the price
+                            if (field === 'price') {
+                                // Convert the string input (which may contain commas, dots, currency symbols) to a proper float number
+                                const parsed = parsePriceString(newValue);
 
-                            // Update the originalValue to prevent duplicate updates
-                            ev.target.dataset.originalValue = newValue; // Update reference value
+                                // If the conversion fails (NaN = Not a Number), warn in console and do not send update
+                                if (Number.isNaN(parsed)) {
+                                    console.warn('Could not parse price string:', newValue);
+
+                                    // Reset cell to original
+                                    ev.target.textContent = oldValue;
+
+                                    // Alert the user about the problem:
+                                    alert("Price is not a number!")
+
+                                    return;
+                                }
+
+                                // Send PUT request to backend to update the product's price with the parsed numeric value
+                                await updateProduct(productId, { [field]: parsed });
+
+                                // Display value immediately in EU format (e.g., "123,45 Kr.") as Performsport is in EU
+                                ev.target.textContent = parsed.toLocaleString('de-DE', { // DE = Germany = EU
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }) + ' Kr.';
+
+                                // Update the cell's original value reference to avoid sending duplicate updates later
+                                ev.target.dataset.originalValue = ev.target.textContent; // Update reference value
+                            }
+                            // For all other fields (name, description, etc.), send the raw string value
+                            else {
+                                await updateProduct(productId, { [field]: newValue });
+
+                                // Update the cell's original value reference to avoid sending duplicate updates later
+                                ev.target.dataset.originalValue = newValue; // Update reference value
+                            }
                         }
                     });
                 });
@@ -148,9 +180,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* --- CONTROLLER CALL: PUT PRODUCT UPDATE --- */
 // Sends a PUT request to update a product field in the backend "Product Controller"
-/** @param {string} productId ID of the product to update
- * @param {Object} updatedData Object containing field(s) and value(s) to update
- */
+/** @param {string} productId ID of the product to update **/
+/** @param {Object} updatedData Object containing field(s) and value(s) to update **/
 async function updateProduct(productId, updatedData) {
     try {
         // Send PUT request to the backend API
@@ -168,10 +199,61 @@ async function updateProduct(productId, updatedData) {
 
         // Handle any fetch errors (network issues, server errors)
         await handleFetchErrors(response);
-
     }
     catch (error) {
         // Log error
         console.error('Error updating product:', error);
     }
+}
+
+/* --- PRICE STRING TO NUMBER CONVERTER --- */
+// Converts price string into a float number.
+// Handles formats like
+// - "123.45" (US decimal)
+// - "123,45" (EU decimal)
+// - "1,234.56" (US thousands separator)
+// - "1.234,56" (EU thousands separator)
+// - "123,45 Kr." (with currency text)
+/** @param {string} raw String value of the price field **/
+/** @returns {number} Parsed float value, or NaN if invalid **/
+function parsePriceString(raw) {
+    // Return NaN if input is null or undefined
+    if (raw === null || raw === undefined) return NaN;
+
+    // Convert input to string and trim whitespace
+    let s = String(raw).trim();
+
+    // Remove currency symbols/text AND trailing dots (like "Kr." or "kr.")
+    s = s.replace(/\s*(kr|kroner)\.?/ig, ''); // \s = whitespace, i = ignore case, g = global replace (replace all occurrences)
+
+    // Remove all other non-digit, non-comma, non-dot characters
+    s = s.replace(/[^\d.,]/g, '');
+
+    // If String has a length of 0 return NaN = Not a Number
+    if (s.length === 0) return NaN;
+
+    // Determine separators
+    const lastComma = s.lastIndexOf(',');
+    const lastDot = s.lastIndexOf('.');
+
+    if (lastComma !== -1 && lastDot !== -1) {
+        // Both exist = Last one is decimal
+        if (lastComma > lastDot) {
+            // EU style: Last comma is decimal
+            s = s.replace(/\./g, ''); // Remove dots (thousands)
+            s = s.replace(',', '.');  // Convert decimal comma to dot
+        }
+        else {
+            // US style: Last dot is decimal
+            s = s.replace(/,/g, ''); // Remove commas (thousands)
+        }
+    }
+    else if (lastComma !== -1) {
+        // Only comma = Decimal
+        s = s.replace(',', '.');
+    }
+    // Only dot or no separator = Use as decimal, nothing to do
+
+    // Converted and cleaned string to float number
+    return parseFloat(s);
 }
