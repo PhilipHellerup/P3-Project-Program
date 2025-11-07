@@ -5,9 +5,6 @@ package mainProgram.table; // Project Organization
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /* --- Product Class --- */
 // Represents a product in the system
 // This entity is mapped to the "products" table in the database.
@@ -23,7 +20,7 @@ public class Product {
 
     @Column(name = "\"productNumber\"")
     private String productNumber; // Maps to: productNumber (Not product_number)
-    
+
     private String name; // Maps to: name
 
     @JsonProperty("EAN") // Ensures Jackson matches the JSON key "EAN" (with uppercase letters)
@@ -37,22 +34,21 @@ public class Product {
 
 
     // One-to-Many Relationship: One Product can be associated with many JobParts.
+
     /**
      * @mappedBy "product"
      * Indicates that the JobPart entity owns the relationship
      * through its "product" field. This makes it a bidirectional
      * relationship where JobPart has the foreign key.
-     *
      * @cascade CascadeType.ALL
      * All JPA operations (persist, merge, remove, refresh, detach)
      * performed on this Product will cascade to associated JobParts.
      * EXAMPLE: Deleting a Product will also delete all its JobParts.
-     *
      * @orphanRemoval true
      * If a JobPart is removed from this list, it will be automatically
      * deleted from the database. This ensures no orphaned JobPart records
      * exist without a parent Product.
-    **/
+     **/
 
     // #TODO WE NEED MANY TO MANY AND THE PRODUCT WHEN DELETED SHOULD BE ARCHIVED NOT DELETE
     // @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -51,7 +51,7 @@ let modalProducts = [];
                     if (existing) {
                         existing.quantity += 1;
                     } else {
-                        modalProducts.push({product: match, quantity: 1});
+                        modalProducts.push({product: match, quantity: 1, productType: "part"});
                     }
                     // Add the product to modal UI and update the UI
                     renderProductTable()
@@ -101,7 +101,8 @@ let modalProducts = [];
         const payload = modalProducts.map(item => ({
             repairId: repairId,
             productId: item.product.id,
-            quantity: item.quantity
+            quantity: item.quantity,
+            type: item.productType
         }))
 
         console.log(JSON.stringify(payload))
@@ -162,7 +163,7 @@ function renderProductTable() {
 
         row.querySelector('.remove-btn').addEventListener('click', () => {
             const id = parseInt(row.dataset.productId, 10);
-            modalProducts = modalProducts.filter(p => p.id !== id);
+            modalProducts = modalProducts.filter(p => p.product.id !== id);
             renderProductTable(modalProducts)
         });
 

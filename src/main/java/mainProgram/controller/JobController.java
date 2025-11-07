@@ -1,15 +1,21 @@
 package mainProgram.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 import mainProgram.repository.JobRepository;
+import mainProgram.repository.JobServiceRepository;
 import mainProgram.repository.JobStatusRepository;
+import mainProgram.repository.ServiceRepository;
 import mainProgram.services.JobService;
 import mainProgram.table.Job;
+import mainProgram.table.JobServices;
 import mainProgram.table.JobStatus;
+import mainProgram.table.Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +32,8 @@ public class JobController {
     private final JobRepository jobRepository;
     private final JobStatusRepository statusRepository;
     private final JobService jobService;
+    private final ServiceRepository serviceRepository;
+    private final JobServiceRepository jobServiceRepository;
 
     /**
      * Constructor for dependency injection.
@@ -33,10 +41,12 @@ public class JobController {
      * @param jobRepository    the repository for job database operations
      * @param statusRepository the repository for job status database operations
      */
-    public JobController(JobRepository jobRepository, JobStatusRepository statusRepository, JobService jobService) {
+    public JobController(JobRepository jobRepository, JobStatusRepository statusRepository, JobService jobService, ServiceRepository serviceRepository, JobServiceRepository jobServiceRepository) {
         this.jobRepository = jobRepository;
         this.statusRepository = statusRepository;
         this.jobService = jobService;
+        this.serviceRepository = serviceRepository;
+        this.jobServiceRepository = jobServiceRepository;
     }
 
     /**
@@ -85,35 +95,61 @@ public class JobController {
      * @return ResponseEntity containing the updated job if found, or a not found response
      * @throws IllegalArgumentException if the provided status_id is invalid
      */
-    @PutMapping("api/jobs/{id}")
+    @PostMapping("/api/jobs")
     @ResponseBody
-    public ResponseEntity<Job> updateJob(@PathVariable Integer id, @RequestBody Job job) {
-        return jobRepository
-                .findById(id)
-                .map((existing) -> {
-                    // Update all job fields
-                    existing.setTitle(job.getTitle());
-                    existing.setCustomer_name(job.getCustomer_name());
-                    existing.setCustomer_phone(job.getCustomer_phone());
-                    existing.setJob_description(job.getJob_description());
-                    existing.setWork_time_minutes(job.getWork_time_minutes());
-                    existing.setDuration(job.getDuration());
-                    existing.setPrice_per_minute(job.getPrice_per_minute());
-                    existing.setDate(job.getDate());
+    public ResponseEntity<Job> createJob(@RequestBody Map<String, Object> body) {
+        try {
+            // --- Extract main job data ---
+            String title = (String) body.get("title");
+            String dateString = (String) body.get("date");
+            Map<String, Object> statusMap = (Map<String, Object>) body.get("status");
 
-                    // Update status if provided
-                    if (job.getStatus() != null && job.getStatus().getId() != null) {
-                        JobStatus status = statusRepository
-                                .findById(job.getStatus().getId())
-                                .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
-                        existing.setStatus(status);
+            if (title == null || dateString == null || statusMap == null) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            Integer statusId = (Integer) statusMap.get("id");
+            if (statusId == null) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            JobStatus status = statusRepository.findById(statusId)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
+
+            // --- Create Job entity ---
+            Job job = new Job();
+            job.setTitle(title);
+            job.setCustomer_name((String) body.get("customer_name"));
+            job.setCustomer_phone((String) body.get("customer_phone"));
+            job.setJob_description((String) body.get("job_description"));
+            job.setDate(LocalDateTime.parse(dateString));
+            job.setStatus(status);
+
+            Job savedJob = jobRepository.save(job);
+
+            // --- Attach services if provided ---
+            List<Map<String, Object>> services = (List<Map<String, Object>>) body.get("services");
+            if (services != null) {
+                for (Map<String, Object> s : services) {
+                    Integer serviceId = (Integer) s.get("id");
+                    Integer quantity = (Integer) s.getOrDefault("quantity", 1);
+
+                    if (serviceId != null) {
+                        Services service = serviceRepository.findById(serviceId)
+                                .orElseThrow(() -> new RuntimeException("Service not found"));
+                        jobServiceRepository.save(new JobServices(savedJob, service, quantity));
                     }
+                }
+            }
 
-                    Job updated = jobRepository.save(existing);
-                    return ResponseEntity.ok(updated);
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+            return ResponseEntity.ok(savedJob);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
     }
+
 
     /**
      * Updates only the job description for a specific job.
@@ -152,4 +188,5 @@ public class JobController {
 
         return ResponseEntity.ok("Products added to repair successfully");
     }
+
 }
