@@ -68,23 +68,23 @@ public class JobController {
      * @return ResponseEntity containing the created job if successful, or a bad request/error response
      * @throws IllegalArgumentException if the provided status_id is invalid
      */
-    @PostMapping("api/jobs")
-    @ResponseBody
-    public ResponseEntity<Job> createJob(@RequestBody Job job) {
-        // Validate required fields
-        if (job.getDate() == null || job.getTitle() == null) return ResponseEntity.badRequest().build();
-        // Ensure status is valid
-        if (job.getStatus() == null || job.getStatus().getId() == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        // Verify the status exists in the database
-        JobStatus status = statusRepository
-                .findById(job.getStatus().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
-        job.setStatus(status);
-        Job saved = jobRepository.save(job);
-        return ResponseEntity.ok(saved);
-    }
+//    @PostMapping("api/jobs")
+//    @ResponseBody
+//    public ResponseEntity<Job> createJob(@RequestBody Job job) {
+//        // Validate required fields
+//        if (job.getDate() == null || job.getTitle() == null) return ResponseEntity.badRequest().build();
+//        // Ensure status is valid
+//        if (job.getStatus() == null || job.getStatus().getId() == null) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//        // Verify the status exists in the database
+//        JobStatus status = statusRepository
+//                .findById(job.getStatus().getId())
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
+//        job.setStatus(status);
+//        Job saved = jobRepository.save(job);
+//        return ResponseEntity.ok(saved);
+//    }
 
     /**
      * Updates an existing job with new information.
@@ -113,7 +113,7 @@ public class JobController {
                 return ResponseEntity.badRequest().build();
             }
 
-            JobStatus status = statusRepository.findById(statusId)
+            JobStatus status = statusRepository.findById(statusId.shortValue())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
 
             // --- Create Job entity ---

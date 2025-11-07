@@ -105,18 +105,31 @@ let totalWorkCost = document.getElementById('workTotalCost');
         const isoString = `${dateValue}T${timeValue}:00`; // "2025-10-28T13:45:00"
 
         // Collect and sanitize form data into a payload object
-        const payload = {
+        const newRepair = {
             title: document.getElementById('jobTitle').value,
             customer_name: document.getElementById('customerName').value,
             customer_phone: document.getElementById('customerPhone').value,
             job_description: document.getElementById('jobDescription').value,
             work_time_minutes: parseInt(document.getElementById('workTime').value || '0', 10),
-            price_per_minute: parseFloat(document.getElementById('pricePerMin').value || '0'),
-            duration: parseFloat(document.getElementById('jobDuration').value || '0'),
+            price_per_minute: parseFloat(document.getElementById('workCost').value || '0'),
+            duration: parseFloat(document.getElementById('totalDuration').value || '0'),
             date: isoString,
             status: {id: parseInt(document.getElementById('jobStatus').value, 10)},
         };
 
+        // Map services into the array. We only need 'id' and 'quantity' for adding them to the repair
+        const servicesArray = modalServices.map(item => ({
+            id: item.product.id,
+            quantity: item.quantity
+        }));
+
+        // Spread the newRepair fields and the services
+        const payload = {
+            ...newRepair,
+            services: servicesArray
+        };
+
+        // Debugging
         console.log(payload);
 
         // Send POST request to create a new job entry

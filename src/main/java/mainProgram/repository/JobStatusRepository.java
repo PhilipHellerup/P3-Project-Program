@@ -35,6 +35,4 @@ import java.util.List;
  */
 @Repository
 public interface JobStatusRepository extends JpaRepository<JobStatus, Short> {
-    List<JobStatus> findById(int jobId);
-    // No custom query methods needed - all operations use inherited CRUD methods
 }
