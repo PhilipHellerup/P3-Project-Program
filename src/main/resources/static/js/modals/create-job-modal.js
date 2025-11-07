@@ -223,6 +223,7 @@ function renderProductTable() {
         const row = document.createElement('tr');
         // Set the productid of the row, so that the remove buttons knows which product to remove from modalServices
         row.dataset.productId = item.product.id
+        row.style.marginBottom = '0'
         row.innerHTML = `
         <td class="w-15">
             <p class="mt-0">${item.product.name}</p>
@@ -232,13 +233,13 @@ function renderProductTable() {
                        value="${item.quantity}" min="1" style="width: 3rem;">
         </td>
         <td class="w-30">
-            <p class="mt-0">${item.product.duration}</p>
+            <p class="mt-0">${item.product.duration} min</p>
         </td>
         <td class="w-30">
-            <p class="mt-0">${item.product.price}</p>
+            <p class="mt-0">${item.product.price} kr.</p>
         </td>
         <td class="w-30">
-            <p class="mt-0">${item.product.price * item.quantity}</p>
+            <p class="mt-0">${item.product.price * item.quantity} kr.</p>
         </td>
         <td class="w-10 text-center">
             <button type="button" class="btn btn-sm btn-danger remove-btn">X</button>
