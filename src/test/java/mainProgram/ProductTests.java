@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductTests {
 
     @Test
+    /* Tests basic Product entity functionality including constructors, getters, and setters,
+   ensuring correct field assignment and handling of null values without database interaction. */
     void testProductCreation() {
         Product product = new Product("P001", "Test Product", "1234567890123", "Electronics", 99.99);
 

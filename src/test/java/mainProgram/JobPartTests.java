@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JobPartTests {
+    /* Verifies JobPart logic such as constructor initialization, quantity adjustments, and setter
+   correctness, focusing purely on in-memory object behavior without persistence. */
 
     private Job testJob;
     private Product testProduct;
