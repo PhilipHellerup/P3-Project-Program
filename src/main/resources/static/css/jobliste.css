@@ -34,15 +34,17 @@ body {
 .tab-btn.active {
     background-color: #ffffff;
     color: #1a1a1a;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
-    0 1px 2px rgba(0, 0, 0, 0.06);
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 .tab-btn:hover:not(.active) {
     color: #1a1a1a;
     background-color: #ffffff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
-    0 1px 2px rgba(0, 0, 0, 0.06);
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 /* Container for tab buttons */
@@ -166,7 +168,6 @@ body {
     font-size: 14px;
     line-height: 1.5;
 }
-
 
 /* Status badge styling */
 .job-status {

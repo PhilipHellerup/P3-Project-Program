@@ -28,9 +28,7 @@ public class JobServices {
         this.quantity = quantity;
     }
 
-    public JobServices() {
-
-    }
+    public JobServices() {}
 
     // Getters and setters
     public int getId() {

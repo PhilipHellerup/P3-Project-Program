@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
 import mainProgram.repository.JobRepository;
 import mainProgram.repository.JobServiceRepository;
 import mainProgram.repository.JobStatusRepository;
@@ -43,7 +42,13 @@ public class JobController {
      * @param jobRepository    the repository for job database operations
      * @param statusRepository the repository for job status database operations
      */
-    public JobController(JobRepository jobRepository, JobStatusRepository statusRepository, JobService jobService, ServiceRepository serviceRepository, JobServiceRepository jobServiceRepository) {
+    public JobController(
+        JobRepository jobRepository,
+        JobStatusRepository statusRepository,
+        JobService jobService,
+        ServiceRepository serviceRepository,
+        JobServiceRepository jobServiceRepository
+    ) {
         this.jobRepository = jobRepository;
         this.statusRepository = statusRepository;
         this.jobService = jobService;
@@ -80,8 +85,9 @@ public class JobController {
                 return ResponseEntity.badRequest().build();
             }
 
-            JobStatus status = statusRepository.findById(statusId.shortValue())
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
+            JobStatus status = statusRepository
+                .findById(statusId.shortValue())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
 
             // --- Create Job entity ---
             Job job = new Job();
@@ -102,21 +108,20 @@ public class JobController {
                     Integer quantity = (Integer) s.getOrDefault("quantity", 1);
 
                     if (serviceId != null) {
-                        Services service = serviceRepository.findById(serviceId)
-                                .orElseThrow(() -> new RuntimeException("Service not found"));
+                        Services service = serviceRepository
+                            .findById(serviceId)
+                            .orElseThrow(() -> new RuntimeException("Service not found"));
                         jobServiceRepository.save(new JobServices(savedJob, service, quantity));
                     }
                 }
             }
 
             return ResponseEntity.ok(savedJob);
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }
-
 
     /**
      * Updates only the job description for a specific job.
@@ -130,17 +135,16 @@ public class JobController {
     @ResponseBody
     public ResponseEntity<Job> updateJobDesc(@PathVariable Integer id, @RequestBody Job job) {
         return jobRepository
-                .findById(id)
-                .map((existing) -> {
-                    // Update only the description field
-                    existing.setJob_description(job.getJob_description());
+            .findById(id)
+            .map((existing) -> {
+                // Update only the description field
+                existing.setJob_description(job.getJob_description());
 
-                    Job updated = jobRepository.save(existing);
-                    return ResponseEntity.ok(updated);
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                Job updated = jobRepository.save(existing);
+                return ResponseEntity.ok(updated);
+            })
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 
     // todo: Aad logic so that if the "link" already exists, a new should not be added but the amount should be updated.
     @PostMapping("/api/repairs/addProduct")
@@ -158,7 +162,6 @@ public class JobController {
             } else {
                 throw new Error("undefined product type");
             }
-
         }
 
         return ResponseEntity.ok("Products added to repair successfully");
@@ -170,7 +173,6 @@ public class JobController {
             Integer repairId = (Integer) data.get("repairId");
             Integer productId = (Integer) data.get("ProductId");
             String productType = (String) data.get("type");
-
 
             if (Objects.equals(productType, "service")) {
                 jobService.removeServiceFromRepair(repairId, productId);

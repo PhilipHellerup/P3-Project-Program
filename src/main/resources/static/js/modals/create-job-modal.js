@@ -34,9 +34,9 @@ let totalWorkCost = document.getElementById('workTotalCost');
     // Show search results, when clicking the search bar which already has a value
     searchBar.addEventListener('click', (e) => {
         if (e.target.value) {
-            showSearchResults(searchTable)
+            showSearchResults(searchTable);
         }
-    })
+    });
 
     // Add an evenetListener to the search bar
     searchBar.addEventListener('input', async (e) => {
@@ -44,30 +44,29 @@ let totalWorkCost = document.getElementById('workTotalCost');
 
         // Get search results using the search Controller API
         let searchParams = searchBar.value;
-        let matches = await fetchSearchMatches(searchParams)
+        let matches = await fetchSearchMatches(searchParams);
 
-        searchResults.innerHTML = ''
+        searchResults.innerHTML = '';
         if (!matches) {
-            searchTable.style.display = "none"
+            searchTable.style.display = 'none';
         } else {
-            matches.forEach(match => {
-                let newResult = document.createElement('tr')
+            matches.forEach((match) => {
+                let newResult = document.createElement('tr');
                 newResult.addEventListener('click', (e) => {
                     // The if the product is already on the list. If it is, increate the quantity by one. If not, add the products to the list.
-                    const existing = modalServices.find(p =>
-                        String(p.product.id) === String(match.id));
+                    const existing = modalServices.find((p) => String(p.product.id) === String(match.id));
 
                     if (existing) {
                         existing.quantity += 1;
                     } else {
-                        modalServices.push({product: match, quantity: 1, productType: "service"});
+                        modalServices.push({ product: match, quantity: 1, productType: 'service' });
                     }
                     // Add the product to modal UI and update the UI
-                    renderProductTable()
+                    renderProductTable();
                     searchBar.value = '';
                     searchBar.select();
-                    hideSearchResults(searchTable)
-                })
+                    hideSearchResults(searchTable);
+                });
                 newResult.innerHTML = `
                     <td class="d-flex justify-content-between">
                         <div>
@@ -82,17 +81,16 @@ let totalWorkCost = document.getElementById('workTotalCost');
                         </div>
                      </div>
                     </td>
-                `
-                searchResults.appendChild(newResult)
-                showSearchResults(searchTable)
-            })
+                `;
+                searchResults.appendChild(newResult);
+                showSearchResults(searchTable);
+            });
         }
-
-    })
+    });
 
     // Eventlistener on the workTime and WorkCost inputs to change totalWorkCost on inputchange
-    workTimeInput.addEventListener('input', handleWorkInputChange)
-    workCostPrMin.addEventListener('input', handleWorkInputChange)
+    workTimeInput.addEventListener('input', handleWorkInputChange);
+    workCostPrMin.addEventListener('input', handleWorkInputChange);
 
     // Attach submit listener to the form (if it exists)
     createRepairForm.addEventListener('submit', function (e) {
@@ -114,19 +112,19 @@ let totalWorkCost = document.getElementById('workTotalCost');
             price_per_minute: parseFloat(document.getElementById('workCost').value || '0'),
             duration: parseFloat(document.getElementById('totalDuration').value || '0'),
             date: isoString,
-            status: {id: parseInt(document.getElementById('jobStatus').value, 10)},
+            status: { id: parseInt(document.getElementById('jobStatus').value, 10) },
         };
 
         // Map services into the array. We only need 'id' and 'quantity' for adding them to the repair
-        const servicesArray = modalServices.map(item => ({
+        const servicesArray = modalServices.map((item) => ({
             id: item.product.id,
-            quantity: item.quantity
+            quantity: item.quantity,
         }));
 
         // Spread the newRepair fields and the services
         const payload = {
             ...newRepair,
-            services: servicesArray
+            services: servicesArray,
         };
 
         // Debugging
@@ -135,7 +133,7 @@ let totalWorkCost = document.getElementById('workTotalCost');
         // Send POST request to create a new job entry
         fetch('/api/jobs/create', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
         })
             .then((r) => {
@@ -174,7 +172,7 @@ async function fetchSearchMatches(searchParam) {
         // Send PUT request to update the job entry
         const r1 = await fetch('/api/search/service?q=' + searchParam, {
             method: 'GET',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
         });
 
         // Get the matches from the response and update the page to show matches
@@ -188,8 +186,7 @@ async function fetchSearchMatches(searchParam) {
 // logic to hide the seach results, when the user clicks outside of the search bar
 // The listener that checks if user clicked outside
 function handleClickOutside(event) {
-    const clickedOutside =
-        !searchResults.contains(event.target) && !searchBar.contains(event.target);
+    const clickedOutside = !searchResults.contains(event.target) && !searchBar.contains(event.target);
 
     if (clickedOutside) {
         hideSearchResults(searchTable);
@@ -219,8 +216,8 @@ function renderProductTable() {
     modalServices.forEach((item) => {
         const row = document.createElement('tr');
         // Set the productid of the row, so that the remove buttons knows which product to remove from modalServices
-        row.dataset.productId = item.product.id
-        row.style.marginBottom = '0'
+        row.dataset.productId = item.product.id;
+        row.style.marginBottom = '0';
         row.innerHTML = `
         <td class="w-15">
             <p class="mt-0">${item.product.name}</p>
@@ -249,7 +246,7 @@ function renderProductTable() {
             const newQty = parseInt(e.target.value, 10);
 
             const id = parseInt(row.dataset.productId, 10);
-            const productItem = modalServices.find(p => p.product.id === id);
+            const productItem = modalServices.find((p) => p.product.id === id);
             if (productItem) {
                 productItem.quantity = newQty;
             }
@@ -258,13 +255,12 @@ function renderProductTable() {
             if (newQty) {
                 updatePriceAndDuration();
             }
-
         });
 
         row.querySelector('.remove-btn').addEventListener('click', () => {
             const id = parseInt(row.dataset.productId, 10);
-            modalServices = modalServices.filter(p => p.product.id !== id);
-            renderProductTable(modalServices)
+            modalServices = modalServices.filter((p) => p.product.id !== id);
+            renderProductTable(modalServices);
         });
 
         tableBody.appendChild(row);
@@ -272,13 +268,11 @@ function renderProductTable() {
         // Update price and duration
         updatePriceAndDuration();
     });
-
-
 }
 
 function handleWorkInputChange() {
     totalWorkCost.innerText = (Number(workTimeInput.value) * Number(workCostPrMin.value)).toFixed(2);
-    updatePriceAndDuration()
+    updatePriceAndDuration();
 }
 
 function updatePriceAndDuration() {
@@ -286,33 +280,32 @@ function updatePriceAndDuration() {
     // Calculate and set to total duration of the job. This duration can later be editid by the user
     let duration = 0;
     let total = 0;
-    modalServices.forEach(service => {
+    modalServices.forEach((service) => {
         total += service.product.price * service.quantity;
-        duration += service.product.duration * service.quantity
+        duration += service.product.duration * service.quantity;
     });
-    total += parseInt(totalWorkCost.innerText)
+    total += parseInt(totalWorkCost.innerText);
     totalPrice.innerText = total;
     totalDuration.value = duration;
-
 }
 
 // Function to add the services chosen here to the products.
 function addServicesToRepair() {
     // Define the payload to send
-    const payload = modalServices.map(item => ({
-        repairId: "8", // Placeholder. Find a way to get the id of the new created repair
+    const payload = modalServices.map((item) => ({
+        repairId: '8', // Placeholder. Find a way to get the id of the new created repair
         productId: item.product.id,
         quantity: item.quantity,
-        type: item.productType
-    }))
+        type: item.productType,
+    }));
 
-    fetch("api/repairs/addProduct", {
+    fetch('api/repairs/addProduct', {
         method: post,
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
     }).then((r) => {
         if (!r.ok) {
-            throw new Error("failed to add product to repair")
+            throw new Error('failed to add product to repair');
         }
-    })
+    });
 }

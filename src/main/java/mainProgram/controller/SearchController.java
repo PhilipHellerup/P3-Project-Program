@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import mainProgram.services.JobService;
 import mainProgram.services.ServiceService;
 import mainProgram.services.productService;
@@ -34,10 +33,10 @@ public class SearchController {
     }
 
     ///  this is not working anymore, but maybe we need a search to only get parts somewhere.
-//    @GetMapping("/part")
-//    public List<Product> searchProduct(@RequestParam String q) {
-//        return productService.search(q);
-//    }
+    //    @GetMapping("/part")
+    //    public List<Product> searchProduct(@RequestParam String q) {
+    //        return productService.search(q);
+    //    }
     @GetMapping("/service")
     public List<Services> searchService(@RequestParam String q) {
         return serviceService.search(q);

@@ -23,9 +23,7 @@ public class Services {
         this.duration = duration;
     }
 
-    public Services() {
-
-    }
+    public Services() {}
 
     // Getters
     public String getName() {

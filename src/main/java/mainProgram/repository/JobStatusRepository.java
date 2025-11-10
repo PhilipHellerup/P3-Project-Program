@@ -1,11 +1,10 @@
 package mainProgram.repository;
 
+import java.util.List;
 import mainProgram.table.JobServices;
 import mainProgram.table.JobStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Repository interface for JobStatus entity database operations.
@@ -34,5 +33,4 @@ import java.util.List;
  * @see JpaRepository
  */
 @Repository
-public interface JobStatusRepository extends JpaRepository<JobStatus, Short> {
-}
+public interface JobStatusRepository extends JpaRepository<JobStatus, Short> {}
