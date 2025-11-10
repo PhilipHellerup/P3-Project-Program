@@ -81,7 +81,7 @@
             </table>
           </div>
         </div>
-
+          
         <!-- Description Card: brief job description and its edit button -->
         <div class="card ms-2" style="width: 100%">
           <div class="card-header d-inline-flex justify-content-between align-items-center">
@@ -151,34 +151,47 @@
       <div
         class="final-table-content-container d-flex justify-content-between align-items-start mt-3"
         style="width: 100%"
-      
+
       >
         <!-- Left Side: Button to add a product. You might wire this to a modal or product selector. -->
         <button type="button" class="btn btn-primary">Tilføj Produkt</button>
 
-        <!-- Right Side: Totals table (static values here). Replace with computed values if needed. -->
+        <!-- Right Side: Totals table (static values here). Replace with computed values: here are all set to 0 as default. -->
         <table class="table table-borderless mb-0" style="width: auto">
           <tbody>
             <tr>
               <td class="fs-5"><b>Pris:</b></td>
-              <td class="fs-5">1.539,90 Kr.</td>
+              <td class="fs-5" id="subtotal" > 0 Kr.</td>
             </tr>
             <tr>
               <td class="fs-5"><b>Moms:</b></td>
-              <td class="fs-5">384,98 Kr.</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
+              <td class="fs-5" id="moms" > 0 Kr.</td>
             </tr>
             <tr>
               <td class="fs-5"><b>Total:</b></td>
-              <td class="fs-5"><b>1.924,88 Kr.</b></td>
+              <td class="fs-5" id="total"><b>0 Kr.</b></td>
             </tr>
           </tbody>
+             <!-- Final price + moms: It takes the price of item from the list and adds it together then plus the 25% ()-->
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            let subtotal = 0;
+          
+            document.querySelectorAll('.product-table-content-container tbody tr td:nth-child(4) p')
+              .forEach(cell => subtotal += parseFloat(cell.textContent.replace(/[^\d.,-]/g, '').replace(',', '.')) || 0);
+          
+            const moms = subtotal * 0.25;
+            const total = subtotal + moms;
+          
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' Kr.';
+            document.getElementById('moms').textContent = moms.toFixed(2) + ' Kr.';
+            document.getElementById('total').textContent = total.toFixed(2) + ' Kr.';
+          });
+          </script>
         </table>
       </div>
     </div>
+    
 
     <script src="/js/bootstrap.js"></script>
     <script src="/js/html.js"></script>
