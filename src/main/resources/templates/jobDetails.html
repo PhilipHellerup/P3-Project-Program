@@ -249,23 +249,26 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                 <td class="fs-5"><b>Total:</b></td>
                 <td class="fs-6" id="total"><b>0 Kr.</b></td>
             </tr>
-            </tbody>
-            <!-- Final price + moms: It takes the price of item from the list and adds it together then plus the 25% ()-->
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    let subtotal = 0;
+          </tbody>
+             <!-- Final price + moms: It takes the price of item from the list and adds it together then plus the 25% ()-->
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            let subtotal = 0;
+          
+            document.querySelectorAll('.product-table-content-container tbody tr td:nth-child(4) p')
+              .forEach(cell => subtotal += parseFloat(cell.textContent.replace(/[^\d.,-]/g, '').replace(',', '.')) || 0);
+          
+            const moms = subtotal * 0.25;
+            const total = subtotal + moms;
 
-                    document.querySelectorAll('.product-table-content-container tbody tr td:nth-child(5) p')
-                        .forEach(cell => subtotal += parseFloat(cell.textContent.replace(/[^\d.,-]/g, '').replace(',', '.')) || 0);
-
-                    const moms = subtotal * 0.25;
-                    const total = subtotal + moms;
-
-                    document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' Kr.';
-                    document.getElementById('moms').textContent = moms.toFixed(2) + ' Kr.';
-                    document.getElementById('total').textContent = total.toFixed(2) + ' Kr.';
-                });
-            </script>
+            // Here it rewrites the total price in Danish currency = DKK
+            const formatDK = num => num.toLocaleString('da-DK', { minimumFractionDigits: 2 ,maximumFractionDigits: 2 });
+          
+            document.getElementById('subtotal').textContent = `${formatDK(subtotal)} Kr.`;
+            document.getElementById('moms').textContent = `${formatDK(moms)} Kr.`;
+            document.getElementById('total').textContent =`${formatDK(total)} Kr.`;
+          });
+          </script>
         </table>
     </div>
 </div>
