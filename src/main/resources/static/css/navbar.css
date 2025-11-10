@@ -1,152 +1,152 @@
 /* Venstrestillet vertikal navbar */
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .sidebar-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 13rem;
-  height: 100%;
-  background: #1f2937;
-  color: #ffffff;
-  transform: translateX(-100%); /* Start hidden */
-  transition: transform 0.3s ease-in-out;
-  z-index: 1001;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 13rem;
+    height: 100%;
+    background: #1f2937;
+    color: #ffffff;
+    transform: translateX(-100%); /* Start hidden */
+    transition: transform 0.3s ease-in-out;
+    z-index: 1001;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .content-push {
-  margin-left: 13rem; /* Matches sidebar width */
+    margin-left: 13rem; /* Matches sidebar width */
 }
 
 .with-navbar .sidebar-nav {
-  transform: translateX(0);
+    transform: translateX(0);
 }
 
 .nav-header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 22px 20px;
-  border-bottom: 1px solid #374151;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 20px;
+    border-bottom: 1px solid #374151;
 }
 
 .logo {
-  width: 90%;
-  max-width: 180px;
+    width: 90%;
+    max-width: 180px;
 }
 
 .nav-header h2 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #f3f4f6;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #f3f4f6;
 }
 
 .nav-menu {
-  list-style: none;
-  padding: 12px 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+    list-style: none;
+    padding: 12px 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .nav-item {
-  width: 100%;
+    width: 100%;
 }
 
 .nav-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 12px 18px;
-  color: #e5e7eb;
-  text-decoration: none;
-  border-left: 3px solid transparent;
-  transition:
-    background-color 0.2s ease,
-    transform 0.1s ease,
-    border-color 0.2s ease;
-  border-radius: 4px 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 18px;
+    color: #e5e7eb;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition:
+        background-color 0.2s ease,
+        transform 0.1s ease,
+        border-color 0.2s ease;
+    border-radius: 4px 0 0 4px;
 }
 
 .nav-link:hover {
-  background-color: #111827;
-  border-left-color: #3b82f6; /* blå accent */
-  transform: translateX(4px);
+    background-color: #111827;
+    border-left-color: #3b82f6; /* blå accent */
+    transform: translateX(4px);
 }
 
 .nav-text {
-  font-size: 15px;
-  font-weight: 500;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 /* Hovedindhold rykkes til højre for at give plads til navbar */
 .main-content {
-  margin-left: 240px; /* samme som sidebar bredde */
-  padding: 24px;
-  min-height: 100vh;
-  background-color: #f9fafb;
-  color: #111827;
+    margin-left: 240px; /* samme som sidebar bredde */
+    padding: 24px;
+    min-height: 100vh;
+    background-color: #f9fafb;
+    color: #111827;
 }
 
 /* Gør headeren lidt pænere uden at forstyrre resten */
 .header {
-  margin-bottom: 16px;
+    margin-bottom: 16px;
 }
 
 /* Adjust page margin, when navbar is present */
 .body.with-navbar {
-  margin-left: 13rem;
+    margin-left: 13rem;
 }
 
 /* Navbar button style */
 .close-navbar-btn,
 .open-navbar-btn {
-  width: 40px;
-  height: 40px;
-  background-color: #303e51;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s;
-  position: relative;
-  flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background-color: #303e51;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+    position: relative;
+    flex-shrink: 0;
 }
 
 /* Navbar close button style */
 .close-navbar-btn {
-  left: 10%;
-  border-radius: 50%; /* Makes it circular */
-  transition: left 0.1s;
+    left: 10%;
+    border-radius: 50%; /* Makes it circular */
+    transition: right 0.1s;
 }
 
 .close-navbar-btn:hover {
-  background-color: #3b82f6;
+    background-color: #3b82f6;
 }
 
 /* Navbar open button style */
 .open-navbar-btn {
-  width: 40px;
-  padding-left: 20px;
-  border-top-right-radius: 50%;
-  border-bottom-right-radius: 50%;
-  position: fixed;
-  top: 2.3%;
-  left: -1%;
-  transition: left 0.1s;
+    width: 40px;
+    padding-left: 20px;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    position: fixed;
+    top: 2.3%;
+    left: -1%;
+    transition: left 0.1s;
 }
 
 .open-navbar-btn:hover {
-  background-color: #3b82f6;
-  left: 0;
+    background-color: #3b82f6;
+    left: 0;
 }
