@@ -65,19 +65,17 @@ let searchBar = document.getElementById('searchBar');
                     <td class="d-flex justify-content-between">
                         <div>
                            <p class="fs-6 mb-0">${match.name}</p>
-                           <p class="text-secondary mb-0 fs-7">${match.type}</p>
+                           <p class="text-secondary mb-0 fs-7">${match.type === "service" ? "Ydelse" : match.type === "part" ? "Reservedel" : "Udefineret type"}</p>
                         </div>
                         <div>
-                           <p class="fs-6 mb-0 text-secondary">${match.type === "service" ? "Ydelse" : match.type === "part" ? "Reservedel" : "Udefineret type"}</p>
+                           <p class="fs-6 mb-0 text-secondary"></p>
                         </div>
                     <div class="d-flex justify-content-between gap-5">
                         <div>
-                           <p class="fs-6 mb-0">EAN</p>
-                           <p class="text-secondary mb-0 fs-7">${match.ean}</p> <!-- EAN has to be lowercase (ean), beucase the JSON ojbect "match" from the HTTP repose, are lowercase -->
+                           <p class="text-secondary mb-0 fs-7">${match.type === "part" ? match.EAN : ''}</p> <!-- EAN has to be lowercase (ean), beucase the JSON ojbect "match" from the HTTP repose, are lowercase -->
                         </div>
                            <div>
-                           <p class="fs-6 mb-0">Pris</p>
-                           <p class="text-secondary mb-0 fs-7">${match.price}</p>
+                           <p class="text-secondary mb-0 fs-7">${match.price} kr.</p>
                         </div>
                      </div>
                     </td>
@@ -144,10 +142,10 @@ function renderProductTable() {
                        value="${item.quantity}" min="1" style="width: 3rem;">
         </td>
         <td class="w-30">
-            <p class="mt-0">${item.product.price}</p>
+            <p class="mt-0">${item.product.price} kr.</p>
         </td>
         <td class="w-30">
-            <p class="mt-0">${item.product.price}</p>
+            <p class="total-cost-field mt-0">${item.product.price * item.quantity} kr.</p>
         </td>
         <td class="w-10 text-center">
             <button type="button" class="btn btn-sm btn-danger remove-btn">X</button>
@@ -156,13 +154,14 @@ function renderProductTable() {
 
         // Listen for quantity change in the input field for each row. When the quantity is changed, also change the quantity attribute in the modalProducts array
         const qtyInput = row.querySelector('.quantity-input');
-        qtyInput.addEventListener('input', (e) => {
+        qtyInput.addEventListener('change', (e) => {
             const newQty = parseInt(e.target.value, 10);
 
             const id = parseInt(row.dataset.productId, 10);
             const productItem = modalProducts.find(p => p.product.id === id);
             if (productItem) {
                 productItem.quantity = newQty;
+                renderProductTable() // Also rerender the product table, to show the correct
             }
         });
 
