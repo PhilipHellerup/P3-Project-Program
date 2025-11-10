@@ -30,7 +30,7 @@
     <script src="/js/productPagination.js"></script>
 </head>
 
-<body>
+<body class="d-flex justify-content-center with-navbar content-push" style="background-color: #f5f5f5;">
 <!-- === Navbar Section === -->
 <!-- Navigation bar dynamically injected at runtime via navbar.js -->
 <nav>
@@ -38,7 +38,7 @@
 </nav>
 
 <!-- === Main Page Container (No Nav Bar) === -->
-<div class="page-content-container m-4 mt-1 flex-1 p-5">
+<div class="page-content-container w-95 d-flex flex-column m-5 p-4 border secondary-border-subtle rounded-4 shadow-sm" style="background-color: white;">
     <!-- Page Header -->
     <div class="page-head d-flex justify-content-end">
         <!-- "Add Product" button opens the modal below -->
@@ -97,7 +97,7 @@
     </div>
 
     <!-- === Search Bar Section === -->
-    <div class="search-bar mt-5">
+    <div class="search-bar mt-3">
         <nav class="navbar navbar-light">
             <form class="d-inline-flex" style="width: 40rem">
                 <!-- Search Input -->
@@ -114,7 +114,7 @@
 
     <!-- === Product Table === -->
     <!-- Displays a list of products dynamically rendered by Thymeleaf -->
-    <div class="mt-6">
+    <div class="mt-4">
         <table class="table table-striped">
             <thead>
             <tr>
