@@ -182,10 +182,13 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
           
             const moms = subtotal * 0.25;
             const total = subtotal + moms;
+
+            // Here it rewrites the total price in Danish currency = DKK
+            const formatDK = num => num.toLocaleString('da-DK', { minimumFractionDigits: 2 ,maximumFractionDigits: 2 });
           
-            document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' Kr.';
-            document.getElementById('moms').textContent = moms.toFixed(2) + ' Kr.';
-            document.getElementById('total').textContent = total.toFixed(2) + ' Kr.';
+            document.getElementById('subtotal').textContent = `${formatDK(subtotal)} Kr.`;
+            document.getElementById('moms').textContent = `${formatDK(moms)} Kr.`;
+            document.getElementById('total').textContent =`${formatDK(total)} Kr.`;
           });
           </script>
         </table>
