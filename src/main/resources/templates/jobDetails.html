@@ -81,7 +81,7 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                 </table>
             </div>
         </div>
-          
+
         <!-- Description Card: brief job description and its edit button -->
         <div class="card ms-2" style="width: 100%">
             <div class="card-header d-inline-flex justify-content-between align-items-center">
@@ -126,33 +126,44 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                 <th scope="col">Antal</th>
                 <th scope="col">Styk Pris</th>
                 <th scope="col">Total Pris</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="jp : ${jobParts}">
-                <td class="w-15">
+                <td class="w-30">
                     <p class="m-1" th:text="${jp.product.name}"></p>
                 </td>
-                <td class="w-15">
+                <td class="w-25">
                     <p class="m-1" th:text="${jp.quantity}"></p>
                 </td>
-                <td class="w-30">
-                    <p class="m-1" th:text="${jp.product.price}"></p>
+                <td class="w-15">
+                    <p class="m-1 d-inline"
+                       th:text="${#numbers.formatDecimal(jp.product.price, 2, 2,'COMMA')}"></p>
+                    <p class="d-inline">kr.</p>
                 </td>
-                <td class="w-30" th:with="result=${jp.product.price * jp.quantity}">
-                    <p class="m-1" th:text="${result}"></p>
+                <td class="w-15" th:with="totalPrice=${jp.product.price * jp.quantity}">
+                    <p class="m-1 d-inline" th:text="${#numbers.formatDecimal(totalPrice, 2, 2,'COMMA')}"></p>
+                    <p class="d-inline">kr.</p>
                 </td>
+                <td class="p-0">
+                    <button type="button" class="btn btn-sm btn-danger remove-btn"
+                            th:attr="data-id=${jp.product.id}, data-type='part' "
+                    >X
+                    </button>
+                </td>
+
             </tr>
             </tbody>
         </table>
     </div>
 
-      <!-- Button + Final Price Table: action button on left, totals on right -->
-      <div
-        class="final-table-content-container d-flex justify-content-between align-items-start mt-3"
-        style="width: 100%"
+    <!-- Button + Final Price Table: action button on left, totals on right -->
+    <div
+            class="final-table-content-container d-flex justify-content-between align-items-start mt-3"
+            style="width: 100%"
 
-      >
+    >
         <!-- Left Side: Button to add a product. You might wire this to a modal or product selector. -->
         <button id="add-product-btn" type="button" class="btn btn-primary">Tilføj Produkt</button>
 
@@ -160,34 +171,34 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
         <table class="table table-borderless mb-0" style="width: auto">
             <tbody>
             <tr>
-              <td class="fs-5"><b>Pris:</b></td>
-              <td class="fs-5" id="subtotal" > 0 Kr.</td>
+                <td class="fs-5"><b>Pris:</b></td>
+                <td class="fs-5" id="subtotal"> 0 Kr.</td>
             </tr>
             <tr>
-              <td class="fs-5"><b>Moms:</b></td>
-              <td class="fs-5" id="moms" > 0 Kr.</td>
+                <td class="fs-5"><b>Moms:</b></td>
+                <td class="fs-5" id="moms"> 0 Kr.</td>
             </tr>
             <tr>
-              <td class="fs-5"><b>Total:</b></td>
-              <td class="fs-5" id="total"><b>0 Kr.</b></td>
+                <td class="fs-5"><b>Total:</b></td>
+                <td class="fs-5" id="total"><b>0 Kr.</b></td>
             </tr>
-          </tbody>
-             <!-- Final price + moms: It takes the price of item from the list and adds it together then plus the 25% ()-->
-        <script>
-          document.addEventListener('DOMContentLoaded', () => {
-            let subtotal = 0;
-          
-            document.querySelectorAll('.product-table-content-container tbody tr td:nth-child(4) p')
-              .forEach(cell => subtotal += parseFloat(cell.textContent.replace(/[^\d.,-]/g, '').replace(',', '.')) || 0);
-          
-            const moms = subtotal * 0.25;
-            const total = subtotal + moms;
-          
-            document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' Kr.';
-            document.getElementById('moms').textContent = moms.toFixed(2) + ' Kr.';
-            document.getElementById('total').textContent = total.toFixed(2) + ' Kr.';
-          });
-          </script>
+            </tbody>
+            <!-- Final price + moms: It takes the price of item from the list and adds it together then plus the 25% ()-->
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    let subtotal = 0;
+
+                    document.querySelectorAll('.product-table-content-container tbody tr td:nth-child(4) p')
+                        .forEach(cell => subtotal += parseFloat(cell.textContent.replace(/[^\d.,-]/g, '').replace(',', '.')) || 0);
+
+                    const moms = subtotal * 0.25;
+                    const total = subtotal + moms;
+
+                    document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' Kr.';
+                    document.getElementById('moms').textContent = moms.toFixed(2) + ' Kr.';
+                    document.getElementById('total').textContent = total.toFixed(2) + ' Kr.';
+                });
+            </script>
         </table>
     </div>
 </div>

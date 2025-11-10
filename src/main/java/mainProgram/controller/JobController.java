@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import jakarta.transaction.Transactional;
 import mainProgram.repository.JobRepository;
 import mainProgram.repository.JobServiceRepository;
 import mainProgram.repository.JobStatusRepository;
@@ -165,10 +166,11 @@ public class JobController {
     }
 
     @PostMapping("/api/repairs/removeProduct")
+    @Transactional
     public ResponseEntity<String> removeProductFromRepair(@RequestBody List<Map<String, Object>> dataList) {
         for (Map<String, Object> data : dataList) {
             Integer repairId = (Integer) data.get("repairId");
-            Integer productId = (Integer) data.get("ProductId");
+            Integer productId = (Integer) data.get("productId");
             String productType = (String) data.get("type");
 
 
