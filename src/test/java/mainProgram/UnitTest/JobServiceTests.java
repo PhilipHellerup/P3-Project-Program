@@ -1,4 +1,4 @@
-package mainProgram;
+package mainProgram.UnitTest;
 
 import mainProgram.repository.*;
 import mainProgram.services.JobService;

@@ -1,4 +1,4 @@
-package mainProgram;
+package mainProgram.UnitTest;
 
 import mainProgram.table.JobStatus;
 import org.junit.jupiter.api.Test;

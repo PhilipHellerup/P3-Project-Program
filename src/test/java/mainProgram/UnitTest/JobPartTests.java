@@ -1,4 +1,4 @@
-package mainProgram;
+package mainProgram.UnitTest;
 
 import mainProgram.table.Job;
 import mainProgram.table.JobPart;
