@@ -4,14 +4,12 @@ package mainProgram.table; // Project Organization
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /* --- Product Class --- */
 // Represents a product in the system
 // This entity is mapped to the "products" table in the database.
 // Each Product can be linked to multiple JobParts (via one-to-many relationship).
-@Entity // Marks this class as a JPA entity (maps to a database table)
+@Entity                   // Marks this class as a JPA entity (maps to a database table)
 @Table(name = "products") // Explicitly sets the table name in the database
 public class Product {
 
@@ -34,18 +32,18 @@ public class Product {
 
     private Double price; // Maps to: price
 
+
     // One-to-Many Relationship: One Product can be associated with many JobParts.
+
     /**
      * @mappedBy "product"
      * Indicates that the JobPart entity owns the relationship
      * through its "product" field. This makes it a bidirectional
      * relationship where JobPart has the foreign key.
-     *
      * @cascade CascadeType.ALL
      * All JPA operations (persist, merge, remove, refresh, detach)
      * performed on this Product will cascade to associated JobParts.
      * EXAMPLE: Deleting a Product will also delete all its JobParts.
-     *
      * @orphanRemoval true
      * If a JobPart is removed from this list, it will be automatically
      * deleted from the database. This ensures no orphaned JobPart records
@@ -67,7 +65,8 @@ public class Product {
     }
 
     // No-Parameter constructor required by JPA/Hibernate, when fetching Product objects from the database
-    public Product() {}
+    public Product() {
+    }
 
     // Methods
     // Getters
