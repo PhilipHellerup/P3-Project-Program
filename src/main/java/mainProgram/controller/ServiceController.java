@@ -28,8 +28,9 @@ public class ServiceController {
     // CREATE
     // Handles POST requests to create a new service
     // Endpoint: POST /api/services
+    /** @param service the service object to create **/
+    /** @return ResponseEntity containing the created service if successful (HTTP 200 OK) **/
     @PostMapping
-    // #TODO: PARAM COMMENTS PLEASE!
     public ResponseEntity<Services> createService(@RequestBody Services service) {
         // Save the new service to the database using the repository and its .save() method.
         Services savedService = serviceRepository.save(service);
@@ -41,7 +42,9 @@ public class ServiceController {
     // DELETE
     // Handles DELETE requests to remove a service by ID
     // Endpoint: DELETE /api/services/{id}
-    // #TODO: PARAM COMMENTS PLEASE!
+    /** @param id the unique id of the service to delete **/
+    /** @return ResponseEntity with HTTP 204 No Content if deletion is successful,
+     **         or HTTP 404 Not Found if the service does not exist **/
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteService(@PathVariable int id) {
         // Check if the service with the given ID exists
@@ -62,8 +65,11 @@ public class ServiceController {
     // Handles PUT requests to update a service by ID
     // Endpoint: PUT /api/services/{id}
     // The frontend sends a JSON body containing fields to update: name, price, duration
+    /** @param id the unique id of the service to update **/
+    /** @param updates a Map containing field names as keys and new values as values **/
+    /** @return ResponseEntity containing the updated service (HTTP 200 OK) if found and updated,
+     **         or HTTP 404 Not Found if the service with the given ID does not exist **/
     @PutMapping("/{id}")
-    // #TODO: PARAM COMMENTS PLEASE!
     public ResponseEntity<?> editService(@PathVariable int id, @RequestBody Map<String, Object> updates) {
         // Find the service by ID
         return serviceRepository.findById(id).map(service -> {

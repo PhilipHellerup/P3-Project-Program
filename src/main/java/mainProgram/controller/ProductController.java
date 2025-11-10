@@ -38,6 +38,9 @@ public class ProductController {
     // Deletes a specific product from the database based on its ID.
     // Triggered when a DELETE request is sent to "/api/products/{id}"-
     // Example: request: DELETE /api/products/5 will delete the product with id "5".
+    /** @param id the unique id of the product to delete **/
+    /** @return ResponseEntity with HTTP 204 No Content if deletion is successful,
+     **         or HTTP 404 Not Found if the service does not exist **/
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable int id) {
         // Check if a product with the given ID exists before attempting deletion
@@ -57,6 +60,10 @@ public class ProductController {
     // Handles HTTP PUT requests to update a product by its ID.
     // Base path: /api/products/{id}
     // The frontend sends a JSON body containing the fields to update (name, price, etc.)
+    /** @param id the unique id of the product to update **/
+    /** @param updates a Map containing field names as keys and new values as values **/
+    /** @return ResponseEntity containing the updated service (HTTP 200 OK) if found and updated,
+     **         or HTTP 404 Not Found if the product with the given ID does not exist **/
     @PutMapping("/{id}")
     public ResponseEntity<?> editProduct(@PathVariable int id, @RequestBody Map<String, Object> updates) {
         // Look up the product in the database by ID

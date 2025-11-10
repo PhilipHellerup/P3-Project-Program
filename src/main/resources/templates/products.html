@@ -20,14 +20,17 @@
     <!-- Bootstrap JavaScript (for modals, dropdowns, etc.) -->
     <script type="module" src="/js/bootstrap.js"></script>
 
-    <!-- Custom JS: Handles delete button and other product actions -->
+    <!-- Custom JS: Handles Fetch Errors in both "addProductsModal.js" and "productActions.js" -->
+    <script type="module" src="/js/utils/fetchUtils.js"></script>
+
+    <!-- Custom JS: Handles delete and edit functionality in the Product Table -->
     <script type="module" src="/js/productActions.js"></script>
+
+    <!-- Custom JS: Handles delete and edit functionality in the Service Table -->
+    <script type="module" src="/js/serviceActions.js"></script>
 
     <!-- Custom JS: Handles the 'Add Product' modal form behavior -->
     <script type="module" src="/js/modals/addProductsModal.js"></script>
-
-    <!-- Custom JS: Handles Fetch Errors in both "addProductsModal.js" and "productActions.js" -->
-    <script type="module" src="/js/utils/fetchUtils.js"></script>
 
     <!-- Custom JS: Pagination = Handles client-side page switching -->
     <script src="/js/productPagination.js"></script>
@@ -151,7 +154,7 @@
     <div class="mt-5-5">
         <!-- Displays the product table only if the products tab/filter is active -->
         <div th:if="${currentFilter == 'products'}">
-            <table class="table table-striped">
+            <table id="productTable" class="table table-striped">
                 <thead>
                 <tr>
                   <th scope="col">Varenr.</th>
@@ -193,7 +196,7 @@
     <div class="mt-5-5">
         <!-- Displays the service table only if the services tab/filter is active -->
         <div th:if="${currentFilter == 'services'}">
-            <table class="table table-striped">
+            <table id="serviceTable" class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -208,7 +211,7 @@
                 <!-- Thymeleaf loop: Generates one <tr> per service in 'services' list -->
                 <!-- data-id attribute is set dynamically to product.id (used by JS delete logic) -->
                 <tr th:each="service : ${services}" th:attr="data-id=${service.id}">
-                    <td data-field="id" class="fs-5" contenteditable="false" th:text="${service.id}"></td>
+                    <td data-field="id" class="fs-5" th:text="${service.id}"></td>
                     <td data-field="name" class="fs-5" contenteditable="false" th:text="${service.name}"></td>
                     <td data-field="price" class="fs-5" contenteditable="false" th:text="${#numbers.formatDecimal(service.price, 2, 'POINT', 2, 'COMMA')} + ' Kr.'"></td>
                     <td data-field="duration" class="fs-5" contenteditable="false" th:text="${service.duration}"></td>
