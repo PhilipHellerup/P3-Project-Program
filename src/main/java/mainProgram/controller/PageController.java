@@ -3,6 +3,7 @@ package mainProgram.controller; // Project Organization
 /* --- Imports --- */
 import java.util.List;
 import mainProgram.table.Product;
+import mainProgram.table.Services;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import mainProgram.services.JobService;
 import mainProgram.repository.JobPartRepository;
 import mainProgram.repository.JobRepository;
 import mainProgram.repository.ProductRepository;
+import mainProgram.repository.ServiceRepository;
 import mainProgram.table.Job;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -27,7 +29,9 @@ public class PageController {
     private final JobRepository jobRepository;
     private final JobService jobService;
     private final ProductRepository productRepository;
+    private final ServiceRepository serviceRepository;
     private final JobPartRepository jobPartRepository;
+
 
     // Constructor for Dependency Injection
     /**
@@ -36,10 +40,11 @@ public class PageController {
      * @param productRepository the repository for accessing product data
      * @param jobPartRepository the repository for connecting jobs and products
      **/
-    public PageController(JobRepository jobRepository, JobService jobService, ProductRepository productRepository, JobPartRepository jobPartRepository) {
+    public PageController(JobRepository jobRepository, JobService jobService, ProductRepository productRepository, ServiceRepository serviceRepository, JobPartRepository jobPartRepository) {
         this.jobRepository = jobRepository;
         this.jobService = jobService;
         this.productRepository = productRepository;
+        this.serviceRepository = serviceRepository;
         this.jobPartRepository = jobPartRepository;
     }
 
@@ -96,8 +101,14 @@ public class PageController {
         // using the variable name "products" for rendering in tables, forms, etc.
         model.addAttribute("products", products);
 
-        // Load services (replace with real service repository)
-        model.addAttribute("services", List.of()); // TODO: Replace with actual services list
+        // Retrieve all services from the repository and sort by ID in ascending order.
+        // Sorting by ID ensures consistent ordering in the service table on the product page.
+        List<Services> services = serviceRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+
+        // Add the list of services to the model with the key "services".
+        // This allows the Thymeleaf template (products.html) to access the services
+        // using the variable name "services" for rendering in tables, forms, etc.
+        model.addAttribute("services", services); // Add services to the model
 
         // Return the name of the template to be rendered.
         // Spring resolves this to "templates/products.html" by default.
