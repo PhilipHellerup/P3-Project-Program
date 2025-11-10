@@ -144,10 +144,10 @@ function renderProductTable() {
                        value="${item.quantity}" min="1" style="width: 3rem;">
         </td>
         <td class="w-30">
-            <p class="mt-0">${item.product.price}</p>
+            <p class="mt-0">${item.product.price} kr.</p>
         </td>
         <td class="w-30">
-            <p class="mt-0">${item.product.price}</p>
+            <p class="mt-0">${item.product.price * item.quantity} kr.</p>
         </td>
         <td class="w-10 text-center">
             <button type="button" class="btn btn-sm btn-danger remove-btn">X</button>
@@ -156,13 +156,14 @@ function renderProductTable() {
 
         // Listen for quantity change in the input field for each row. When the quantity is changed, also change the quantity attribute in the modalProducts array
         const qtyInput = row.querySelector('.quantity-input');
-        qtyInput.addEventListener('input', (e) => {
+        qtyInput.addEventListener('change', (e) => {
             const newQty = parseInt(e.target.value, 10);
 
             const id = parseInt(row.dataset.productId, 10);
             const productItem = modalProducts.find(p => p.product.id === id);
             if (productItem) {
                 productItem.quantity = newQty;
+                renderProductTable(modalProducts)
             }
         });
 

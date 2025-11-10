@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import jakarta.transaction.Transactional;
 import mainProgram.repository.JobRepository;
 import mainProgram.repository.JobServiceRepository;
 import mainProgram.repository.JobStatusRepository;
@@ -89,6 +90,9 @@ public class JobController {
             job.setCustomer_name((String) body.get("customer_name"));
             job.setCustomer_phone((String) body.get("customer_phone"));
             job.setJob_description((String) body.get("job_description"));
+            job.setWork_time_minutes((Integer) body.get("work_time_minutes"));
+            job.setPrice_per_minute(((Number) body.get("price_per_min")).doubleValue());
+            job.setDuration((Integer) body.get("duration"));
             job.setDate(LocalDateTime.parse(dateString));
             job.setStatus(status);
 
@@ -165,10 +169,11 @@ public class JobController {
     }
 
     @PostMapping("/api/repairs/removeProduct")
+    @Transactional
     public ResponseEntity<String> removeProductFromRepair(@RequestBody List<Map<String, Object>> dataList) {
         for (Map<String, Object> data : dataList) {
             Integer repairId = (Integer) data.get("repairId");
-            Integer productId = (Integer) data.get("ProductId");
+            Integer productId = (Integer) data.get("productId");
             String productType = (String) data.get("type");
 
 

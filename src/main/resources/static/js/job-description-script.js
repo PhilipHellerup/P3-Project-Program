@@ -66,4 +66,39 @@ document.addEventListener('DOMContentLoaded', () => {
         window.openAddProductToRepairModal()
     })
 
+    // Event listener to remove a product from a repair
+    const removeBtns = document.querySelectorAll('.remove-btn');
+
+    removeBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            let productId = parseInt(e.target.getAttribute("data-id"));
+            let repairId = getRepairIdFromUrl(); // Use a function "add-product-to-repair-modal.js" to get the repair id from the url.
+            let type = e.target.getAttribute("data-type");
+
+            let payload = [{
+                repairId,
+                productId,
+                type,
+            }];
+
+            console.log(payload)
+            console.log(JSON.stringify(payload))
+
+            fetch("/api/repairs/removeProduct", {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload),
+            }).then((r) => {
+                console.log("trying to parse")
+                if (!r.ok) throw new Error('Create failed'); // Handle HTTP errors
+                return r.text();
+            }).then((r) => {
+                console.log("trying to reload")
+                window.location.reload()
+            })
+
+        })
+    })
+
+
 });
