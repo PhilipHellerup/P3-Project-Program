@@ -17,14 +17,44 @@ document.addEventListener('DOMContentLoaded', function () {
     const submitProductBtn = document.getElementById('submitProductBtn');
     const submitServiceBtn = document.getElementById('submitServiceBtn');
 
+    // Modal Title
+    const modalTitle = document.getElementById('modalTitle');
+
+    // Reset Modal whenever it is close down
+    const addProductModal = document.getElementById('addProductModal');
+    addProductModal.addEventListener('hidden.bs.modal', () => {
+        // Show the choice menu
+        choiceMenu.classList.remove('d-none');
+
+        // Hide both forms
+        productForm.classList.add('d-none');
+        serviceForm.classList.add('d-none');
+
+        // Hide submit buttons
+        submitProductBtn.classList.add('d-none');
+        submitServiceBtn.classList.add('d-none');
+
+        // Clear input values in the service and product form for clear state
+        productForm.reset();
+        serviceForm.reset();
+
+        // Change modal title to fit the choice menu
+        modalTitle.textContent = "Tilføj Produkter";
+    });
+
     /* --- SHOW PRODUCT FORM --- */
     addPartBtn.addEventListener('click', () => {
         // Hide the choice menu
         choiceMenu.classList.add('d-none');
+
         // Show product form
         productForm.classList.remove('d-none');
+
         // Show product submit button
         submitProductBtn.classList.remove('d-none');
+
+        // Change modal title to fit the Product Form
+        modalTitle.textContent = "Tilføj Produkt";
     });
 
     /* --- SHOW SERVICE FORM --- */
@@ -37,6 +67,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Show service submit button
         submitServiceBtn.classList.remove('d-none');
+
+        // Change modal title to fit the Service Form
+        modalTitle.textContent = "Tilføj Service";
     });
 
     /* --- PRODUCT SUBMISSION --- */

@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Success: Remove service row
                 row.remove();
+
+                // Success: Reload the page so table and pagination update automatically
+                window.location.reload();
             }
             // Catch any network or fetch-related errors and log them for debugging
             catch (error) {

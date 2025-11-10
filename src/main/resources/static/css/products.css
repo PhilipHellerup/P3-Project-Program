@@ -36,3 +36,45 @@
     border-radius: 24px;
     padding: 0.25rem;
 }
+
+#choiceMenu {
+    text-align: center;
+}
+
+.choice-btn {
+    width: 12rem;                     /* Fixed equal width */
+    min-height: 10rem;                /* Fixed equal height */
+    padding: 1rem;
+
+    border: none;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+    /* Center and stack content */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;      /* Keeps icon/title/desc aligned nicely */
+    align-items: center;
+    text-align: center;
+}
+
+.choice-btn:hover {
+    background-color: #e2e6ea;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.choice-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    color: #007bff;
+}
+
+.choice-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
