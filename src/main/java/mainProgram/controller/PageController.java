@@ -1,8 +1,10 @@
 package mainProgram.controller; // Project Organization
 
 /* --- Imports --- */
+
 import java.util.List;
 
+import mainProgram.repository.JobServiceRepository;
 import mainProgram.table.Product;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -29,19 +31,22 @@ public class PageController {
     private final JobService jobService;
     private final ProductRepository productRepository;
     private final JobPartRepository jobPartRepository;
+    private final JobServiceRepository jobServiceRepository;
 
     // Constructor for Dependency Injection
+
     /**
-     * @param jobRepository the repository for accessing job data
-     * @param jobService the service layer for business logic related to jobs
+     * @param jobRepository     the repository for accessing job data
+     * @param jobService        the service layer for business logic related to jobs
      * @param productRepository the repository for accessing product data
      * @param jobPartRepository the repository for connecting jobs and products
      **/
-    public PageController(JobRepository jobRepository, JobService jobService, ProductRepository productRepository, JobPartRepository jobPartRepository) {
+    public PageController(JobRepository jobRepository, JobService jobService, ProductRepository productRepository, JobPartRepository jobPartRepository, JobServiceRepository jobServiceRepository) {
         this.jobRepository = jobRepository;
         this.jobService = jobService;
         this.productRepository = productRepository;
         this.jobPartRepository = jobPartRepository;
+        this.jobServiceRepository = jobServiceRepository;
     }
 
     // Methods
@@ -80,7 +85,9 @@ public class PageController {
     // It fetches all products from the database, sorts them by ascending ID,
     // and adds them to the Spring MVC model so that the Thymeleaf template can render them.
     /** @param model the Spring MVC model used to pass data to the view **/
-    /** @return the name of the Thymeleaf template ("products.html") to render **/
+    /**
+     * @return the name of the Thymeleaf template ("products.html") to render
+     **/
     @GetMapping("products")
     public String products(Model model) {
         // Retrieve all products from the repository and sort by ID in ascending order.
@@ -129,6 +136,7 @@ public class PageController {
         // Add data to the model for rendering in the template
         model.addAttribute("job", job);
         model.addAttribute("jobParts", jobPartRepository.findByJobId(id));
+        model.addAttribute("jobService", jobServiceRepository.findByJobId(id));
 
         return "jobDetails";
     }

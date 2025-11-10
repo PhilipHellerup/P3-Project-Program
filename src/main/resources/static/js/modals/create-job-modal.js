@@ -111,7 +111,7 @@ let totalWorkCost = document.getElementById('workTotalCost');
             customer_phone: document.getElementById('customerPhone').value,
             job_description: document.getElementById('jobDescription').value,
             work_time_minutes: parseInt(document.getElementById('workTime').value || '0', 10),
-            price_per_minute: parseFloat(document.getElementById('workCost').value || '0'),
+            price_per_min: parseFloat(document.getElementById('workCost').value || '0'),
             duration: parseFloat(document.getElementById('totalDuration').value || '0'),
             date: isoString,
             status: {id: parseInt(document.getElementById('jobStatus').value, 10)},
@@ -248,13 +248,14 @@ function renderProductTable() {
 
         // Listen for quantity change in the input field for each row. When the quantity is changed, also change the quantity attribute in the modalServices array
         const qtyInput = row.querySelector('.quantity-input');
-        qtyInput.addEventListener('input', (e) => {
+        qtyInput.addEventListener('change', (e) => {
             const newQty = parseInt(e.target.value, 10);
 
             const id = parseInt(row.dataset.productId, 10);
             const productItem = modalServices.find(p => p.product.id === id);
             if (productItem) {
                 productItem.quantity = newQty;
+                renderProductTable(modalServices)
             }
 
             // Update price and duration, if the input is not blank.

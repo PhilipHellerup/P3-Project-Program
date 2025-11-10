@@ -124,18 +124,54 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
             <tr>
                 <th scope="col">Produkter</th>
                 <th scope="col">Antal</th>
+                <th scope="col">Varighed</th>
                 <th scope="col">Styk Pris</th>
                 <th scope="col">Total Pris</th>
-                <th scope="col"></th>
+                <th></th>
             </tr>
             </thead>
+            <!-- Show list of services -->
             <tbody>
+            <tr th:each="js : ${jobService}">
+                <td class="w-30">
+                    <p class="m-1" th:text="${js.service.name}"></p>
+                </td>
+                <td class="w-15">
+                    <p class="m-1" th:text="${js.quantity}"></p>
+                </td>
+                <td class="w-15">
+                    <p class="m-1 d-inline" th:text="${js.service.duration}"></p>
+                    <p class="d-inline">min.</p>
+                </td>
+                <td class="w-15">
+                    <p class="m-1 d-inline"
+                       th:text="${#numbers.formatDecimal(js.service.price, 2, 2,'COMMA')}"></p>
+                    <p class="d-inline">kr.</p>
+                </td>
+                <td class="w-15" th:with="totalPrice=${js.service.price * js.quantity}">
+                    <p class="m-1 d-inline" th:text="${#numbers.formatDecimal(totalPrice, 2, 2,'COMMA')}"></p>
+                    <p class="d-inline">kr.</p>
+                </td>
+                <td class="p-0">
+                    <button type="button" class="btn btn-sm btn-danger remove-btn"
+                            th:attr="data-id=${js.service.id}, data-type='service' "
+                    >X
+                    </button>
+                </td>
+
+            </tr>
+            </tbody>
+            <tbody>
+            <!-- Show list of parts-->
             <tr th:each="jp : ${jobParts}">
                 <td class="w-30">
                     <p class="m-1" th:text="${jp.product.name}"></p>
                 </td>
-                <td class="w-25">
+                <td class="w-15">
                     <p class="m-1" th:text="${jp.quantity}"></p>
+                </td>
+                <td class="w-15">
+
                 </td>
                 <td class="w-15">
                     <p class="m-1 d-inline"
@@ -188,7 +224,7 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                 document.addEventListener('DOMContentLoaded', () => {
                     let subtotal = 0;
 
-                    document.querySelectorAll('.product-table-content-container tbody tr td:nth-child(4) p')
+                    document.querySelectorAll('.product-table-content-container tbody tr td:nth-child(5) p')
                         .forEach(cell => subtotal += parseFloat(cell.textContent.replace(/[^\d.,-]/g, '').replace(',', '.')) || 0);
 
                     const moms = subtotal * 0.25;

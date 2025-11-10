@@ -90,6 +90,9 @@ public class JobController {
             job.setCustomer_name((String) body.get("customer_name"));
             job.setCustomer_phone((String) body.get("customer_phone"));
             job.setJob_description((String) body.get("job_description"));
+            job.setWork_time_minutes((Integer) body.get("work_time_minutes"));
+            job.setPrice_per_minute((Double) body.get("price_per_min"));
+            job.setDuration((Integer) body.get("duration"));
             job.setDate(LocalDateTime.parse(dateString));
             job.setStatus(status);
 
