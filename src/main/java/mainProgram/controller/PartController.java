@@ -19,29 +19,29 @@ import mainProgram.table.Product;
 @RequestMapping("/")
 public class PartController {
 
-  private final ProductRepository productRepository;
-  private final JobPartRepository jobPartRepository;
+    private final ProductRepository productRepository;
+    private final JobPartRepository jobPartRepository;
 
-  public PartController(ProductRepository productRepository, JobPartRepository jobPartRepository) {
-    this.productRepository = productRepository;
-    this.jobPartRepository = jobPartRepository;
-  }
+    public PartController(ProductRepository productRepository, JobPartRepository jobPartRepository) {
+        this.productRepository = productRepository;
+        this.jobPartRepository = jobPartRepository;
+    }
 
-  @GetMapping("api/part")
-  @ResponseBody
-  public List<Product> getAllParts() {
-    return productRepository.findAll();
-  }
+    @GetMapping("api/part")
+    @ResponseBody
+    public List<Product> getAllParts() {
+        return productRepository.findAll();
+    }
 
-  @GetMapping("api/products")
-  @ResponseBody
-  public List<JobPart> getAllProducts() {
-    return jobPartRepository.findAll();
-  }
+    @GetMapping("api/products")
+    @ResponseBody
+    public List<JobPart> getAllProducts() {
+        return jobPartRepository.findAll();
+    }
 
-  @GetMapping("api/products/{id}")
-  @ResponseBody
-  public List<JobPart> getAllProducts(@PathVariable int id) {
-    return jobPartRepository.findByJobId(id);
-  }
+    @GetMapping("api/products/{id}")
+    @ResponseBody
+    public List<JobPart> getAllProducts(@PathVariable int id) {
+        return jobPartRepository.findByJobId(id);
+    }
 }

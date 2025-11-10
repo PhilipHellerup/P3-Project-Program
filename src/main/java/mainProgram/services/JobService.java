@@ -1,6 +1,9 @@
 package mainProgram.services;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import mainProgram.repository.*;
 import mainProgram.table.*;
@@ -119,6 +122,24 @@ public class JobService implements BaseSearchService<Job> {
             throw new RuntimeException("Part not found: " + serviceId);
         }
         jobServiceRepository.deleteByJobIdAndServiceId(repairId, serviceId);
+
+    }
+
+    public void getAllProductsForRepair(int repairID) {
+        List<Map<String, Object>> results = new ArrayList<>();
+
+        // Get All parts
+        List<Product> parts;
+        List<JobPart> jobParts = jobPartRepository.findByJobId(repairID);
+
+        jobParts.forEach((jobPart -> {
+            
+        }));
+
+
+        // Get All services
+        List<JobServices> jobServices = jobServiceRepository.findByJobId(repairID);
+
 
     }
 

@@ -2,12 +2,18 @@ package mainProgram.controller; // Project Organization
 
 /* --- Imports --- */
 
+import mainProgram.repository.JobPartRepository;
+import mainProgram.repository.JobServiceRepository;
 import mainProgram.repository.ProductRepository;
+import mainProgram.table.JobPart;
 import mainProgram.table.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /* --- PartController --- */
@@ -16,8 +22,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/products") // Base path for all API routes in this controller
 public class ProductController {
-  // Attributes
-  private final ProductRepository productRepository; // Injected repository used for database operations CRUD
+    // Attributes
+    private final ProductRepository productRepository; // Injected repository used for database operations CRUD
+    private final JobPartRepository jobPartRepository;
+    private final JobServiceRepository jobServiceRepository;
 
     // Constructor for Dependency Injection
     // Spring automatically provides an instance of ProductRepository at runtime.
@@ -25,8 +33,10 @@ public class ProductController {
     /**
      * @param productRepository the repository handling CRUD operations for Product entities.
      **/
-    public ProductController(ProductRepository productRepository) {
+    public ProductController(ProductRepository productRepository, JobPartRepository jobPartRepository, JobServiceRepository jobServiceRepository) {
         this.productRepository = productRepository;
+        this.jobPartRepository = jobPartRepository;
+        this.jobServiceRepository = jobServiceRepository;
     }
 
     // Methods
@@ -42,6 +52,13 @@ public class ProductController {
         // Return the saved product as a JSON response with HTTP 200 OK status.
         return ResponseEntity.ok(savedProduct);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Void> getProductsForJob(@PathVariable int id) {
+
+    }
+
+    ;
 
     // Deletes a specific product from the database based on its ID.
     // Triggered when a DELETE request is sent to "/api/products/{id}"-
@@ -68,42 +85,42 @@ public class ProductController {
     public ResponseEntity<?> editProduct(@PathVariable int id, @RequestBody Map<String, Object> updates) {
         // Look up the product in the database by ID
         return productRepository.findById(id).map(product -> {
-            // Iterate over each field in the updates map
-            // The map comes from the frontend and contains key/value pairs of fields to update
-            updates.forEach((field, value) -> {
-                switch (field) {
-                    case "productNumber" -> product.setProductNumber((String) value);
-                    case "name" -> product.setName((String) value);
-                    case "EAN" -> product.setEAN((String) value);
-                    case "type" -> product.setType((String) value);
-                    case "price" -> {
-                        // Handle price being either a number or string
-                        // Frontend sends a numeric value (Double) after parsing EU/US formats
-                        if (value instanceof Number num) {
-                            product.setPrice(num.doubleValue()); // Store numeric value directly
-                        } else {
-                            // Safety fallback: Parse string as Double
-                            product.setPrice(Double.parseDouble(value.toString()));
+                    // Iterate over each field in the updates map
+                    // The map comes from the frontend and contains key/value pairs of fields to update
+                    updates.forEach((field, value) -> {
+                        switch (field) {
+                            case "productNumber" -> product.setProductNumber((String) value);
+                            case "name" -> product.setName((String) value);
+                            case "EAN" -> product.setEAN((String) value);
+                            case "type" -> product.setType((String) value);
+                            case "price" -> {
+                                // Handle price being either a number or string
+                                // Frontend sends a numeric value (Double) after parsing EU/US formats
+                                if (value instanceof Number num) {
+                                    product.setPrice(num.doubleValue()); // Store numeric value directly
+                                } else {
+                                    // Safety fallback: Parse string as Double
+                                    product.setPrice(Double.parseDouble(value.toString()));
+                                }
+                                // Note (DO NOT DELETE!):
+                                // This prevents the "300,00 -> 30.000" problem when reloading the product page, because the numeric value
+                                // is already correct, thus no string formatting is applied on save.
+                            }
+                            default -> System.out.println("Unknown field: " + field);
                         }
-                        // Note (DO NOT DELETE!):
-                        // This prevents the "300,00 -> 30.000" problem when reloading the product page, because the numeric value
-                        // is already correct, thus no string formatting is applied on save.
-                    }
-                    default -> System.out.println("Unknown field: " + field);
-                }
-            });
-            // Save the updated product in the database
-            Product saved = productRepository.save(product);
+                    });
+                    // Save the updated product in the database
+                    Product saved = productRepository.save(product);
 
-            // Return HTTP 200 OK because the product updated successfully
-            return ResponseEntity.ok(saved);
-        })
+                    // Return HTTP 200 OK because the product updated successfully
+                    return ResponseEntity.ok(saved);
+                })
 
-        // Product with given ID does not exist
-        .orElseGet(() -> {
-            // Return HTTP 404: Not Found = Product Not Found
-            return ResponseEntity.notFound().build();
-        });
+                // Product with given ID does not exist
+                .orElseGet(() -> {
+                    // Return HTTP 404: Not Found = Product Not Found
+                    return ResponseEntity.notFound().build();
+                });
     }
 }
 

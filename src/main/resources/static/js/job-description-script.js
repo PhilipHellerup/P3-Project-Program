@@ -65,5 +65,74 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('add-product-btn').addEventListener('click', async (e) => {
         window.openAddProductToRepairModal()
     })
-
 });
+
+
+// Function to dynamically render a list of products on the page
+function renderProductTable() {
+    const tableBody = document.getElementById('table-body');
+    tableBody.innerHTML = ''; // clear current rows
+
+    modalProducts.forEach((item) => {
+        const row = document.createElement('tr');
+        // Set the productid of the row, so that the remove buttons knows which product to remove from modalProducts
+        row.dataset.productId = item.product.id
+        row.innerHTML = `
+        <td class="w-15">
+            <p class="mt-0">${item.product.name}</p>
+        </td>
+        <td class="w-15">
+            <input type="number" class="form-control form-control-sm quantity-input" 
+                       value="${item.quantity}" min="1" style="width: 3rem;">
+        </td>
+        <td class="w-30">
+            <p class="mt-0">${item.product.price} kr.</p>
+        </td>
+        <td class="w-30">
+            <p class="total-cost-field mt-0">${item.product.price * item.quantity} kr.</p>
+        </td>
+        <td class="w-10 text-center">
+            <button type="button" class="btn btn-sm btn-danger remove-btn">X</button>
+        </td>
+    `;
+
+        // Listen for quantity change in the input field for each row. When the quantity is changed, also change the quantity attribute in the modalProducts array
+        const qtyInput = row.querySelector('.quantity-input');
+        qtyInput.addEventListener('change', (e) => {
+            const newQty = parseInt(e.target.value, 10);
+
+            const id = parseInt(row.dataset.productId, 10);
+            const productItem = modalProducts.find(p => p.product.id === id);
+            if (productItem) {
+                productItem.quantity = newQty;
+                renderProductTable() // Also rerender the product table, to show the correct
+            }
+        });
+
+        row.querySelector('.remove-btn').addEventListener('click', () => {
+            const id = parseInt(row.dataset.productId, 10);
+            modalProducts = modalProducts.filter(p => p.product.id !== id);
+            renderProductTable(modalProducts)
+        });
+
+        tableBody.appendChild(row);
+    });
+}
+
+
+// Search in jobParts and jobServices using the searchController API endpoint
+async function fetchSearchMatches(searchParam) {
+    try {
+        // Send PUT request to update the job entry
+        const r1 = await fetch('/api/search/products?q=' + searchParam, {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+        });
+
+        // Get the matches from the response and update the page to show matches
+        return await r1.json();
+    } catch (err) {
+        // todo: add some error handleing
+        console.log(err);
+    }
+}

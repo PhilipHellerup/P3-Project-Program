@@ -3,6 +3,7 @@ package mainProgram.repository;
 import mainProgram.services.JobService;
 import mainProgram.table.JobPart;
 import mainProgram.table.JobServices;
+import mainProgram.table.Services;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

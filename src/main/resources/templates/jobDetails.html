@@ -128,19 +128,23 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                 <th scope="col">Total Pris</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="products-table-body">
             <tr th:each="jp : ${jobParts}">
                 <td class="w-15">
                     <p class="m-1" th:text="${jp.product.name}"></p>
                 </td>
                 <td class="w-15">
-                    <p class="m-1" th:text="${jp.quantity}"></p>
+                    <input class="form-control form-control-sm m-1 w-20" type="number" th:value="${jp.quantity}">
                 </td>
                 <td class="w-30">
-                    <p class="m-1" th:text="${jp.product.price}"></p>
+                    <p class="m-1 d-inline" th:text="${#numbers.formatDecimal(jp.product.price, 2,'POINT', 2,'COMMA')}">
+                    </p>
+                    <p class="d-inline">kr.</p>
+
                 </td>
-                <td class="w-30" th:with="result=${jp.product.price * jp.quantity}">
-                    <p class="m-1" th:text="${result}"></p>
+                <td class="w-30" th:with="totalPrice=${jp.product.price * jp.quantity}">
+                    <p class="m-1 d-inline" th:text="${#numbers.formatDecimal(totalPrice, 2, 'POINT', 2,'COMMA')}"></p>
+                    <p class="d-inline">kr.</p>
                 </td>
             </tr>
             </tbody>
