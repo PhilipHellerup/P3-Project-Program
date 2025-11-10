@@ -1,7 +1,9 @@
 package mainProgram.repository;
 
 import java.util.List;
+
 import mainProgram.table.Job;
+import mainProgram.table.Services;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -28,6 +30,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface JobRepository extends JpaRepository<Job, Integer>, SearchableRepository<Job> {
+    List<Job> findByTitleContainingIgnoreCase(String keyword);
+
     /**
      * Retrieves all jobs ordered by date in ascending order (earliest first).
      *

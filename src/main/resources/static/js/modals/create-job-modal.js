@@ -44,7 +44,7 @@ let totalWorkCost = document.getElementById('workTotalCost');
 
         // Get search results using the search Controller API
         let searchParams = searchBar.value;
-        let matches = await fetchSearchMatches(searchParams)
+        let matches = await fetchSearchMatchesService(searchParams)
 
         searchResults.innerHTML = ''
         if (!matches) {
@@ -176,7 +176,7 @@ let totalWorkCost = document.getElementById('workTotalCost');
 })();
 
 // Search in product using the productController API endpoint
-async function fetchSearchMatches(searchParam) {
+async function fetchSearchMatchesService(searchParam) {
     try {
         // Send PUT request to update the job entry
         const r1 = await fetch('/api/search/service?q=' + searchParam, {
