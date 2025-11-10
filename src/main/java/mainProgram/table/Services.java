@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 // Service Class
 @Entity
-@Table(name = "service")
+@Table(name = "services")
 public class Services {
 
     // Attributes

@@ -11,6 +11,9 @@
     <!-- Bootstrap Styling -->
     <link rel="stylesheet" href="/css/bootstrap.css"/>
 
+    <!-- Custom Styling For Product & Service Button -->
+    <link rel="stylesheet" href="/css/products.css"/>
+
     <!-- Google Material Icons (used for delete and search icons) -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
 
@@ -40,8 +43,21 @@
 <!-- === Main Page Container (No Nav Bar) === -->
 <div class="page-content-container m-4 mt-1 flex-1 p-5">
     <!-- Page Header -->
-    <div class="page-head d-flex justify-content-end">
-        <!-- "Add Product" button opens the modal below -->
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <!-- LEFT SECTION - Product/Service Tabs -->
+        <div class="d-inline-flex gap-3">
+            <!-- Products Tab -->
+            <a class="tab-btn" th:href="@{'/products'(filter='products')}" th:classappend="${currentFilter == 'products'} ? ' active' : ''">
+                Produkter
+            </a>
+
+            <!-- Services Tab -->
+            <a class="tab-btn" th:href="@{'/products'(filter='services')}" th:classappend="${currentFilter == 'services'} ? ' active' : ''">
+                Services
+            </a>
+        </div>
+
+        <!-- RIGHT SECTION - Add Product Button (Open Modal Below) -->
         <button type="button" class="btn addProductBtn" data-bs-toggle="modal" data-bs-target="#addProductModal">Tilføj Produkt</button>
     </div>
 
@@ -114,42 +130,86 @@
 
     <!-- === Product Table === -->
     <!-- Displays a list of products dynamically rendered by Thymeleaf -->
-    <div class="mt-6">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">Varenr.</th>
-                <th scope="col">Navn</th>
-                <th scope="col">EAN</th>
-                <th scope="col">Type</th>
-                <th scope="col">Pris</th>
-                <th scope="col">Handling</th>
-            </tr>
-            </thead>
+    <div class="mt-5-5">
+        <!-- Displays the product table only if the products tab/filter is active -->
+        <div th:if="${currentFilter == 'products'}">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th scope="col">Varenr.</th>
+                  <th scope="col">Navn</th>
+                  <th scope="col">EAN</th>
+                  <th scope="col">Type</th>
+                   <th scope="col">Pris</th>
+                  <th scope="col">Handling</th>
+                </tr>
+                </thead>
 
-            <tbody>
-            <!-- Thymeleaf loop: Generates one <tr> per product in 'products' list -->
-            <!-- data-id attribute is set dynamically to product.id (used by JS delete logic) -->
-            <tr th:each="product : ${products}" th:attr="data-id=${product.id}">
-                <td data-field="productNumber" class="fs-5" contenteditable="false" th:text="${product.productNumber}"></td>
-                <td data-field="name" class="fs-5" contenteditable="false" th:text="${product.name}"></td>
-                <td data-field="EAN" class="fs-5" contenteditable="false" th:text="${product.EAN}"></td>
-                <td data-field="type" class="fs-5" contenteditable="false" th:text="${product.type}"></td>
-                <td data-field="price" class="fs-5" contenteditable="false" th:text="${#numbers.formatDecimal(product.price, 2, 'POINT', 2, 'COMMA')} + ' Kr.'"></td>
-                <td class="fs-5">
-                    <!-- Delete Button (Triggers delete request in JS) -->
-                    <button class="btn btn-outline-danger btn-sm delete-btn" type="button">
-                        <span class="material-symbols-outlined">delete</span>
-                    </button>
-                    <!-- Edit Button (Triggers edit request in JS) -->
-                    <button class="btn btn-outline-dark btn-sm edit-btn" type="button" aria-pressed="false">
-                        <span class="material-symbols-outlined edit-btn-icon">edit_square</span>
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                <tbody>
+                <!-- Thymeleaf loop: Generates one <tr> per product in 'products' list -->
+                <!-- data-id attribute is set dynamically to product.id (used by JS delete logic) -->
+                <tr th:each="product : ${products}" th:attr="data-id=${product.id}">
+                    <td data-field="productNumber" class="fs-5" contenteditable="false" th:text="${product.productNumber}"></td>
+                    <td data-field="name" class="fs-5" contenteditable="false" th:text="${product.name}"></td>
+                    <td data-field="EAN" class="fs-5" contenteditable="false" th:text="${product.EAN}"></td>
+                    <td data-field="type" class="fs-5" contenteditable="false" th:text="${product.type}"></td>
+                    <td data-field="price" class="fs-5" contenteditable="false" th:text="${#numbers.formatDecimal(product.price, 2, 'POINT', 2, 'COMMA')} + ' Kr.'"></td>
+                    <td class="fs-5">
+                        <!-- Delete Button (Triggers delete request in JS) -->
+                        <button class="btn btn-outline-danger btn-sm delete-btn" type="button">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                        <!-- Edit Button (Triggers edit request in JS) -->
+                        <button class="btn btn-outline-dark btn-sm edit-btn" type="button" aria-pressed="false">
+                            <span class="material-symbols-outlined edit-btn-icon">edit_square</span>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    <!-- === Service Table === -->
+    <!-- Displays a list of services dynamically rendered by Thymeleaf -->
+    <div class="mt-5-5">
+        <!-- Displays the service table only if the services tab/filter is active -->
+        <div th:if="${currentFilter == 'services'}">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Navn</th>
+                    <th scope="col">Pris</th>
+                    <th scope="col">Varighed</th>
+                    <th scope="col">Handling</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <!-- Thymeleaf loop: Generates one <tr> per service in 'services' list -->
+                <!-- data-id attribute is set dynamically to product.id (used by JS delete logic) -->
+                <tr th:each="service : ${services}" th:attr="data-id=${service.id}">
+                    <td data-field="ID" class="fs-5" contenteditable="false" th:text="${service.ID}"></td>
+                    <td data-field="name" class="fs-5" contenteditable="false" th:text="${service.name}"></td>
+                    <td data-field="price" class="fs-5" contenteditable="false" th:text="${#numbers.formatDecimal(product.price, 2, 'POINT', 2, 'COMMA')} + ' Kr.'"></td>
+                    <td data-field="duration" class="fs-5" contenteditable="false" th:text="${service.duration}"></td>
+                    <td class="fs-5">
+                        <!-- Delete Button (Triggers delete request in JS) -->
+                        <button class="btn btn-outline-danger btn-sm delete-btn" type="button">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                        <!-- Edit Button (Triggers edit request in JS) -->
+                        <button class="btn btn-outline-dark btn-sm edit-btn" type="button" aria-pressed="false">
+                            <span class="material-symbols-outlined edit-btn-icon">edit_square</span>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <!-- === Pagination Bar === -->
     <!-- Static example navigation (can be made dynamic later) -->
     <div class="pagination-css align-content-center">

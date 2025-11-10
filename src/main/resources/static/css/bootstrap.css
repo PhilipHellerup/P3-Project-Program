@@ -8896,6 +8896,10 @@ textarea.form-control-lg {
     margin-top: 6rem !important;
 }
 
+.mt-5-5 {
+    margin-top: 4rem !important;
+}
+
 /* remove the last separator line */
 .tableRemoveLastLine tr:last-child td {
     border-bottom: none !important;
