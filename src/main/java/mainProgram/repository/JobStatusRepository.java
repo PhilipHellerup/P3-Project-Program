@@ -1,8 +1,11 @@
 package mainProgram.repository;
 
+import mainProgram.table.JobServices;
 import mainProgram.table.JobStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Repository interface for JobStatus entity database operations.
@@ -32,5 +35,4 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface JobStatusRepository extends JpaRepository<JobStatus, Short> {
-    // No custom query methods needed - all operations use inherited CRUD methods
 }

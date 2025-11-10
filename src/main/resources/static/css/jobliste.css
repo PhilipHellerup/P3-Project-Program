@@ -1,14 +1,13 @@
 /* General body and page styling */
 body {
     background-color: #f5f5f5;
-    font-family:
-        -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
 
 /* Main container styling */
-#main-container {
+#jobliste-page {
     background-color: white;
 }
 
@@ -35,17 +34,15 @@ body {
 .tab-btn.active {
     background-color: #ffffff;
     color: #1a1a1a;
-    box-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.1),
-        0 1px 2px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 .tab-btn:hover:not(.active) {
     color: #1a1a1a;
     background-color: #ffffff;
-    box-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.1),
-        0 1px 2px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 /* Container for tab buttons */
@@ -119,14 +116,14 @@ body {
     background-color: #f9fafb;
 }
 
-/* Table styling */
-.table {
+/* Table styling — scoped only to #jobliste-page */
+#jobliste-page .table {
     border-collapse: separate;
     border-spacing: 0;
     margin-top: 1.5rem;
 }
 
-.table thead th {
+#jobliste-page .table thead th {
     background-color: #ffffff;
     color: #6b7280;
     font-weight: 600;
@@ -138,16 +135,16 @@ body {
     border-top: none;
 }
 
-.table tbody tr {
+#jobliste-page .table tbody tr {
     border-bottom: 1px solid #f3f4f6;
     transition: background-color 0.15s ease;
 }
 
-.table tbody tr:hover {
+#jobliste-page .table tbody tr:hover {
     background-color: #f9fafb;
 }
 
-.table tbody td {
+#jobliste-page .table tbody td {
     padding: 1.5rem 1.5rem;
     vertical-align: middle;
     color: #374151;
@@ -155,7 +152,7 @@ body {
 }
 
 /* Job title styling */
-.table tbody td .fw-bolder {
+#jobliste-page .table tbody td .fw-bolder {
     color: #1a1a1a;
     font-weight: 600;
     font-size: 15px;
@@ -163,12 +160,13 @@ body {
 }
 
 /* Customer name and phone */
-.table tbody td p {
+#jobliste-page .table tbody td p {
     margin: 0;
     color: #6b7280;
     font-size: 14px;
     line-height: 1.5;
 }
+
 
 /* Status badge styling */
 .job-status {

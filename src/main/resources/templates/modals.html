@@ -123,87 +123,64 @@
                     <section class="p-4 pt-5 rounded-3 border bg-white shadow-sm">
                         <h6 class="fw-bold mb-5">Tilføj ydelser</h6>
 
-                        <div class="mb-4">
-                            <label for="serviceSearch" class="form-label">
-                                Søg efter ydelse
-                            </label>
+                        <div class="position-relative">
                             <input
-                                    type="text"
-                                    id="serviceSearch"
-                                    class="form-control w-50"
-                                    placeholder="Ydelses navn"
+                                    class="form-control ps-2 mt-4"
+                                    type="search"
+                                    placeholder="Søg efter ydelser"
+                                    aria-label="Search"
+                                    autocomplete="off"
+                                    id="serviceSearchBar"
                             />
+                            <table id="service-search-table"
+                                   class="table table-bordered table-hover position-absolute mt-0 p-2"
+                                   style="display: none">
+                                <tbody id="service-search-results" class="w-100">
+                                <!-- Products are dynamically placed here using javascript on search -->
+                                </tbody>
+                            </table>
                         </div>
 
                         <!-- Services Table -->
-                        <div class="table-responsive">
+                        <div class="table-responsive mt-5">
                             <table class="table align-middle">
                                 <thead>
                                 <tr class="fw-semibold text-muted">
-                                    <th>Produkt/ service</th>
+                                    <th>Ydelse</th>
                                     <th style="width: 120px">Antal</th>
                                     <th>Arbejdstid</th>
                                     <th>Pris</th>
                                     <th>I alt</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr>
-                                    <td>Timeløn</td>
+
+                                <!-- Keep working time in the table, even when rendered by js -->
+                                <tr id="input-row">
+                                    <td>Timeløn (i minutter):</td>
                                     <td>
                                         <input
                                                 type="number"
                                                 class="form-control form-control-sm w-50 d-inline qty-input"
                                                 id="workTime"
-                                                value="15"
+                                                value="0"
                                         />
-                                        <p class="d-inline ms-1">min</p>
                                     </td>
                                     <td></td>
                                     <td>
-                                        <span class="price" id="pricePerMin">8,00</span>
-                                        kr.
-                                    </td>
-                                    <td class="fw-bold total">147,50 kr.</td>
-                                </tr>
-                                <tr>
-                                    <td>Skift af kæde</td>
-                                    <td>
                                         <input
                                                 type="number"
-                                                class="form-control form-control-sm d-inline w-50"
-                                                value="1"
+                                                class="form-control form-control-sm w-20 d-inline qty-input"
+                                                id="workCost"
+                                                value="8,5"
                                         />
-                                        <a
-                                                href="#"
-                                                class="text-decoration-none text-danger ms-1"
-                                        >
-                                            fjern
-                                        </a>
+                                        <p class="d-inline ms-1">kr.</p>
                                     </td>
-                                    <td>15 min</td>
-                                    <td>250,00 kr.</td>
-                                    <td class="fw-bold">250,00 kr.</td>
+                                    <td id="workTotalCost" class="fw-bold total">0,00</td>
+                                    <p class="d-inline ms-1">kr.</p>
                                 </tr>
-                                <tr>
-                                    <td>Lubrikation af lejer</td>
-                                    <td>
-                                        <input
-                                                type="number"
-                                                class="form-control form-control-sm d-inline w-50"
-                                                value="1"
-                                        />
-                                        <a
-                                                href="#"
-                                                class="text-decoration-none text-danger ms-1"
-                                        >
-                                            fjern
-                                        </a>
-                                    </td>
-                                    <td>30 min</td>
-                                    <td>300,00 kr.</td>
-                                    <td class="fw-bold">300,00 kr.</td>
-                                </tr>
+
+                                <tbody id="service-added-table-body">
+                                <!-- dynamically added rows go here -->
                                 </tbody>
                             </table>
                         </div>
@@ -211,17 +188,20 @@
                         <!-- Totals -->
                         <div class="d-flex justify-content-between mt-4">
                             <p class="fw-semibold">Totalpris med moms:</p>
-                            <p id="grandTotal" class="fw-bold">000,000 kr.</p>
+                            <div class="d-inline-flex gap-2">
+                                <p id="total-price-create-repair" class="fw-bold">0,00</p>
+                                <p>kr.</p>
+                            </div>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center">
-                            <p class="fw-semibold">Varighed:</p>
+                            <p class="fw-semibold">Anslåget varighed: </p>
                             <div class="d-flex align-items-center gap-2">
                                 <input
                                         type="number"
                                         class="form-control form-control-sm"
-                                        id="jobDuration"
-                                        value="45"
+                                        id="totalDuration"
+                                        value="0"
                                         style="width: 70px"
                                 />
                                 min
