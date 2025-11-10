@@ -1,13 +1,10 @@
 package mainProgram.controller; // Project Organization
 
 /* --- Imports --- */
-
 import mainProgram.repository.ProductRepository;
 import mainProgram.table.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 import java.util.Map;
 
 /* --- PartController --- */
@@ -21,19 +18,14 @@ public class ProductController {
 
     // Constructor for Dependency Injection
     // Spring automatically provides an instance of ProductRepository at runtime.
-
-    /**
-     * @param productRepository the repository handling CRUD operations for Product entities.
-     **/
+    /** @param productRepository the repository handling CRUD operations for Product entities. **/
     public ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
     // Methods
     /** @param product the product object to create **/
-    /**
-     * @return ResponseEntity containing the created product if successful, or a bad request response
-     **/
+    /** @return ResponseEntity containing the created product if successful, or a bad request response **/
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         // Save the product to the database using the repository and its .save() method.
@@ -55,7 +47,8 @@ public class ProductController {
 
             // Return HTTP 204: No Content (indicating success, but no response body needed)
             return ResponseEntity.noContent().build(); // 204 No Content
-        } else {
+        }
+        else {
             // Return HTTP 404: Not Found (if the product does not exist in the database)
             return ResponseEntity.notFound().build(); // 404 if not found
         }
@@ -85,9 +78,6 @@ public class ProductController {
                             // Safety fallback: Parse string as Double
                             product.setPrice(Double.parseDouble(value.toString()));
                         }
-                        // Note (DO NOT DELETE!):
-                        // This prevents the "300,00 -> 30.000" problem when reloading the product page, because the numeric value
-                        // is already correct, thus no string formatting is applied on save.
                     }
                     default -> System.out.println("Unknown field: " + field);
                 }

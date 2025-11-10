@@ -1,6 +1,86 @@
 // Imports
 import { handleFetchErrors } from '/js/utils/fetchUtils.js';
 
+document.addEventListener('DOMContentLoaded', function () {
+    // Buttons for choosing type
+    const addPartBtn = document.getElementById('addPartBtn');
+    const addServiceBtn = document.getElementById('addServiceBtn');
+
+    // Forms
+    const choiceMenu = document.getElementById('choiceMenu');
+    const productForm = document.getElementById('productForm');
+    const serviceForm = document.getElementById('serviceForm');
+
+    // Submit buttons
+    const submitProductBtn = document.getElementById('submitProductBtn');
+    const submitServiceBtn = document.getElementById('submitServiceBtn');
+
+    // Show Product Form
+    addPartBtn.addEventListener('click', () => {
+        choiceMenu.classList.add('d-none');
+        productForm.classList.remove('d-none');
+        submitProductBtn.classList.remove('d-none');
+    });
+
+    // Show Service Form
+    addServiceBtn.addEventListener('click', () => {
+        choiceMenu.classList.add('d-none');
+        serviceForm.classList.remove('d-none');
+        submitServiceBtn.classList.remove('d-none');
+    });
+
+    // Product submission
+    submitProductBtn.addEventListener('click', async function (e) {
+        e.preventDefault();
+        const productData = {
+            productNumber: document.getElementById('varenummer-text').value,
+            name: document.getElementById('navn-text').value,
+            EAN: document.getElementById('EAN-text').value,
+            type: document.getElementById('type-text').value,
+            price: document.getElementById('pris-tal').value,
+        };
+        try {
+            const response = await fetch('/api/products', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productData),
+            });
+            await handleFetchErrors(response);
+            window.location.reload();
+        } catch (error) {
+            console.error('Error creating product:', error);
+        }
+    });
+
+    // Service submission
+    submitServiceBtn.addEventListener('click', async function (e) {
+        e.preventDefault();
+        const serviceData = {
+            name: document.getElementById('service-navn-text').value,
+            price: document.getElementById('service-price').value,
+            duration: document.getElementById('service-duration').value,
+        };
+        try {
+            const response = await fetch('/api/services', {  // Make sure you have ServiceController
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(serviceData),
+            });
+            await handleFetchErrors(response);
+            window.location.reload();
+        } catch (error) {
+            console.error('Error creating service:', error);
+        }
+    });
+});
+
+
+
+
+/*
+// Imports
+import { handleFetchErrors } from '/js/utils/fetchUtils.js';
+
 // Handles the submission of the "Add Product" form on the product page.
 // Sends product data to the server via POST request.
 
@@ -47,3 +127,4 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+*/

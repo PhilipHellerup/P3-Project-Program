@@ -73,39 +73,57 @@
 
                 <!-- Modal Body: Input fields for new product info -->
                 <div class="modal-body">
-                    <form>
-                        <!-- Modal Input -->
-                        <!-- Product Number -->
+                    <!-- Step 1: Choice Menu -->
+                    <div id="choiceMenu">
+                        <button class="btn btn-primary w-100 mb-2" id="addPartBtn">Tilføj Del</button>
+                        <button class="btn btn-secondary w-100" id="addServiceBtn">Tilføj Service</button>
+                    </div>
+
+                    <!-- Step 2a: Product/Part Form -->
+                    <form id="productForm" class="d-none">
                         <div class="mb-3">
                             <label for="varenummer-text" class="col-form-label">Varenr.:</label>
                             <input type="text" class="form-control" id="varenummer-text">
                         </div>
-                        <!-- Product Name -->
                         <div class="mb-3">
                             <label for="navn-text" class="col-form-label">Navn:</label>
                             <input type="text" class="form-control" id="navn-text">
                         </div>
-                        <!-- EAN Code -->
                         <div class="mb-3">
                             <label for="EAN-text" class="col-form-label">EAN:</label>
                             <input type="text" class="form-control" id="EAN-text">
                         </div>
-                        <!-- Product Type -->
                         <div class="mb-3">
                             <label for="type-text" class="col-form-label">Type</label>
                             <input type="text" class="form-control" id="type-text">
                         </div>
-                        <!-- Product Price -->
                         <div class="mb-3">
                             <label for="pris-tal" class="col-form-label">Pris</label>
                             <input type="number" class="form-control" id="pris-tal">
                         </div>
                     </form>
 
-                    <!-- Modal Footer: Close and Submit Buttons -->
+                    <!-- Step 2b: Service Form -->
+                    <form id="serviceForm" class="d-none">
+                        <div class="mb-3">
+                            <label for="service-navn-text" class="col-form-label">Navn:</label>
+                            <input type="text" class="form-control" id="service-navn-text">
+                        </div>
+                        <div class="mb-3">
+                            <label for="service-price" class="col-form-label">Pris:</label>
+                            <input type="number" class="form-control" id="service-price">
+                        </div>
+                        <div class="mb-3">
+                            <label for="service-duration" class="col-form-label">Varighed (Minutter):</label>
+                            <input type="number" class="form-control" id="service-duration">
+                        </div>
+                    </form>
+
+                    <!-- Modal Footer (Close & Submit Buttons) -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Luk</button>
-                        <button type="submit" class="btn addProductBtn" id="submitProductBtn">Tilføj Produkt</button>
+                        <button type="submit" class="btn btn-primary d-none" id="submitProductBtn">Tilføj Produkt</button>
+                        <button type="submit" class="btn btn-primary d-none" id="submitServiceBtn">Tilføj Service</button>
                     </div>
                 </div>
             </div>
@@ -190,9 +208,9 @@
                 <!-- Thymeleaf loop: Generates one <tr> per service in 'services' list -->
                 <!-- data-id attribute is set dynamically to product.id (used by JS delete logic) -->
                 <tr th:each="service : ${services}" th:attr="data-id=${service.id}">
-                    <td data-field="ID" class="fs-5" contenteditable="false" th:text="${service.ID}"></td>
+                    <td data-field="id" class="fs-5" contenteditable="false" th:text="${service.id}"></td>
                     <td data-field="name" class="fs-5" contenteditable="false" th:text="${service.name}"></td>
-                    <td data-field="price" class="fs-5" contenteditable="false" th:text="${#numbers.formatDecimal(product.price, 2, 'POINT', 2, 'COMMA')} + ' Kr.'"></td>
+                    <td data-field="price" class="fs-5" contenteditable="false" th:text="${#numbers.formatDecimal(service.price, 2, 'POINT', 2, 'COMMA')} + ' Kr.'"></td>
                     <td data-field="duration" class="fs-5" contenteditable="false" th:text="${service.duration}"></td>
                     <td class="fs-5">
                         <!-- Delete Button (Triggers delete request in JS) -->
