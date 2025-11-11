@@ -28,7 +28,17 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                 <h5 class="mb-0">Detaljer</h5>
 
                 <!-- Edit button: opens the edit-job modal. ID used by JS to attach click handler. -->
-                <a id="openEditBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
+                <a id="openEditBtn"
+                   th:data-job-id="${job.id}"
+                   th:data-job-title="${job.title}"
+                   th:data-job-customer-name="${job.customer_name}"
+                   th:data-job-customer-phone="${job.customer_phone}"
+                   th:data-job-work-time="${job.work_time_minutes}"
+                   th:data-job-price="${job.price_per_minute}"
+                   th:data-job-date="${#temporals.format(job.date, 'yyyy-MM-dd''T''HH:mm')}"
+                   th:data-job-status-id="${job.status.id}" class="btn btn-primary align-co px-1 py-1 pt-0"
+                   style="width: 2rem">
+
                     <!-- Pencil icon (SVG) visually indicates edit action -->
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -249,26 +259,29 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                 <td class="fs-5"><b>Total:</b></td>
                 <td class="fs-6" id="total"><b>0 Kr.</b></td>
             </tr>
-          </tbody>
-             <!-- Final price + moms: It takes the price of item from the list and adds it together then plus the 25% ()-->
-        <script>
-          document.addEventListener('DOMContentLoaded', () => {
-            let subtotal = 0;
-          
-            document.querySelectorAll('.product-table-content-container tbody tr td:nth-child(4) p')
-              .forEach(cell => subtotal += parseFloat(cell.textContent.replace(/[^\d.,-]/g, '').replace(',', '.')) || 0);
-          
-            const moms = subtotal * 0.25;
-            const total = subtotal + moms;
+            </tbody>
+            <!-- Final price + moms: It takes the price of item from the list and adds it together then plus the 25% ()-->
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    let subtotal = 0;
 
-            // Here it rewrites the total price in Danish currency = DKK
-            const formatDK = num => num.toLocaleString('da-DK', { minimumFractionDigits: 2 ,maximumFractionDigits: 2 });
-          
-            document.getElementById('subtotal').textContent = `${formatDK(subtotal)} Kr.`;
-            document.getElementById('moms').textContent = `${formatDK(moms)} Kr.`;
-            document.getElementById('total').textContent =`${formatDK(total)} Kr.`;
-          });
-          </script>
+                    document.querySelectorAll('.product-table-content-container tbody tr td:nth-child(4) p')
+                        .forEach(cell => subtotal += parseFloat(cell.textContent.replace(/[^\d.,-]/g, '').replace(',', '.')) || 0);
+
+                    const moms = subtotal * 0.25;
+                    const total = subtotal + moms;
+
+                    // Here it rewrites the total price in Danish currency = DKK
+                    const formatDK = num => num.toLocaleString('da-DK', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+
+                    document.getElementById('subtotal').textContent = `${formatDK(subtotal)} Kr.`;
+                    document.getElementById('moms').textContent = `${formatDK(moms)} Kr.`;
+                    document.getElementById('total').textContent = `${formatDK(total)} Kr.`;
+                });
+            </script>
         </table>
     </div>
 </div>

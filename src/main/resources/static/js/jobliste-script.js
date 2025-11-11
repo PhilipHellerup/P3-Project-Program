@@ -1,9 +1,18 @@
+// Reload when the page is shown. Fixing the issue where changing repair information on the detail page for a repair, and then using the browser navigation
+// To return to this page, would have this page not showing the upadated information. This can be solved by reloading the page to rerender the table.
+window.addEventListener("pageshow", function (event) {
+    if (event.persisted) {
+        // Page was restored from the bfcache
+        window.location.reload();
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     // Consts for active or completed filter buttons
     const completedBtn = document.getElementById('completed-btn');
     const activeBtn = document.getElementById('active-btn');
     const tableBody = document.getElementById('table-body');
-    
+
     // Make each <tr data-href> row clickable and navigate to the URL in data-href
     const rows = document.querySelectorAll('tr[data-href]');
     rows.forEach((row) => {
@@ -48,13 +57,14 @@ document.addEventListener('DOMContentLoaded', function () {
         rows.forEach(row => {
             const status = getRowStatus(row);
             const show = (filter === 'active') ? !isPickedUp(status)
-                        : (filter === 'completed') ? isPickedUp(status)
-                        : true;
+                : (filter === 'completed') ? isPickedUp(status)
+                    : true;
             row.classList.toggle('d-none', !show);
         });
-    activeBtn?.classList.toggle('active', filter === 'active');
-    completedBtn?.classList.toggle('active', filter === 'completed');
+        activeBtn?.classList.toggle('active', filter === 'active');
+        completedBtn?.classList.toggle('active', filter === 'completed');
     }
+
     applyFilter('active');
 
     // Listens for filter buttons
@@ -148,7 +158,7 @@ async function fetchAllRepairs() {
         // Send PUT request to update the job entry
         const r1 = await fetch('/api/jobs', {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
         });
 
         // Get the matches from the response and update the page to show matches
@@ -164,7 +174,7 @@ async function fetchSearchMatches(searchParam) {
         // Send PUT request to update the job entry
         const r1 = await fetch('/api/search/job?q=' + searchParam, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
         });
 
         // Get the matches from the response and update the page to show matches
