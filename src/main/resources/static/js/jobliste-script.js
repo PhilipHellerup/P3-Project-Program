@@ -1,3 +1,12 @@
+// Reload when the page is shown. Fixing the issue where changing repair information on the detail page for a repair, and then using the browser navigation
+// To return to this page, would have this page not showing the upadated information. This can be solved by reloading the page to rerender the table.
+window.addEventListener("pageshow", function (event) {
+    if (event.persisted) {
+        // Page was restored from the bfcache
+        window.location.reload();
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     // Consts for active or completed filter buttons
     const completedBtn = document.getElementById('completed-btn');
@@ -21,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Filter for sorting active and completed jobs
-    // Normalize the job statuses to string and clean
+    // Normalize the job statuses to string and clean 
     function normalizeStatus(s) {
         return (s || '').toString().trim().toLowerCase().replace(/[_-]/g, ' ');
     }
@@ -33,10 +42,11 @@ document.addEventListener('DOMContentLoaded', function () {
         return /picked\s*up/.test(st) || st === 'afhentet' || st === 'pickedup';
     }
 
+
     function getRowStatus(row) {
         if (row.dataset && row.dataset.status) return normalizeStatus(row.dataset.status);
         const el = row.querySelector('.job-status');
-        return el ? normalizeStatus(el.textContent) : ';';
+        return el ? normalizeStatus(el.textContent) : ';'
     }
 
     // Function for checking whether the status is "afhentet"
@@ -44,19 +54,24 @@ document.addEventListener('DOMContentLoaded', function () {
     function applyFilter(filter) {
         if (!tableBody) return;
         const rows = tableBody.querySelectorAll('tr');
-        rows.forEach((row) => {
+        rows.forEach(row => {
             const status = getRowStatus(row);
-            const show = filter === 'active' ? !isPickedUp(status) : filter === 'completed' ? isPickedUp(status) : true;
+            const show = (filter === 'active') ? !isPickedUp(status)
+                : (filter === 'completed') ? isPickedUp(status)
+                    : true;
             row.classList.toggle('d-none', !show);
         });
         activeBtn?.classList.toggle('active', filter === 'active');
         completedBtn?.classList.toggle('active', filter === 'completed');
     }
+
     applyFilter('active');
 
     // Listens for filter buttons
     activeBtn?.addEventListener('click', () => applyFilter('active'));
-    completedBtn?.addEventListener('click', () => applyFilter('completed'));
+    completedBtn?.addEventListener('click', () => applyFilter('completed'))
+
+
 });
 
 // Eventlistener for the seach-input form
@@ -143,7 +158,7 @@ async function fetchAllRepairs() {
         // Send PUT request to update the job entry
         const r1 = await fetch('/api/jobs', {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
         });
 
         // Get the matches from the response and update the page to show matches
@@ -159,7 +174,7 @@ async function fetchSearchMatches(searchParam) {
         // Send PUT request to update the job entry
         const r1 = await fetch('/api/search/job?q=' + searchParam, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
         });
 
         // Get the matches from the response and update the page to show matches
