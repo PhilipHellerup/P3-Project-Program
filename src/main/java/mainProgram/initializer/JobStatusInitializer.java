@@ -1,14 +1,13 @@
 package mainProgram.initializer;
 
 import jakarta.annotation.PostConstruct;
+import java.util.Map;
+import java.util.TreeMap;
 import mainProgram.repository.JobStatusRepository;
 import mainProgram.table.JobStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Initializes the JobStatus table with default reference data if missing.
@@ -28,14 +27,22 @@ public class JobStatusInitializer {
     private final JobStatusRepository repository;
 
     // Define your default statuses here (ID → Name)
-    private static final Map<Short, String> DEFAULT_STATUSES = new TreeMap<>(Map.of(
-            (short) 1, "notDelivered",
-            (short) 2, "delivered",
-            (short) 3, "inProgress",
-            (short) 4, "missingPart",
-            (short) 5, "finished",
-            (short) 6, "pickedUp"
-    ));
+    private static final Map<Short, String> DEFAULT_STATUSES = new TreeMap<>(
+        Map.of(
+            (short) 1,
+            "notDelivered",
+            (short) 2,
+            "delivered",
+            (short) 3,
+            "inProgress",
+            (short) 4,
+            "missingPart",
+            (short) 5,
+            "finished",
+            (short) 6,
+            "pickedUp"
+        )
+    );
 
     public JobStatusInitializer(JobStatusRepository repository) {
         this.repository = repository;
@@ -47,8 +54,10 @@ public class JobStatusInitializer {
             logger.info("Checking JobStatus table...");
 
             DEFAULT_STATUSES.forEach((id, name) -> {
-                repository.findById(id).ifPresentOrElse(
-                        existing -> {
+                repository
+                    .findById(id)
+                    .ifPresentOrElse(
+                        (existing) -> {
                             if (!existing.getName().equals(name)) {
                                 existing.setName(name);
                                 repository.save(existing);
@@ -62,11 +71,10 @@ public class JobStatusInitializer {
                             repository.save(status);
                             logger.info("Inserted JobStatus ID {} with name '{}'", id, name);
                         }
-                );
+                    );
             });
 
             logger.info("JobStatus initialization complete. Total records: {}", repository.count());
-
         } catch (Exception e) {
             logger.error("Failed to initialize JobStatus table", e);
         }

@@ -7,7 +7,7 @@ import { parsePriceString } from '/js/utils/parsePrice.js';
 document.addEventListener('DOMContentLoaded', () => {
     // Select all elements with the class "delete-btn" in the service table (trash can buttons)
     // and loop through them to attach an event listener
-    document.querySelectorAll('#serviceTable .delete-btn').forEach(button => {
+    document.querySelectorAll('#serviceTable .delete-btn').forEach((button) => {
         // Add a click event listener to each delete button
         button.addEventListener('click', async (e) => {
             // Prevent the default form submission behavior (meaning that the page will now not reload on submission)
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 // Send a DELETE request to the backend API "ServiceController.java" to remove the service
                 const response = await fetch(`/api/services/${serviceId}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
                 });
 
                 // Validate and throw specific error if necessary
@@ -40,9 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Success: Reload the page so table and pagination update automatically
                 window.location.reload();
-            }
-            // Catch any network or fetch-related errors and log them for debugging
-            catch (error) {
+            } catch (error) {
+                // Catch any network or fetch-related errors and log them for debugging
                 console.error('Error deleting service:', error);
             }
         });
@@ -54,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     // Select all elements with the class "edit-btn" in the service table (pencil buttons)
     // and loop through them to attach an event listener
-    document.querySelectorAll('#serviceTable .edit-btn').forEach(button => {
+    document.querySelectorAll('#serviceTable .edit-btn').forEach((button) => {
         // Add a click event listener to each edit button
         button.addEventListener('click', async (e) => {
             // Prevent page reload
@@ -88,13 +87,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 row.classList.add('table-warning'); // Highlight row
 
                 // Change icon to indicate "save" to show the user can save changes
-                editIcon.textContent = 'save';      // Show save icon
+                editIcon.textContent = 'save'; // Show save icon
 
                 // Change button style to indicate active editing
                 button.classList.replace('btn-outline-dark', 'btn-dark'); // Dark button
 
                 // Enable editing for each editable cell
-                cells.forEach(cell => {
+                cells.forEach((cell) => {
                     // Make the cell content editable
                     cell.setAttribute('contenteditable', 'true');
 
@@ -133,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     ev.target.textContent = oldValue;
 
                                     // Alert the user about the problem:
-                                    alert("Price is not a number!");
+                                    alert('Price is not a number!');
 
                                     return;
                                 }
@@ -142,10 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                 await updateService(serviceId, { [field]: parsed });
 
                                 // Display value immediately in EU format (e.g., "123,45 Kr.") as Performsport is in EU
-                                ev.target.textContent = parsed.toLocaleString('de-DE', { // DE = Germany = EU
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                }) + ' Kr.';
+                                ev.target.textContent =
+                                    parsed.toLocaleString('de-DE', {
+                                        // DE = Germany = EU
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                    }) + ' Kr.';
 
                                 // Update the cell's original value reference to avoid sending duplicate updates later
                                 ev.target.dataset.originalValue = ev.target.textContent; // Update reference value
@@ -161,20 +162,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
                 });
-            }
-            else {
+            } else {
                 /* --- EXIT EDIT MODE --- */
                 // Remove visual highlight
                 row.classList.remove('table-warning'); // Remove highlight
 
                 // Change icon back to "edit"
-                editIcon.textContent = 'edit_square';  // Restore edit icon
+                editIcon.textContent = 'edit_square'; // Restore edit icon
 
                 // Reset button style to normal
                 button.classList.replace('btn-dark', 'btn-outline-dark'); // Restore button style
 
                 // Disable editing for all cells and remove original value data
-                cells.forEach(cell => {
+                cells.forEach((cell) => {
                     cell.removeAttribute('contenteditable'); // Removes editing ability
                     delete cell.dataset.originalValue; // Removing original value data
                 });
@@ -193,7 +193,7 @@ async function updateService(serviceId, updatedData) {
         const response = await fetch(`/api/services/${serviceId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedData)
+            body: JSON.stringify(updatedData),
         });
         // Extra NOTES:
         // "method" HTTP Method: (Get, Post, Put, Delete)
@@ -204,9 +204,7 @@ async function updateService(serviceId, updatedData) {
 
         // Handle any fetch errors (network issues, server errors)
         await handleFetchErrors(response);
-    }
-
-    catch (error) {
+    } catch (error) {
         // Log error
         console.error('Error updating service:', error);
     }

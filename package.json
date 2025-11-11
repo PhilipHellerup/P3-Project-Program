@@ -4,7 +4,7 @@
         "prettier-plugin-java": "^2.7.5"
     },
     "scripts": {
-        "prettier:check": "prettier --cache --check \"**/*.{js,jsx,ts,tsx,css,scss,md,html,json,yml,yaml,java}\"",
-        "prettier:write": "prettier --cache --write \"**/*.{js,jsx,ts,tsx,css,scss,md,html,json,yml,yaml,java}\""
+        "prettier:check": "prettier --check \"**/*.{js,jsx,ts,tsx,css,scss,md,html,json,yml,yaml,java}\"",
+        "prettier:write": "prettier --write \"**/*.{js,jsx,ts,tsx,css,scss,md,html,json,yml,yaml,java}\""
     }
 }

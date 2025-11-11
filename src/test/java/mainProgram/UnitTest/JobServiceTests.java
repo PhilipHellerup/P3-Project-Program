@@ -1,5 +1,12 @@
 package mainProgram.UnitTest;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import mainProgram.repository.*;
 import mainProgram.services.JobService;
 import mainProgram.table.Job;
@@ -12,16 +19,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class JobServiceTests {
+
     /* Unit tests JobService logic using mocked repositories to verify method behavior,
    interaction with dependencies, and correct handling of valid, empty, and missing data. */
 

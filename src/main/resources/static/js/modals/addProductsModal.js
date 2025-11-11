@@ -5,11 +5,11 @@ import { handleFetchErrors } from '/js/utils/fetchUtils.js';
 document.addEventListener('DOMContentLoaded', function () {
     /* --- SELECT DOM ELEMENTS --- */
     // Buttons for choosing which form to show
-    const addPartBtn = document.getElementById('addPartBtn');       // Show product form
+    const addPartBtn = document.getElementById('addPartBtn'); // Show product form
     const addServiceBtn = document.getElementById('addServiceBtn'); // Show service form
 
     // Forms for product and service
-    const choiceMenu = document.getElementById('choiceMenu');   // Initial choice menu
+    const choiceMenu = document.getElementById('choiceMenu'); // Initial choice menu
     const productForm = document.getElementById('productForm'); // Product input form
     const serviceForm = document.getElementById('serviceForm'); // Service input form
 
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
         serviceForm.reset();
 
         // Change modal title to fit the choice menu
-        modalTitle.textContent = "Tilføj Produkter";
+        modalTitle.textContent = 'Tilføj Produkter';
     });
 
     /* --- SHOW PRODUCT FORM --- */
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
         submitProductBtn.classList.remove('d-none');
 
         // Change modal title to fit the Product Form
-        modalTitle.textContent = "Tilføj Produkt";
+        modalTitle.textContent = 'Tilføj Produkt';
     });
 
     /* --- SHOW SERVICE FORM --- */
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
         submitServiceBtn.classList.remove('d-none');
 
         // Change modal title to fit the Service Form
-        modalTitle.textContent = "Tilføj Service";
+        modalTitle.textContent = 'Tilføj Service';
     });
 
     /* --- PRODUCT SUBMISSION --- */
@@ -80,14 +80,15 @@ document.addEventListener('DOMContentLoaded', function () {
         // Gather input values from the product form
         const productData = {
             name: document.getElementById('navn-text').value, // Product name
-            EAN: document.getElementById('EAN-text').value,   // Product EAN code
+            EAN: document.getElementById('EAN-text').value, // Product EAN code
             type: document.getElementById('type-text').value, // Product type/category
             price: document.getElementById('pris-tal').value, // Product price
         };
 
         try {
             // Send a POST request to create a new product in backend
-            const response = await fetch('/api/products', { // Endpoint handled by ProductController
+            const response = await fetch('/api/products', {
+                // Endpoint handled by ProductController
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(productData),
@@ -98,8 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Reload the page to show the newly added product
             window.location.reload();
-        }
-        catch (error) {
+        } catch (error) {
             // Log any network/server errors
             console.error('Error creating product:', error);
         }
@@ -112,14 +112,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Gather input values from the service form
         const serviceData = {
-            name: document.getElementById('service-navn-text').value,    // Service name
-            price: document.getElementById('service-price').value,       // Service price
+            name: document.getElementById('service-navn-text').value, // Service name
+            price: document.getElementById('service-price').value, // Service price
             duration: document.getElementById('service-duration').value, // Service duration in minutes
         };
 
         try {
             // Send a POST request to create a new service in backend
-            const response = await fetch('/api/services', {  // Endpoint handled by ServiceController
+            const response = await fetch('/api/services', {
+                // Endpoint handled by ServiceController
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(serviceData),
@@ -130,8 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Reload the page to show the newly added service
             window.location.reload();
-        }
-        catch (error) {
+        } catch (error) {
             // Log any network/server errors
             console.error('Error creating service:', error);
         }

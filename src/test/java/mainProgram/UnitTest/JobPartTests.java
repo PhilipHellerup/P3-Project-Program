@@ -1,14 +1,15 @@
 package mainProgram.UnitTest;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import mainProgram.table.Job;
 import mainProgram.table.JobPart;
 import mainProgram.table.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class JobPartTests {
+
     /* Verifies JobPart logic such as constructor initialization, quantity adjustments, and setter
    correctness, focusing purely on in-memory object behavior without persistence. */
 

@@ -1,10 +1,9 @@
 package mainProgram.services;
 
+import java.util.List;
 import mainProgram.repository.ProductRepository;
 import mainProgram.table.Product;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class productService implements BaseSearchService<Product> {

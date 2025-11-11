@@ -17,8 +17,8 @@
     background-color: #ffffff;
     color: #1a1a1a;
     box-shadow:
-            0 2px 4px rgba(0, 0, 0, 0.1),
-            0 1px 2px rgba(0, 0, 0, 0.06);
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 /* Hover state for inactive tabs */
@@ -26,8 +26,8 @@
     color: #1a1a1a;
     background-color: #ffffff;
     box-shadow:
-            0 2px 4px rgba(0, 0, 0, 0.1),
-            0 1px 2px rgba(0, 0, 0, 0.06);
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 /* Background container for the button group */
@@ -42,8 +42,8 @@
 }
 
 .choice-btn {
-    width: 12rem;                     /* Fixed equal width */
-    min-height: 10rem;                /* Fixed equal height */
+    width: 12rem; /* Fixed equal width */
+    min-height: 10rem; /* Fixed equal height */
     padding: 1rem;
 
     border: none;
@@ -51,12 +51,12 @@
     background-color: #f8f9fa;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 
     /* Center and stack content */
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;      /* Keeps icon/title/desc aligned nicely */
+    justify-content: flex-start; /* Keeps icon/title/desc aligned nicely */
     align-items: center;
     text-align: center;
 }
@@ -64,7 +64,7 @@
 .choice-btn:hover {
     background-color: #e2e6ea;
     transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .choice-icon {
