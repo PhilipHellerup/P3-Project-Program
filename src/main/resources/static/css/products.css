@@ -141,7 +141,11 @@
     justify-content: space-between; /* Ensures pagination stays at bottom */
 }
 
-/* Highlight editable cells when in edit mode */
+/* Editable cells styling */
 .editable-cell {
-    outline: 2px solid black;
+    background-color: #0095ff;  /* Highlight background */
+    outline: 1px solid #040404; /* Border */
+    border-radius: 5px;         /* Slightly rounded corners */
+    padding: 4px 8px;           /* Small padding so text does not touch edges */
+    transition: all 0.2s ease;  /* Smooth hover/focus transition */
 }

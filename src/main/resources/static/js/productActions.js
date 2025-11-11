@@ -85,7 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isEditing) {
                 /* --- ENTER EDIT MODE --- */
                 // Visually indicate the row is editable
-                cells.forEach(cell => cell.classList.add('table-warning'));
+                cells.forEach(cell => cell.classList.add('table-light'));
+                cells.forEach(cell => cell.classList.add('editable-cell'));
 
                 // Change icon to indicate "save" to show the user can save changes
                 editIcon.textContent = `save`;
@@ -164,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
             else {
                 /* --- EXIT EDIT MODE --- */
                 // Remove visual highlight
-                cells.forEach(cell => cell.classList.remove('table-warning'));
+                cells.forEach(cell => cell.classList.remove('table-light'));
                 cells.forEach(cell => cell.classList.remove('editable-cell'));
 
                 // Change icon back to "edit"
