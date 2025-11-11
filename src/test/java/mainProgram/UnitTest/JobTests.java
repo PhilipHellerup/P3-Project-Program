@@ -1,14 +1,14 @@
 package mainProgram.UnitTest;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDateTime;
 import mainProgram.table.Job;
 import mainProgram.table.JobStatus;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class JobTests {
+
     /* Validates Job entity field assignment and retrieval, checks null defaults and
    ensures getters/setters operate correctly without relying on Spring or database layers. */
 

@@ -1,11 +1,12 @@
 package mainProgram.UnitTest;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import mainProgram.table.JobStatus;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class JobStatusTests {
+
     /* Ensures JobStatus entity properly stores and retrieves ID and name values,
    including handling of null names, in a standalone, non-database context. */
 

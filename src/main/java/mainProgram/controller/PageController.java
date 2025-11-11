@@ -3,8 +3,13 @@ package mainProgram.controller; // Project Organization
 /* --- Imports --- */
 
 import java.util.List;
-
+import mainProgram.repository.JobPartRepository;
+import mainProgram.repository.JobRepository;
 import mainProgram.repository.JobServiceRepository;
+import mainProgram.repository.ProductRepository;
+import mainProgram.repository.ServiceRepository;
+import mainProgram.services.JobService;
+import mainProgram.table.Job;
 import mainProgram.table.Product;
 import mainProgram.table.Services;
 import org.springframework.data.domain.Sort;
@@ -13,12 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import mainProgram.services.JobService;
-import mainProgram.repository.JobPartRepository;
-import mainProgram.repository.JobRepository;
-import mainProgram.repository.ProductRepository;
-import mainProgram.repository.ServiceRepository;
-import mainProgram.table.Job;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /* --- PageController Class --- */
@@ -28,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/")
 public class PageController {
+
     // Attributes
     private final JobRepository jobRepository;
     private final JobService jobService;
@@ -35,7 +35,6 @@ public class PageController {
     private final ServiceRepository serviceRepository;
     private final JobPartRepository jobPartRepository;
     private final JobServiceRepository jobServiceRepository;
-
 
     // Constructor for Dependency Injection
 
@@ -45,7 +44,14 @@ public class PageController {
      * @param productRepository the repository for accessing product data
      * @param jobPartRepository the repository for connecting jobs and products
      **/
-    public PageController(JobRepository jobRepository, JobService jobService, ProductRepository productRepository, ServiceRepository serviceRepository, JobPartRepository jobPartRepository, JobServiceRepository jobServiceRepository) {
+    public PageController(
+        JobRepository jobRepository,
+        JobService jobService,
+        ProductRepository productRepository,
+        ServiceRepository serviceRepository,
+        JobPartRepository jobPartRepository,
+        JobServiceRepository jobServiceRepository
+    ) {
         this.jobRepository = jobRepository;
         this.jobService = jobService;
         this.productRepository = productRepository;

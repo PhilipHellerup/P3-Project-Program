@@ -32,13 +32,13 @@
             work_time_minutes: parseInt(document.getElementById('work_time_minutes').value || '0', 10),
             price_per_minute: parseFloat(document.getElementById('price_per_minute').value || '0'),
             date: toIsoLocal(document.getElementById('date').value),
-            status: {id: parseInt(document.getElementById('status_id').value, 10)},
+            status: { id: parseInt(document.getElementById('status_id').value, 10) },
         };
 
         // Perform PUT request to update the job
-        fetch('/api/jobs/' + id + "/update", {
+        fetch('/api/jobs/' + id + '/update', {
             method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
         })
             .then((r) => {

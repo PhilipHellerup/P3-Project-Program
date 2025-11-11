@@ -1,5 +1,7 @@
 package mainProgram;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import mainProgram.repository.JobRepository;
 import mainProgram.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -7,11 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-
 @SpringBootTest
 class MainApplicationTests {
+
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -26,5 +26,3 @@ class MainApplicationTests {
         assertNotNull(applicationContext.getBean(ProductRepository.class));
     }
 }
-
-

@@ -71,7 +71,7 @@ let searchBar = document.getElementById('searchBar');
                         </div>
                     <div class="d-flex justify-content-between gap-5">
                         <div>
-                           <p class="text-secondary mb-0 fs-7">${match.type === "part" ? match.EAN : ''}</p> <!-- EAN has to be lowercase (ean), beucase the JSON ojbect "match" from the HTTP repose, are lowercase -->
+                           <p class="text-secondary mb-0 fs-7">${match.type === 'part' ? match.EAN : ''}</p> <!-- EAN has to be lowercase (ean), beucase the JSON ojbect "match" from the HTTP repose, are lowercase -->
                         </div>
                            <div>
                            <p class="text-secondary mb-0 fs-7">${match.price} kr.</p>
@@ -160,7 +160,7 @@ function renderProductTable() {
             const productItem = modalProducts.find((p) => p.product.id === id);
             if (productItem) {
                 productItem.quantity = newQty;
-                renderProductTable(modalProducts)
+                renderProductTable(modalProducts);
             }
         });
 

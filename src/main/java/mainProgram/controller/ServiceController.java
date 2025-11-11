@@ -1,11 +1,11 @@
 package mainProgram.controller; // Project Organization
 
+import java.util.Map;
 /* --- Imports --- */
 import mainProgram.repository.ServiceRepository;
 import mainProgram.table.Services;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Map;
 
 /* --- ServiceController --- */
 // REST controller for handling service-related operations.
@@ -13,6 +13,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/services") // Base path for all API routes in this controller
 public class ServiceController {
+
     // Attributes
     private final ServiceRepository serviceRepository; // Injected repository for CRUD operations on Services
 
@@ -54,8 +55,7 @@ public class ServiceController {
 
             // Return HTTP 204: No Content (indicating success, but no response body needed)
             return ResponseEntity.noContent().build(); // 204 No Content
-        }
-        else {
+        } else {
             // Return HTTP 404: Not Found (if the service does not exist in the database)
             return ResponseEntity.notFound().build(); // 404 if not found
         }
@@ -72,42 +72,44 @@ public class ServiceController {
     @PutMapping("/{id}")
     public ResponseEntity<?> editService(@PathVariable int id, @RequestBody Map<String, Object> updates) {
         // Find the service by ID
-        return serviceRepository.findById(id).map(service -> {
-            // Iterate over each field in the updates map
-            // The map comes from the frontend and contains key/value pairs of fields to update
-            updates.forEach((field, value) -> {
-                switch (field) {
-                    case "name" -> service.setName((String) value);
-                    case "price" -> {
-                        // Handle price as number or string
-                        if (value instanceof Number num) {
-                            service.setPrice(num.doubleValue());
-                        } else {
-                            service.setPrice(Double.parseDouble(value.toString()));
+        return serviceRepository
+            .findById(id)
+            .map((service) -> {
+                // Iterate over each field in the updates map
+                // The map comes from the frontend and contains key/value pairs of fields to update
+                updates.forEach((field, value) -> {
+                    switch (field) {
+                        case "name" -> service.setName((String) value);
+                        case "price" -> {
+                            // Handle price as number or string
+                            if (value instanceof Number num) {
+                                service.setPrice(num.doubleValue());
+                            } else {
+                                service.setPrice(Double.parseDouble(value.toString()));
+                            }
                         }
-                    }
-                    case "duration" -> {
-                        // Handle duration as number or string
-                        if (value instanceof Number num) {
-                            service.setDuration(num.intValue());
-                        } else {
-                            service.setDuration(Integer.parseInt(value.toString()));
+                        case "duration" -> {
+                            // Handle duration as number or string
+                            if (value instanceof Number num) {
+                                service.setDuration(num.intValue());
+                            } else {
+                                service.setDuration(Integer.parseInt(value.toString()));
+                            }
                         }
+                        default -> System.out.println("Unknown field: " + field); // Safety fallback for unexpected fields
                     }
-                    default -> System.out.println("Unknown field: " + field); // Safety fallback for unexpected fields
-                }
+                });
+
+                // Save the updated service in the database
+                Services saved = serviceRepository.save(service);
+
+                // Return HTTP 200 OK because the service updated successfully
+                return ResponseEntity.ok(saved);
+            })
+            // Service with the given ID not found
+            .orElseGet(() -> {
+                // Return HTTP 404: Not Found = Service Not Found
+                return ResponseEntity.notFound().build();
             });
-
-            // Save the updated service in the database
-            Services saved = serviceRepository.save(service);
-
-            // Return HTTP 200 OK because the service updated successfully
-            return ResponseEntity.ok(saved);
-        })
-        // Service with the given ID not found
-        .orElseGet(() -> {
-            // Return HTTP 404: Not Found = Service Not Found
-            return ResponseEntity.notFound().build();
-        });
     }
 }

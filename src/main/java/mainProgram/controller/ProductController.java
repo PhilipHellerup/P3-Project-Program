@@ -1,11 +1,11 @@
 package mainProgram.controller; // Project Organization
 
+import java.util.Map;
 /* --- Imports --- */
 import mainProgram.repository.ProductRepository;
 import mainProgram.table.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Map;
 
 /* --- PartController --- */
 // REST controller for handling product-related operations.
@@ -13,8 +13,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/products") // Base path for all API routes in this controller
 public class ProductController {
-  // Attributes
-  private final ProductRepository productRepository; // Injected repository used for database operations CRUD
+
+    // Attributes
+    private final ProductRepository productRepository; // Injected repository used for database operations CRUD
 
     // Constructor for Dependency Injection
     // Spring automatically provides an instance of ProductRepository at runtime.
@@ -50,8 +51,7 @@ public class ProductController {
 
             // Return HTTP 204: No Content (indicating success, but no response body needed)
             return ResponseEntity.noContent().build(); // 204 No Content
-        }
-        else {
+        } else {
             // Return HTTP 404: Not Found (if the product does not exist in the database)
             return ResponseEntity.notFound().build(); // 404 if not found
         }
@@ -67,39 +67,39 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<?> editProduct(@PathVariable int id, @RequestBody Map<String, Object> updates) {
         // Look up the product in the database by ID
-        return productRepository.findById(id).map(product -> {
-            // Iterate over each field in the updates map
-            // The map comes from the frontend and contains key/value pairs of fields to update
-            updates.forEach((field, value) -> {
-                switch (field) {
-                    case "name" -> product.setName((String) value);
-                    case "EAN" -> product.setEAN((String) value);
-                    case "type" -> product.setType((String) value);
-                    case "price" -> {
-                        // Handle price being either a number or string
-                        // Frontend sends a numeric value (Double) after parsing EU/US formats
-                        if (value instanceof Number num) {
-                            product.setPrice(num.doubleValue()); // Store numeric value directly
-                        } else {
-                            // Safety fallback: Parse string as Double
-                            product.setPrice(Double.parseDouble(value.toString()));
+        return productRepository
+            .findById(id)
+            .map((product) -> {
+                // Iterate over each field in the updates map
+                // The map comes from the frontend and contains key/value pairs of fields to update
+                updates.forEach((field, value) -> {
+                    switch (field) {
+                        case "name" -> product.setName((String) value);
+                        case "EAN" -> product.setEAN((String) value);
+                        case "type" -> product.setType((String) value);
+                        case "price" -> {
+                            // Handle price being either a number or string
+                            // Frontend sends a numeric value (Double) after parsing EU/US formats
+                            if (value instanceof Number num) {
+                                product.setPrice(num.doubleValue()); // Store numeric value directly
+                            } else {
+                                // Safety fallback: Parse string as Double
+                                product.setPrice(Double.parseDouble(value.toString()));
+                            }
                         }
+                        default -> System.out.println("Unknown field: " + field);
                     }
-                    default -> System.out.println("Unknown field: " + field);
-                }
+                });
+                // Save the updated product in the database
+                Product saved = productRepository.save(product);
+
+                // Return HTTP 200 OK because the product updated successfully
+                return ResponseEntity.ok(saved);
+            })
+            // Product with given ID does not exist
+            .orElseGet(() -> {
+                // Return HTTP 404: Not Found = Product Not Found
+                return ResponseEntity.notFound().build();
             });
-            // Save the updated product in the database
-            Product saved = productRepository.save(product);
-
-            // Return HTTP 200 OK because the product updated successfully
-            return ResponseEntity.ok(saved);
-        })
-
-        // Product with given ID does not exist
-        .orElseGet(() -> {
-            // Return HTTP 404: Not Found = Product Not Found
-            return ResponseEntity.notFound().build();
-        });
     }
 }
-

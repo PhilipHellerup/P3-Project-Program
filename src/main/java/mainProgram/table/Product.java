@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 @Entity // Marks this class as a JPA entity (maps to a database table)
 @Table(name = "products") // Explicitly sets the table name in the database
 public class Product {
+
     // Attributes
     @Id // Marks this field as the table's primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-incremented ID

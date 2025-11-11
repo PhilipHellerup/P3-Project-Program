@@ -16,7 +16,7 @@ export function parsePriceString(raw) {
     let s = String(raw).trim();
 
     // Remove currency symbols/text AND trailing dots (like "Kr." or "kr.")
-    s = s.replace(/\s*(kr|kroner)\.?/ig, ''); // \s = whitespace, i = ignore case, g = global replace (replace all occurrences)
+    s = s.replace(/\s*(kr|kroner)\.?/gi, ''); // \s = whitespace, i = ignore case, g = global replace (replace all occurrences)
 
     // Remove all other non-digit, non-comma, non-dot characters
     s = s.replace(/[^\d.,]/g, '');
@@ -33,14 +33,12 @@ export function parsePriceString(raw) {
         if (lastComma > lastDot) {
             // EU style: Last comma is decimal
             s = s.replace(/\./g, ''); // Remove dots (thousands)
-            s = s.replace(',', '.');  // Convert decimal comma to dot
-        }
-        else {
+            s = s.replace(',', '.'); // Convert decimal comma to dot
+        } else {
             // US style: Last dot is decimal
             s = s.replace(/,/g, ''); // Remove commas (thousands)
         }
-    }
-    else if (lastComma !== -1) {
+    } else if (lastComma !== -1) {
         // Only comma = Decimal
         s = s.replace(',', '.');
     }
