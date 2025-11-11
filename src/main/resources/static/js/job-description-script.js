@@ -117,3 +117,81 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+    // Eventlistener for the edit "arbejdstid" btn
+    let editBtn = document.getElementById('edit-worktime-btn')
+    editBtn.addEventListener('click', (e) => {
+        // Get the current data from the job using Thymeleaf attributes
+        const repairId = e.currentTarget.getAttribute('data-id')
+        const workTime = e.currentTarget.getAttribute('data-workTimeMin')
+        const workCost = e.currentTarget.getAttribute('data-workCost')
+
+        // Get the table cells for the work time and work cost + the table row (for changing the border on the row when the user can edit)
+        let workTimeTd = document.getElementById('workTimeTd')
+        let workCostTd = document.getElementById('workCostTd')
+        let tableRow = document.getElementById('worktime-table-row')
+
+        // Change the worktime and work cost table cells to input boxes
+        let workTimeInput = document.createElement('input')
+        workTimeInput.type = "number"
+        workTimeInput.className = "w-25 form-control form-control-sm"
+        workTimeInput.value = workTime
+        let workCostInput = document.createElement('input')
+        workCostInput.type = "number"
+        workCostInput.className = "w-30 form-control form-control-sm"
+        workCostInput.value = workCost
+
+        // Replace the current <p> tags with <input> tags inside the table cells
+        workTimeTd.innerHTML = ''
+        workTimeTd.appendChild(workTimeInput)
+        workCostTd.innerHTML = ''
+        workCostTd.appendChild(workCostInput)
+
+        // Set focus in the workTime input
+        workTimeInput.focus()
+
+        // Change the border on the table row, so that the user knows where to edit
+        tableRow.className = "border-left-0 border-2 border-primary"
+
+        // Chang the apperance of the edit btn to "gem"
+        editBtn.innerHTML = ''
+        editBtn.innerText = "Gem"
+        editBtn.className = "btn btn-sm btn-success align-co px-1 py-1 pt-0"
+
+        // Cloning the object removes event listeners
+        let editBtnClone = editBtn.cloneNode(true);
+
+        // Add an eventListener to the edit btn, which updates the job with the values in the input fields and then reloads the page
+        editBtnClone.addEventListener('click', async (e) => {
+            // Define the payload with worktime and work cost
+            const payload = {
+                work_time_minutes: workTimeInput.value,
+                price_per_minute: workCostInput.value
+            }
+
+            // Perform PUT request to update the job
+            fetch('/api/jobs/' + repairId + "/update", {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload),
+            })
+                .then((r) => {
+                    if (!r.ok) throw new Error('Update failed');
+                    return r.json();
+                })
+                .then(() => {
+                    window.location.reload(); // Refresh page to reflect changes
+                })
+                .catch((err) => {
+                    console.error(err);
+                    // User-facing error (Danish): "Could not update the job."
+                    alert('Kunne ikke opdatere jobbet.');
+                });
+        })
+
+        editBtn.parentNode.replaceChild(editBtnClone, editBtn); // Replacing the original btn with the cloned object with the
+
+
+    })
+
+
+});

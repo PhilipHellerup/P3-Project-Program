@@ -142,30 +142,47 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
             </thead>
             <!-- Edit the worktime -->
             <tbody>
-            <tr th:each="js : ${jobService}">
+            <tr id="worktime-table-row">
                 <td class="w-30">
-                    <p class="m-1" th:text="${js.service.name}"></p>
+                    <p class="m-1" th:text="Arbejdstid"></p>
+                </td>
+                <td id="workTimeTd" class="w-15">
+                    <p class="m-1" th:text="${job.work_time_minutes}"></p>
                 </td>
                 <td class="w-15">
-                    <p class="m-1" th:text="${js.quantity}"></p>
+
                 </td>
-                <td class="w-15">
-                    <p class="m-1 d-inline" th:text="${js.service.duration}"></p>
-                    <p class="d-inline">min.</p>
-                </td>
-                <td class="w-15">
+                <td id="workCostTd" class="w-15">
                     <p class="m-1 d-inline"
-                       th:text="${#numbers.formatDecimal(js.service.price, 2, 2,'COMMA')}"></p>
+                       th:text="${#numbers.formatDecimal(job.price_per_minute, 1, 2,'COMMA')}"></p>
                     <p class="d-inline">kr.</p>
                 </td>
-                <td class="w-15" th:with="totalPrice=${js.service.price * js.quantity}">
+                <td class="w-15" th:with="totalPrice=${job.work_time_minutes * job.price_per_minute}">
                     <p class="m-1 d-inline" th:text="${#numbers.formatDecimal(totalPrice, 2, 2,'COMMA')}"></p>
                     <p class="d-inline">kr.</p>
                 </td>
-                <td class="p-0">
-                    <button type="button" class="btn btn-sm btn-danger remove-btn"
-                            th:attr="data-id=${js.service.id}, data-type='service' "
-                    >X
+                <td id="editButtonTd" class="p-0">
+                    <button type="button" id="edit-worktime-btn"
+                            class="btn btn-sm btn-secondary align-co px-1 py-1 pt-0"
+                            th:attr="data-id=${job.id}, data-workTimeMin=${job.work_time_minutes}, data-workCost=${job.price_per_minute}"
+                    >
+                        <!-- Pencil edit icon-->
+                        <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="18"
+                                height="18"
+                                fill="currentColor"
+                                class="bi bi-pencil-square"
+                                viewBox="0 0 16 16"
+                        >
+                            <path
+                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                            />
+                            <path
+                                    fill-rule="evenodd"
+                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                            />
+                        </svg>
                     </button>
                 </td>
 
@@ -268,7 +285,7 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                 document.addEventListener('DOMContentLoaded', () => {
                     let subtotal = 0;
 
-                    document.querySelectorAll('.product-table-content-container tbody tr td:nth-child(4) p')
+                    document.querySelectorAll('.product-table-content-container tbody tr td:nth-child(5) p')
                         .forEach(cell => subtotal += parseFloat(cell.textContent.replace(/[^\d.,-]/g, '').replace(',', '.')) || 0);
 
                     const moms = subtotal * 0.25;

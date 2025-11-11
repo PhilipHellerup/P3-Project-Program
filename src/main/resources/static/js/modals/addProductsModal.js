@@ -1,49 +1,139 @@
-// Imports
+/* --- Imports --- */
 import { handleFetchErrors } from '/js/utils/fetchUtils.js';
 
-// Handles the submission of the "Add Product" form on the product page.
-// Sends product data to the server via POST request.
-
-// Wait for the HTML DOM Content do be loaded and then run the function
+// Wait until the entire DOM (HTML structure) has loaded before running the script
 document.addEventListener('DOMContentLoaded', function () {
-    // Get the submit button by its unique ID
-    const submitButton = document.getElementById('submitProductBtn');
+    /* --- SELECT DOM ELEMENTS --- */
+    // Buttons for choosing which form to show
+    const addPartBtn = document.getElementById('addPartBtn');       // Show product form
+    const addServiceBtn = document.getElementById('addServiceBtn'); // Show service form
 
-    // Attach a click event listener to the submit button.
-    // Using `async`, because it allows the use of `await` for the fetch call.
-    submitButton.addEventListener('click', async function (e) {
-        // Prevent the default form submission behavior (meaning that the page will now not reload on submission)
+    // Forms for product and service
+    const choiceMenu = document.getElementById('choiceMenu');   // Initial choice menu
+    const productForm = document.getElementById('productForm'); // Product input form
+    const serviceForm = document.getElementById('serviceForm'); // Service input form
+
+    // Submit buttons inside the modal forms
+    const submitProductBtn = document.getElementById('submitProductBtn');
+    const submitServiceBtn = document.getElementById('submitServiceBtn');
+
+    // Modal Title
+    const modalTitle = document.getElementById('modalTitle');
+
+    // Reset Modal whenever it is close down
+    const addProductModal = document.getElementById('addProductModal');
+    addProductModal.addEventListener('hidden.bs.modal', () => {
+        // Show the choice menu
+        choiceMenu.classList.remove('d-none');
+
+        // Hide both forms
+        productForm.classList.add('d-none');
+        serviceForm.classList.add('d-none');
+
+        // Hide submit buttons
+        submitProductBtn.classList.add('d-none');
+        submitServiceBtn.classList.add('d-none');
+
+        // Clear input values in the service and product form for clear state
+        productForm.reset();
+        serviceForm.reset();
+
+        // Change modal title to fit the choice menu
+        modalTitle.textContent = "Tilføj Produkter";
+    });
+
+    /* --- SHOW PRODUCT FORM --- */
+    addPartBtn.addEventListener('click', () => {
+        // Hide the choice menu
+        choiceMenu.classList.add('d-none');
+
+        // Show product form
+        productForm.classList.remove('d-none');
+
+        // Show product submit button
+        submitProductBtn.classList.remove('d-none');
+
+        // Change modal title to fit the Product Form
+        modalTitle.textContent = "Tilføj Produkt";
+    });
+
+    /* --- SHOW SERVICE FORM --- */
+    addServiceBtn.addEventListener('click', () => {
+        // Hide the choice menu
+        choiceMenu.classList.add('d-none');
+
+        // Show service form
+        serviceForm.classList.remove('d-none');
+
+        // Show service submit button
+        submitServiceBtn.classList.remove('d-none');
+
+        // Change modal title to fit the Service Form
+        modalTitle.textContent = "Tilføj Service";
+    });
+
+    /* --- PRODUCT SUBMISSION --- */
+    submitProductBtn.addEventListener('click', async function (e) {
+        // Prevent default form submission (no page reload)
         e.preventDefault();
 
-        // Collect all form input values into a product data object
-        // Each property corresponds to an attribute in the database Product entity
+        // Gather input values from the product form
         const productData = {
-            productNumber: document.getElementById('varenummer-text').value, // Product Number
-            name: document.getElementById('navn-text').value, // Product Name
-            EAN: document.getElementById('EAN-text').value, // Product EAN
-            type: document.getElementById('type-text').value, // Product Category/Type
-            price: document.getElementById('pris-tal').value, // Product Price
+            name: document.getElementById('navn-text').value, // Product name
+            EAN: document.getElementById('EAN-text').value,   // Product EAN code
+            type: document.getElementById('type-text').value, // Product type/category
+            price: document.getElementById('pris-tal').value, // Product price
         };
 
         try {
-            // Send an asynchronous POST request to the server API endpoint ("/api/products") in "ProductController.java"
-            // The `await` keyword pauses execution until the fetch completes
-            const response = await fetch('/api/products', {
-                method: 'POST', // HTTP method for creating new resources.
-                headers: {
-                    'Content-Type': 'application/json', // Tell the server that we are sending JSON data
-                },
-                body: JSON.stringify(productData), // Convert JavaScript object to JSON string
+            // Send a POST request to create a new product in backend
+            const response = await fetch('/api/products', { // Endpoint handled by ProductController
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productData),
             });
 
-            // Validate the response and throw specific error if needed
+            // Check for fetch errors and handle them gracefully
             await handleFetchErrors(response);
 
-            // Success: Reload the table to show the new product
+            // Reload the page to show the newly added product
             window.location.reload();
-        } catch (error) {
-            // Catch any network errors or exceptions (e.g., server unreachable)
-            console.error('Error creating product:', error); // Log the error details to the browser console
+        }
+        catch (error) {
+            // Log any network/server errors
+            console.error('Error creating product:', error);
+        }
+    });
+
+    /* --- SERVICE SUBMISSION --- */
+    submitServiceBtn.addEventListener('click', async function (e) {
+        // Prevent default form submission (no page reload)
+        e.preventDefault();
+
+        // Gather input values from the service form
+        const serviceData = {
+            name: document.getElementById('service-navn-text').value,    // Service name
+            price: document.getElementById('service-price').value,       // Service price
+            duration: document.getElementById('service-duration').value, // Service duration in minutes
+        };
+
+        try {
+            // Send a POST request to create a new service in backend
+            const response = await fetch('/api/services', {  // Endpoint handled by ServiceController
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(serviceData),
+            });
+
+            // Check for fetch errors and handle them gracefully
+            await handleFetchErrors(response);
+
+            // Reload the page to show the newly added service
+            window.location.reload();
+        }
+        catch (error) {
+            // Log any network/server errors
+            console.error('Error creating service:', error);
         }
     });
 });

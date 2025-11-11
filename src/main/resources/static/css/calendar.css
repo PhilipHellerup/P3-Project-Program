@@ -23,9 +23,11 @@ body {
     color: #000;
     text-decoration: none;
 }
+
 .fc .fc-daygrid-day-number {
     color: #000;
 }
+
 .fc .fc-event-title {
     white-space: wrap; /* keep on one line */
     overflow: hidden; /* clip overflow */
@@ -138,6 +140,7 @@ body {
 .fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
     border-radius: 12px;
 }
+
 .fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
     border-radius: 12px;
 }
@@ -256,12 +259,12 @@ body {
     cursor: pointer;
     background-color: #fff !important;
     border: 1px solid #dcdcdc !important;
-    padding: 10px 12px !important;
-    border-radius: 14px !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05) !important;
+    padding: 6px 8px !important; /* ↓ reduced padding */
+    border-radius: 12px !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05) !important;
     font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
     font-size: 1rem;
-    font-weight: 1000;
+    font-weight: 600;
     overflow: hidden;
 }
 
@@ -314,26 +317,31 @@ body {
     color: #f65d60 !important;
     background-color: #fff5f5 !important;
 }
+
 .status-delivered {
     border-color: #feb568 !important;
     color: #feb568 !important;
     background-color: #fff9f2 !important;
 }
+
 .status-inProgress {
     border-color: #0088ff !important;
     color: #0088ff !important;
     background-color: #f0f7ff !important;
 }
+
 .status-missingPart {
     border-color: #4b41c8 !important;
     color: #4b41c8 !important;
     background-color: #f5f3ff !important;
 }
+
 .status-finished {
     border-color: #32a759 !important;
     color: #32a759 !important;
     background-color: #f3fff7 !important;
 }
+
 .status-pickedUp {
     border-color: #939292 !important;
     color: #939292 !important;
@@ -352,6 +360,7 @@ body {
     padding: 0.25rem 0;
     display: none;
 }
+
 .event-contextmenu .dropdown-item {
     display: block;
     width: 100%;
@@ -361,9 +370,11 @@ body {
     text-decoration: none;
     cursor: pointer;
 }
+
 .event-contextmenu .dropdown-item:hover {
     background-color: #f8f9fa;
 }
+
 .event-contextmenu .dropdown-divider {
     height: 0;
     margin: 0.25rem 0;
@@ -378,10 +389,12 @@ body {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     z-index: 1100;
 }
+
 .event-contextmenu .dropdown-item {
     cursor: pointer;
     white-space: nowrap;
 }
+
 #statusSubmenuRoot {
     display: flex;
     justify-content: space-between;

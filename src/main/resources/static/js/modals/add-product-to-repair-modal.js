@@ -65,19 +65,16 @@ let searchBar = document.getElementById('searchBar');
                     <td class="d-flex justify-content-between">
                         <div>
                            <p class="fs-6 mb-0">${match.name}</p>
-                           <p class="text-secondary mb-0 fs-7">${match.type}</p>
                         </div>
                         <div>
                            <p class="fs-6 mb-0 text-secondary">${match.type === "service" ? "Ydelse" : match.type === "part" ? "Reservedel" : "Udefineret type"}</p>
                         </div>
                     <div class="d-flex justify-content-between gap-5">
                         <div>
-                           <p class="fs-6 mb-0">EAN</p>
-                           <p class="text-secondary mb-0 fs-7">${match.ean}</p> <!-- EAN has to be lowercase (ean), beucase the JSON ojbect "match" from the HTTP repose, are lowercase -->
+                           <p class="text-secondary mb-0 fs-7">${match.type === "part" ? match.EAN : ''}</p> <!-- EAN has to be lowercase (ean), beucase the JSON ojbect "match" from the HTTP repose, are lowercase -->
                         </div>
                            <div>
-                           <p class="fs-6 mb-0">Pris</p>
-                           <p class="text-secondary mb-0 fs-7">${match.price}</p>
+                           <p class="text-secondary mb-0 fs-7">${match.price} kr.</p>
                         </div>
                      </div>
                     </td>
