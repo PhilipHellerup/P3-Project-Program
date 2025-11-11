@@ -3758,6 +3758,24 @@ textarea.form-control-lg {
     cursor: pointer;
 }
 
+/* Create job btn */
+.addSomethingBtn:hover {
+    background: #247940;
+    color: #fff;
+}
+
+.addSomethingBtn {
+    background: #32a759;
+    height: 40px;
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    font-weight: 600;
+    padding: 6px 14px;
+    transition: all 0.15s ease-in-out;
+    cursor: pointer;
+}
+
 .fade {
     transition: opacity 0.15s linear;
 }
@@ -6271,6 +6289,18 @@ textarea.form-control-lg {
     align-items: center;
     justify-content: flex-end;
     padding: calc(var(--bs-modal-padding) - var(--bs-modal-footer-gap) * 0.5);
+    background-color: var(--bs-modal-footer-bg);
+    border-top: var(--bs-modal-footer-border-width) solid var(--bs-modal-footer-border-color);
+    border-bottom-right-radius: var(--bs-modal-inner-border-radius);
+    border-bottom-left-radius: var(--bs-modal-inner-border-radius);
+}
+
+.modal-footer-CUSTOM {
+    display: flex;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    /*padding: calc(var(--bs-modal-padding) - var(--bs-modal-footer-gap) * 0.5);*/
     background-color: var(--bs-modal-footer-bg);
     border-top: var(--bs-modal-footer-border-width) solid var(--bs-modal-footer-border-color);
     border-bottom-right-radius: var(--bs-modal-inner-border-radius);
@@ -8894,6 +8924,10 @@ textarea.form-control-lg {
 
 .mt-6 {
     margin-top: 6rem !important;
+}
+
+.mt-5-5 {
+    margin-top: 4rem !important;
 }
 
 /* remove the last separator line */

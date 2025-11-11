@@ -1,13 +1,10 @@
 package mainProgram.controller; // Project Organization
 
 /* --- Imports --- */
-
 import mainProgram.repository.ProductRepository;
 import mainProgram.table.Product;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 import java.util.Map;
 
 /* --- PartController --- */
@@ -21,19 +18,14 @@ public class ProductController {
 
     // Constructor for Dependency Injection
     // Spring automatically provides an instance of ProductRepository at runtime.
-
-    /**
-     * @param productRepository the repository handling CRUD operations for Product entities.
-     **/
+    /** @param productRepository the repository handling CRUD operations for Product entities. **/
     public ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
     // Methods
     /** @param product the product object to create **/
-    /**
-     * @return ResponseEntity containing the created product if successful, or a bad request response
-     **/
+    /** @return ResponseEntity containing the created product if successful, or a bad request response **/
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         // Save the product to the database using the repository and its .save() method.
@@ -46,6 +38,9 @@ public class ProductController {
     // Deletes a specific product from the database based on its ID.
     // Triggered when a DELETE request is sent to "/api/products/{id}"-
     // Example: request: DELETE /api/products/5 will delete the product with id "5".
+    /** @param id the unique id of the product to delete **/
+    /** @return ResponseEntity with HTTP 204 No Content if deletion is successful,
+     **         or HTTP 404 Not Found if the service does not exist **/
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable int id) {
         // Check if a product with the given ID exists before attempting deletion
@@ -55,7 +50,8 @@ public class ProductController {
 
             // Return HTTP 204: No Content (indicating success, but no response body needed)
             return ResponseEntity.noContent().build(); // 204 No Content
-        } else {
+        }
+        else {
             // Return HTTP 404: Not Found (if the product does not exist in the database)
             return ResponseEntity.notFound().build(); // 404 if not found
         }
@@ -64,6 +60,10 @@ public class ProductController {
     // Handles HTTP PUT requests to update a product by its ID.
     // Base path: /api/products/{id}
     // The frontend sends a JSON body containing the fields to update (name, price, etc.)
+    /** @param id the unique id of the product to update **/
+    /** @param updates a Map containing field names as keys and new values as values **/
+    /** @return ResponseEntity containing the updated service (HTTP 200 OK) if found and updated,
+     **         or HTTP 404 Not Found if the product with the given ID does not exist **/
     @PutMapping("/{id}")
     public ResponseEntity<?> editProduct(@PathVariable int id, @RequestBody Map<String, Object> updates) {
         // Look up the product in the database by ID
@@ -72,7 +72,6 @@ public class ProductController {
             // The map comes from the frontend and contains key/value pairs of fields to update
             updates.forEach((field, value) -> {
                 switch (field) {
-                    case "productNumber" -> product.setProductNumber((String) value);
                     case "name" -> product.setName((String) value);
                     case "EAN" -> product.setEAN((String) value);
                     case "type" -> product.setType((String) value);
@@ -85,9 +84,6 @@ public class ProductController {
                             // Safety fallback: Parse string as Double
                             product.setPrice(Double.parseDouble(value.toString()));
                         }
-                        // Note (DO NOT DELETE!):
-                        // This prevents the "300,00 -> 30.000" problem when reloading the product page, because the numeric value
-                        // is already correct, thus no string formatting is applied on save.
                     }
                     default -> System.out.println("Unknown field: " + field);
                 }
