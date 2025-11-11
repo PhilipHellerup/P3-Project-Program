@@ -75,8 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Toggle edit mode: adds/removes the "editing" CSS class
             const isEditing = row.classList.toggle(`editing`); // Toggles CSS class
 
-            // Select only the cells within that row that has a data-field (desired editable fields)
-            const cells = row.querySelectorAll('td[data-field]');
+            // Select only the cells within that row that are editable (desired editable field = excluding ID)
+            const cells = Array.from(row.querySelectorAll('td[data-field]')).filter(cell => cell.dataset.field !== 'id');
 
             // Select the icon element inside the button for changing its text where specific text = Specific symbol
             const editIcon = button.querySelector('.edit-btn-icon');
@@ -85,7 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isEditing) {
                 /* --- ENTER EDIT MODE --- */
                 // Visually indicate the row is editable
-                row.classList.add('table-warning'); // Highlight row
+                cells.forEach(cell => cell.classList.add('table-warning'));
+                cells.forEach(cell => cell.classList.add('editable-cell'));
 
                 // Change icon to indicate "save" to show the user can save changes
                 editIcon.textContent = 'save';      // Show save icon
@@ -165,7 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
             else {
                 /* --- EXIT EDIT MODE --- */
                 // Remove visual highlight
-                row.classList.remove('table-warning'); // Remove highlight
+                cells.forEach(cell => cell.classList.remove('table-warning'));
+                cells.forEach(cell => cell.classList.remove('editable-cell'));
 
                 // Change icon back to "edit"
                 editIcon.textContent = 'edit_square';  // Restore edit icon
