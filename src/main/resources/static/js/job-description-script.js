@@ -102,10 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     })
 
-    document.getElementById('deleteBtn').addEventListener('click', function() {
+    document.getElementById('deleteBtn').addEventListener('click', function () {
         const jobId = this.getAttribute('data-job-id');
         if (confirm('Slet reparation?')) {
-            fetch('/api/jobs/' + jobId, { method: 'DELETE' })
+            fetch('/api/jobs/' + jobId, {method: 'DELETE'})
                 .then(resp => {
                     if (resp.ok) {
                         window.location.href = '/jobliste';
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch(() => alert('Could not connect to server'));
         }
     });
-});
+
     // Eventlistener for the edit "arbejdstid" btn
     let editBtn = document.getElementById('edit-worktime-btn')
     editBtn.addEventListener('click', (e) => {
