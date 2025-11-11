@@ -79,7 +79,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Gather input values from the product form
         const productData = {
-            productNumber: document.getElementById('varenummer-text').value, // Product number
             name: document.getElementById('navn-text').value, // Product name
             EAN: document.getElementById('EAN-text').value,   // Product EAN code
             type: document.getElementById('type-text').value, // Product type/category

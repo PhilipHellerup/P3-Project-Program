@@ -105,10 +105,6 @@
                     <!-- Step 2a: Product/Part Form -->
                     <form id="productForm" class="d-none">
                         <div class="mb-3">
-                            <label for="varenummer-text" class="col-form-label">Varenr.:</label>
-                            <input type="text" class="form-control" id="varenummer-text">
-                        </div>
-                        <div class="mb-3">
                             <label for="navn-text" class="col-form-label">Navn:</label>
                             <input type="text" class="form-control" id="navn-text">
                         </div>
@@ -177,7 +173,7 @@
             <table id="productTable" class="table table-striped">
                 <thead>
                 <tr>
-                  <th scope="col">Varenr.</th>
+                  <th scope="col">ID</th>
                   <th scope="col">Navn</th>
                   <th scope="col">EAN</th>
                   <th scope="col">Type</th>
@@ -190,7 +186,7 @@
                 <!-- Thymeleaf loop: Generates one <tr> per product in 'products' list -->
                 <!-- data-id attribute is set dynamically to product.id (used by JS delete logic) -->
                 <tr th:each="product : ${products}" th:attr="data-id=${product.id}">
-                    <td data-field="productNumber" class="fs-5" contenteditable="false" th:text="${product.productNumber}"></td>
+                    <td data-field="productNumber" class="fs-5" th:text="${product.id}"></td>
                     <td data-field="name" class="fs-5" contenteditable="false" th:text="${product.name}"></td>
                     <td data-field="EAN" class="fs-5" contenteditable="false" th:text="${product.EAN}"></td>
                     <td data-field="type" class="fs-5" contenteditable="false" th:text="${product.type}"></td>

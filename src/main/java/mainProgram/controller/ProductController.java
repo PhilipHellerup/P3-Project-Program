@@ -72,7 +72,6 @@ public class ProductController {
             // The map comes from the frontend and contains key/value pairs of fields to update
             updates.forEach((field, value) -> {
                 switch (field) {
-                    case "productNumber" -> product.setProductNumber((String) value);
                     case "name" -> product.setName((String) value);
                     case "EAN" -> product.setEAN((String) value);
                     case "type" -> product.setType((String) value);
