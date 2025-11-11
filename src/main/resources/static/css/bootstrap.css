@@ -9453,7 +9453,7 @@ textarea.form-control-lg {
 
 .text-dark {
     --bs-text-opacity: 1;
-    color: rgba(var(--bs-dark-rgb), var(--bs-text-opacity)) !important;
+    color: rgba(85, 85, 85, var(--bs-text-opacity)) !important; /* #555 — medium gray */
 }
 
 .text-black {
