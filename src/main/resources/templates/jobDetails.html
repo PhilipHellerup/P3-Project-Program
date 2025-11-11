@@ -28,7 +28,17 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                 <h5 class="mb-0">Detaljer</h5>
 
                 <!-- Edit button: opens the edit-job modal. ID used by JS to attach click handler. -->
-                <a id="openEditBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
+                <a id="openEditBtn"
+                   th:data-job-id="${job.id}"
+                   th:data-job-title="${job.title}"
+                   th:data-job-customer-name="${job.customer_name}"
+                   th:data-job-customer-phone="${job.customer_phone}"
+                   th:data-job-work-time="${job.work_time_minutes}"
+                   th:data-job-price="${job.price_per_minute}"
+                   th:data-job-date="${#temporals.format(job.date, 'yyyy-MM-dd''T''HH:mm')}"
+                   th:data-job-status-id="${job.status.id}" class="btn btn-primary align-co px-1 py-1 pt-0"
+                   style="width: 2rem">
+
                     <!-- Pencil icon (SVG) visually indicates edit action -->
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -118,30 +128,108 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
     </div>
 
     <!-- Product Table Container: lists parts/products associated with the job -->
-    <div class="product-table-content-container mt-6">
+    <div class="product-table-content-container mt-5">
         <table class="table align-middle mt-lg-3">
             <thead>
             <tr>
                 <th scope="col">Produkter</th>
                 <th scope="col">Antal</th>
+                <th scope="col">Varighed</th>
                 <th scope="col">Styk Pris</th>
                 <th scope="col">Total Pris</th>
+                <th></th>
             </tr>
             </thead>
+            <!-- Edit the worktime -->
             <tbody>
-            <tr th:each="jp : ${jobParts}">
+            <tr th:each="js : ${jobService}">
+                <td class="w-30">
+                    <p class="m-1" th:text="${js.service.name}"></p>
+                </td>
                 <td class="w-15">
+                    <p class="m-1" th:text="${js.quantity}"></p>
+                </td>
+                <td class="w-15">
+                    <p class="m-1 d-inline" th:text="${js.service.duration}"></p>
+                    <p class="d-inline">min.</p>
+                </td>
+                <td class="w-15">
+                    <p class="m-1 d-inline"
+                       th:text="${#numbers.formatDecimal(js.service.price, 2, 2,'COMMA')}"></p>
+                    <p class="d-inline">kr.</p>
+                </td>
+                <td class="w-15" th:with="totalPrice=${js.service.price * js.quantity}">
+                    <p class="m-1 d-inline" th:text="${#numbers.formatDecimal(totalPrice, 2, 2,'COMMA')}"></p>
+                    <p class="d-inline">kr.</p>
+                </td>
+                <td class="p-0">
+                    <button type="button" class="btn btn-sm btn-danger remove-btn"
+                            th:attr="data-id=${js.service.id}, data-type='service' "
+                    >X
+                    </button>
+                </td>
+
+            </tr>
+            </tbody>
+            <!-- Show list of services -->
+            <tbody>
+            <tr th:each="js : ${jobService}">
+                <td class="w-30">
+                    <p class="m-1" th:text="${js.service.name}"></p>
+                </td>
+                <td class="w-15">
+                    <p class="m-1" th:text="${js.quantity}"></p>
+                </td>
+                <td class="w-15">
+                    <p class="m-1 d-inline" th:text="${js.service.duration}"></p>
+                    <p class="d-inline">min.</p>
+                </td>
+                <td class="w-15">
+                    <p class="m-1 d-inline"
+                       th:text="${#numbers.formatDecimal(js.service.price, 2, 2,'COMMA')}"></p>
+                    <p class="d-inline">kr.</p>
+                </td>
+                <td class="w-15" th:with="totalPrice=${js.service.price * js.quantity}">
+                    <p class="m-1 d-inline" th:text="${#numbers.formatDecimal(totalPrice, 2, 2,'COMMA')}"></p>
+                    <p class="d-inline">kr.</p>
+                </td>
+                <td class="p-0">
+                    <button type="button" class="btn btn-sm btn-danger remove-btn"
+                            th:attr="data-id=${js.service.id}, data-type='service' "
+                    >X
+                    </button>
+                </td>
+
+            </tr>
+            </tbody>
+            <tbody>
+            <!-- Show list of parts-->
+            <tr th:each="jp : ${jobParts}">
+                <td class="w-30">
                     <p class="m-1" th:text="${jp.product.name}"></p>
                 </td>
                 <td class="w-15">
                     <p class="m-1" th:text="${jp.quantity}"></p>
                 </td>
-                <td class="w-30">
-                    <p class="m-1" th:text="${jp.product.price}"></p>
+                <td class="w-15">
+
                 </td>
-                <td class="w-30" th:with="result=${jp.product.price * jp.quantity}">
-                    <p class="m-1" th:text="${result}"></p>
+                <td class="w-15">
+                    <p class="m-1 d-inline"
+                       th:text="${#numbers.formatDecimal(jp.product.price, 2, 2,'COMMA')}"></p>
+                    <p class="d-inline">kr.</p>
                 </td>
+                <td class="w-15" th:with="totalPrice=${jp.product.price * jp.quantity}">
+                    <p class="m-1 d-inline" th:text="${#numbers.formatDecimal(totalPrice, 2, 2,'COMMA')}"></p>
+                    <p class="d-inline">kr.</p>
+                </td>
+                <td class="p-0">
+                    <button type="button" class="btn btn-sm btn-danger remove-btn"
+                            th:attr="data-id=${jp.product.id}, data-type='part' "
+                    >X
+                    </button>
+                </td>
+
             </tr>
             </tbody>
         </table>
@@ -151,30 +239,49 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
     <div
             class="final-table-content-container d-flex justify-content-between align-items-start mt-3"
             style="width: 100%"
+
     >
         <!-- Left Side: Button to add a product. You might wire this to a modal or product selector. -->
         <button id="add-product-btn" type="button" class="btn btn-primary">Tilføj Produkt</button>
 
-        <!-- Right Side: Totals table (static values here). Replace with computed values if needed. -->
-        <table class="table table-borderless mb-0" style="width: auto">
+        <!-- Right Side: Totals table (static values here). Replace with computed values: here are all set to 0 as default. -->
+        <table class="table table-borderless mb-0 mt-5" style="width: auto">
             <tbody>
             <tr>
                 <td class="fs-5"><b>Pris:</b></td>
-                <td class="fs-5">1.539,90 Kr.</td>
+                <td class="fs-6" id="subtotal"> 0 Kr.</td>
             </tr>
             <tr>
                 <td class="fs-5"><b>Moms:</b></td>
-                <td class="fs-5">384,98 Kr.</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
+                <td class="fs-6" id="moms"> 0 Kr.</td>
             </tr>
             <tr>
                 <td class="fs-5"><b>Total:</b></td>
-                <td class="fs-5"><b>1.924,88 Kr.</b></td>
+                <td class="fs-6" id="total"><b>0 Kr.</b></td>
             </tr>
             </tbody>
+            <!-- Final price + moms: It takes the price of item from the list and adds it together then plus the 25% ()-->
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    let subtotal = 0;
+
+                    document.querySelectorAll('.product-table-content-container tbody tr td:nth-child(4) p')
+                        .forEach(cell => subtotal += parseFloat(cell.textContent.replace(/[^\d.,-]/g, '').replace(',', '.')) || 0);
+
+                    const moms = subtotal * 0.25;
+                    const total = subtotal + moms;
+
+                    // Here it rewrites the total price in Danish currency = DKK
+                    const formatDK = num => num.toLocaleString('da-DK', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+
+                    document.getElementById('subtotal').textContent = `${formatDK(subtotal)} Kr.`;
+                    document.getElementById('moms').textContent = `${formatDK(moms)} Kr.`;
+                    document.getElementById('total').textContent = `${formatDK(total)} Kr.`;
+                });
+            </script>
         </table>
     </div>
 </div>

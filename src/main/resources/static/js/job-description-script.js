@@ -34,16 +34,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Open Edit modal with current job prefilled via the module
     document.getElementById('openEditBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
-        // Collect job values using Thymeleaf inlined expressions (note: these become raw values on the client)
+        // Collect job values using Thymeleaf attribute values on the buttn.
+        const btn = e.currentTarget;
+
         const job = {
-            id: '[[${job.id}]]' || '',
-            title: '[[${job.title}]]',
-            customer_name: '[[${job.customer_name}]]',
-            customer_phone: '[[${job.customer_phone}]]',
-            work_time_minutes: '[[${job.work_time_minutes}]]' || 0,
-            price_per_minute: '[[${job.price_per_minute}]]' || 0,
-            date: "[[${#temporals.format(job.date, 'yyyy-MM-dd''T''HH:mm')}]]" || '',
-            status: {id: '[[${job.status.id}]]' || 1},
+            id: btn.dataset.jobId || '',
+            title: btn.dataset.jobTitle || '',
+            customer_name: btn.dataset.jobCustomerName || '',
+            customer_phone: btn.dataset.jobCustomerPhone || '',
+            work_time_minutes: parseInt(btn.dataset.jobWorkTime) || 0,
+            price_per_minute: parseFloat(btn.dataset.jobPrice) || 0,
+            date: btn.dataset.jobDate || '',
+            status: {id: parseInt(btn.dataset.jobStatusId) || 1},
         };
         // Call modal opener if available
         if (window.openEditJobModal) window.openEditJobModal(job);
@@ -52,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Open Description modal and pass current description text
     document.getElementById('openDescBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
-        const id = '[[${job.id}]]' || '';
+        const id = getRepairIdFromUrl()
         const current =
             document.getElementById('jobDescriptionText')?.textContent ?? '';
         if (window.openDescriptionModal)
@@ -65,5 +67,40 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('add-product-btn').addEventListener('click', async (e) => {
         window.openAddProductToRepairModal()
     })
+
+    // Event listener to remove a product from a repair
+    const removeBtns = document.querySelectorAll('.remove-btn');
+
+    removeBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            let productId = parseInt(e.target.getAttribute("data-id"));
+            let repairId = getRepairIdFromUrl(); // Use a function "add-product-to-repair-modal.js" to get the repair id from the url.
+            let type = e.target.getAttribute("data-type");
+
+            let payload = [{
+                repairId,
+                productId,
+                type,
+            }];
+
+            console.log(payload)
+            console.log(JSON.stringify(payload))
+
+            fetch("/api/repairs/removeProduct", {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload),
+            }).then((r) => {
+                console.log("trying to parse")
+                if (!r.ok) throw new Error('Create failed'); // Handle HTTP errors
+                return r.text();
+            }).then((r) => {
+                console.log("trying to reload")
+                window.location.reload()
+            })
+
+        })
+    })
+
 
 });
