@@ -55,6 +55,7 @@ public class SearchController {
             map.put("id", p.getId());
             map.put("name", p.getName());
             map.put("price", p.getPrice());
+            map.put("EAN", p.getEAN());
             map.put("type", "part");
             results.add(map);
         }
@@ -64,6 +65,7 @@ public class SearchController {
             map.put("id", s.getId());
             map.put("name", s.getName());
             map.put("price", s.getPrice());
+            map.put("duration", s.getDuration());
             map.put("type", "service");
             results.add(map);
         }

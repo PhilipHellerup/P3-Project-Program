@@ -126,16 +126,30 @@ public class JobController {
     public ResponseEntity<Job> updateJob(@PathVariable Integer id, @RequestBody Job job) {
         return jobRepository.findById(id)
                 .map(existing -> {
-                    // Update all fields that are allowed to change
-                    existing.setTitle(job.getTitle());
-                    existing.setCustomer_name(job.getCustomer_name());
-                    existing.setCustomer_phone(job.getCustomer_phone());
-                    existing.setWork_time_minutes(job.getWork_time_minutes());
-                    existing.setPrice_per_minute(job.getPrice_per_minute());
-                    existing.setDate(job.getDate());
-
-                    if (job.getStatus() != null) {
+                    // Only update if provided (non-null or non-empty)
+                    if (job.getTitle() != null && !job.getTitle().isBlank()) {
+                        existing.setTitle(job.getTitle());
+                    }
+                    if (job.getCustomer_name() != null && !job.getCustomer_name().isBlank()) {
+                        existing.setCustomer_name(job.getCustomer_name());
+                    }
+                    if (job.getCustomer_phone() != null && !job.getCustomer_phone().isBlank()) {
+                        existing.setCustomer_phone(job.getCustomer_phone());
+                    }
+                    if (job.getWork_time_minutes() != null) {
+                        existing.setWork_time_minutes(job.getWork_time_minutes());
+                    }
+                    if (job.getPrice_per_minute() != null) {
+                        existing.setPrice_per_minute(job.getPrice_per_minute());
+                    }
+                    if (job.getDate() != null) {
+                        existing.setDate(job.getDate());
+                    }
+                    if (job.getStatus() != null && job.getStatus().getId() != null) {
                         existing.setStatus(job.getStatus());
+                    }
+                    if (job.getJob_description() != null && !job.getJob_description().isBlank()) {
+                        existing.setJob_description(job.getJob_description());
                     }
 
                     Job updated = jobRepository.save(existing);
@@ -143,6 +157,7 @@ public class JobController {
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 
     ;
 
