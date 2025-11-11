@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import jakarta.transaction.Transactional;
+import mainProgram.repository.JobPartRepository;
 import mainProgram.repository.JobRepository;
 import mainProgram.repository.JobServiceRepository;
 import mainProgram.repository.JobStatusRepository;
@@ -22,6 +23,7 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 /**
  * REST controller for managing job-related operations.
@@ -37,6 +39,7 @@ public class JobController {
     private final JobService jobService;
     private final ServiceRepository serviceRepository;
     private final JobServiceRepository jobServiceRepository;
+    private final JobPartRepository jobPartRepository;
 
     /**
      * Constructor for dependency injection.
@@ -44,12 +47,13 @@ public class JobController {
      * @param jobRepository    the repository for job database operations
      * @param statusRepository the repository for job status database operations
      */
-    public JobController(JobRepository jobRepository, JobStatusRepository statusRepository, JobService jobService, ServiceRepository serviceRepository, JobServiceRepository jobServiceRepository) {
+    public JobController(JobRepository jobRepository, JobStatusRepository statusRepository, JobService jobService, ServiceRepository serviceRepository, JobServiceRepository jobServiceRepository, JobPartRepository jobPartRepository) {
         this.jobRepository = jobRepository;
         this.statusRepository = statusRepository;
         this.jobService = jobService;
         this.serviceRepository = serviceRepository;
         this.jobServiceRepository = jobServiceRepository;
+        this.jobPartRepository = jobPartRepository;
     }
 
     /**
@@ -212,5 +216,19 @@ public class JobController {
         }
 
         return ResponseEntity.ok("Product(s) removed from repair successfully");
+    }
+
+    @DeleteMapping("/api/jobs/{id}")
+    @ResponseBody
+    @Transactional
+    public ResponseEntity<Void> deleteJob(@PathVariable Integer id) {
+        if (!jobRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        // Delete all JobParts for this job first
+        jobPartRepository.deleteByJobId(id);
+        // Now delete the job
+        jobRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

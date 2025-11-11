@@ -102,5 +102,18 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     })
 
-
+    document.getElementById('deleteBtn').addEventListener('click', function() {
+        const jobId = this.getAttribute('data-job-id');
+        if (confirm('Slet reparation?')) {
+            fetch('/api/jobs/' + jobId, { method: 'DELETE' })
+                .then(resp => {
+                    if (resp.ok) {
+                        window.location.href = '/jobliste';
+                    } else {
+                        alert('Could not delete job');
+                    }
+                })
+                .catch(() => alert('Could not connect to server'));
+        }
+    });
 });

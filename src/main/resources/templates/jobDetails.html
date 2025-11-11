@@ -241,9 +241,12 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
             style="width: 100%"
 
     >
-        <!-- Left Side: Button to add a product. You might wire this to a modal or product selector. -->
-        <button id="add-product-btn" type="button" class="btn btn-primary">Tilføj Produkt</button>
+        <div class="d-flex flex-column">
+            <!-- Left Side: Button to add a product. You might wire this to a modal or product selector. -->
+            <button id="add-product-btn" type="button" class="btn btn-primary">Tilføj Produkt</button>
 
+            <button class="btn btn-danger mt-3" id="deleteBtn" th:attr="data-job-id=${job.id}">Slet Reparation</button>
+        </div>
         <!-- Right Side: Totals table (static values here). Replace with computed values: here are all set to 0 as default. -->
         <table class="table table-borderless mb-0 mt-5" style="width: auto">
             <tbody>
