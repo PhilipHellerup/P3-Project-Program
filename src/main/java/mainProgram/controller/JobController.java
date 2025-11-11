@@ -121,6 +121,31 @@ public class JobController {
         }
     }
 
+    @PutMapping("api/jobs/{id}/update")
+    @ResponseBody
+    public ResponseEntity<Job> updateJob(@PathVariable Integer id, @RequestBody Job job) {
+        return jobRepository.findById(id)
+                .map(existing -> {
+                    // Update all fields that are allowed to change
+                    existing.setTitle(job.getTitle());
+                    existing.setCustomer_name(job.getCustomer_name());
+                    existing.setCustomer_phone(job.getCustomer_phone());
+                    existing.setWork_time_minutes(job.getWork_time_minutes());
+                    existing.setPrice_per_minute(job.getPrice_per_minute());
+                    existing.setDate(job.getDate());
+
+                    if (job.getStatus() != null) {
+                        existing.setStatus(job.getStatus());
+                    }
+
+                    Job updated = jobRepository.save(existing);
+                    return ResponseEntity.ok(updated);
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    ;
+
 
     /**
      * Updates only the job description for a specific job.
