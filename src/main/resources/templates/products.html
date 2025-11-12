@@ -49,17 +49,17 @@
 <!-- === Main Page Container (No Nav Bar) === -->
 <div class="page-content-container w-95 d-flex flex-column m-5 p-4 border secondary-border-subtle rounded-4 shadow-sm" style="background-color: white;">
     <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mt-4">
+    <div class="d-flex justify-content-between align-items-center">
         <!-- LEFT SECTION - Product/Service Tabs -->
         <div class="d-inline-flex gap-3">
             <!-- Products Tab -->
             <a class="tab-btn" th:href="@{'/products'(filter='products')}" th:classappend="${currentFilter == 'products'} ? ' active' : ''">
-                Produkter
+                Reservedele
             </a>
 
             <!-- Services Tab -->
             <a class="tab-btn" th:href="@{'/products'(filter='services')}" th:classappend="${currentFilter == 'services'} ? ' active' : ''">
-                Services
+                Ydelser
             </a>
         </div>
 
@@ -89,7 +89,7 @@
                                 <div class="choice-icon">
                                     <i class="bi bi-box-seam"></i>
                                 </div>
-                                <div class="choice-title">Tilføj Produkt</div>
+                                <div class="choice-title">Tilføj Reservedel</div>
                             </button>
 
                             <!-- Add Service Button -->
@@ -97,7 +97,7 @@
                                 <div class="choice-icon">
                                     <i class="bi bi-tools"></i>
                                 </div>
-                                <div class="choice-title">Tilføj Service</div>
+                                <div class="choice-title">Tilføj Ydelse</div>
                             </button>
                         </div>
                     </div>
@@ -106,19 +106,19 @@
                     <form id="productForm" class="d-none">
                         <div class="mb-3">
                             <label for="navn-text" class="col-form-label">Navn:</label>
-                            <input type="text" class="form-control" id="navn-text">
+                            <input type="text" class="form-control" id="navn-text" required>
                         </div>
                         <div class="mb-3">
                             <label for="EAN-text" class="col-form-label">EAN:</label>
-                            <input type="text" class="form-control" id="EAN-text">
+                            <input type="number" class="form-control" id="EAN-text" required>
                         </div>
                         <div class="mb-3">
                             <label for="type-text" class="col-form-label">Type</label>
-                            <input type="text" class="form-control" id="type-text">
+                            <input type="text" class="form-control" id="type-text" required>
                         </div>
                         <div class="mb-3">
                             <label for="pris-tal" class="col-form-label">Pris</label>
-                            <input type="number" class="form-control" id="pris-tal">
+                            <input type="number" class="form-control" id="pris-tal" placeholder="0 - 999999" required>
                         </div>
                     </form>
 
@@ -126,23 +126,24 @@
                     <form id="serviceForm" class="d-none">
                         <div class="mb-3">
                             <label for="service-navn-text" class="col-form-label">Navn:</label>
-                            <input type="text" class="form-control" id="service-navn-text">
+                            <input type="text" class="form-control" id="service-navn-text" required>
                         </div>
                         <div class="mb-3">
                             <label for="service-price" class="col-form-label">Pris:</label>
-                            <input type="number" class="form-control" id="service-price">
+                            <input type="number" class="form-control" id="service-price" placeholder="0 - 999999" required>
                         </div>
                         <div class="mb-3">
                             <label for="service-duration" class="col-form-label">Varighed (Minutter):</label>
-                            <input type="number" class="form-control" id="service-duration">
+                            <input type="number" class="form-control" id="service-duration" placeholder="0 - 25000" required>
                         </div>
                     </form>
 
                     <!-- Modal Footer (Close & Submit Buttons) -->
                     <div class="modal-footer-CUSTOM">
-                        <button type="submit" class="btn addSomethingBtn d-none mt-3 me-2" id="submitProductBtn">Tilføj Produkt</button>
-                        <button type="submit" class="btn addSomethingBtn d-none mt-3 me-2" id="submitServiceBtn">Tilføj Service</button>
-                        <button type="button" class="btn btn-secondary m-0 mt-3" data-bs-dismiss="modal">Luk</button>
+                        <button type="submit" class="btn addSomethingBtn d-none mt-3 me-2" id="submitProductBtn">Tilføj Reservedel</button>
+                        <button type="submit" class="btn addSomethingBtn d-none mt-3 me-2" id="submitServiceBtn">Tilføj Ydelse</button>
+                        <button type="button" class="btn btn-secondary m-0 mt-3 me-2 d-none" id="backToChoiceBtn">Tilbage</button>
+                        <button type="button" class="btn btn-danger m-0 mt-3" data-bs-dismiss="modal">Luk</button>
                     </div>
                 </div>
             </div>
@@ -150,7 +151,7 @@
     </div>
 
     <!-- === Search Bar Section === -->
-    <div class="search-bar mt-3">
+    <div class="search-bar mt-5-5">
         <nav class="navbar navbar-light">
             <form class="d-inline-flex" style="width: 100%">
                 <!-- Search Input -->
@@ -169,16 +170,16 @@
     <!-- Displays a list of products dynamically rendered by Thymeleaf -->
     <div class="mt-5-5">
         <!-- Displays the product table only if the products tab/filter is active -->
-        <div th:if="${currentFilter == 'products'}">
+        <div th:if="${currentFilter == 'products'}" id="productTableContainer">
             <table id="productTable" class="table table-striped">
                 <thead>
                 <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Navn</th>
-                  <th scope="col">EAN</th>
-                  <th scope="col">Type</th>
-                   <th scope="col">Pris</th>
-                  <th scope="col">Handling</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Navn</th>
+                    <th scope="col">EAN</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Pris</th>
+                    <th scope="col">Handling</th>
                 </tr>
                 </thead>
 
@@ -186,11 +187,11 @@
                 <!-- Thymeleaf loop: Generates one <tr> per product in 'products' list -->
                 <!-- data-id attribute is set dynamically to product.id (used by JS delete logic) -->
                 <tr th:each="product : ${products}" th:attr="data-id=${product.id}">
-                    <td data-field="productNumber" class="fs-5" th:text="${product.id}"></td>
-                    <td data-field="name" class="fs-5" contenteditable="false" th:text="${product.name}"></td>
-                    <td data-field="EAN" class="fs-5" contenteditable="false" th:text="${product.EAN}"></td>
-                    <td data-field="type" class="fs-5" contenteditable="false" th:text="${product.type}"></td>
-                    <td data-field="price" class="fs-5" contenteditable="false" th:text="${#numbers.formatDecimal(product.price, 2, 'POINT', 2, 'COMMA')} + ' Kr.'"></td>
+                    <td data-field="productNumber" class="fs-5" th:text="${product.id}" th:title="${product.id}"></td>
+                    <td data-field="name" class="fs-5" contenteditable="false" th:text="${product.name}" th:title="${product.name}"></td>
+                    <td data-field="EAN" class="fs-5" contenteditable="false" th:text="${product.EAN}" th:title="${product.EAN}"></td>
+                    <td data-field="type" class="fs-5" contenteditable="false" th:text="${product.type}" th:title="${product.type}"></td>
+                    <td data-field="price" class="fs-5" contenteditable="false" th:text="${#numbers.formatDecimal(product.price, 2, 'POINT', 2, 'COMMA')} + ' Kr.'" th:title="${#numbers.formatDecimal(product.price, 2, 'POINT', 2, 'COMMA')} + ' Kr.'"></td>
                     <td class="fs-5">
                         <!-- Delete Button (Triggers delete request in JS) -->
                         <button class="btn btn-outline-danger btn-sm delete-btn" type="button">
@@ -204,21 +205,27 @@
                 </tr>
                 </tbody>
             </table>
+
+            <!-- === Pagination Bar === -->
+            <!-- Static example navigation (can be made dynamic later) -->
+            <div class="pagination-css align-content-center mt-4">
+                <ul class="pagination justify-content-center Page-Navigation-Bar"></ul>
+            </div>
         </div>
     </div>
 
     <!-- === Service Table === -->
     <!-- Displays a list of services dynamically rendered by Thymeleaf -->
-    <div class="mt-5-5">
+    <div class="">
         <!-- Displays the service table only if the services tab/filter is active -->
-        <div th:if="${currentFilter == 'services'}">
+        <div th:if="${currentFilter == 'services'}" id="serviceTableContainer">
             <table id="serviceTable" class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Navn</th>
                     <th scope="col">Pris</th>
-                    <th scope="col">Varighed</th>
+                    <th scope="col">Varighed (Minutter)</th>
                     <th scope="col">Handling</th>
                 </tr>
                 </thead>
@@ -227,11 +234,11 @@
                 <!-- Thymeleaf loop: Generates one <tr> per service in 'services' list -->
                 <!-- data-id attribute is set dynamically to product.id (used by JS delete logic) -->
                 <tr th:each="service : ${services}" th:attr="data-id=${service.id}">
-                    <td data-field="id" class="fs-5" th:text="${service.id}"></td>
-                    <td data-field="name" class="fs-5" contenteditable="false" th:text="${service.name}"></td>
-                    <td data-field="price" class="fs-5" contenteditable="false" th:text="${#numbers.formatDecimal(service.price, 2, 'POINT', 2, 'COMMA')} + ' Kr.'"></td>
-                    <td data-field="duration" class="fs-5" contenteditable="false" th:text="${service.duration}"></td>
-                    <td class="fs-5">
+                    <td data-field="id" class="fs-5" th:text="${service.id}" th:title="${service.id}"></td>
+                    <td data-field="name" class="fs-5" contenteditable="false" th:text="${service.name}" th:title="${service.name}"></td>
+                    <td data-field="price" class="fs-5" contenteditable="false" th:text="${#numbers.formatDecimal(service.price, 2, 'POINT', 2, 'COMMA')} + ' Kr.'" th:title="${#numbers.formatDecimal(service.price, 2, 'POINT', 2, 'COMMA')} + ' Kr.'"></td>
+                    <td data-field="duration" class="fs-5" contenteditable="false" th:text="${service.duration}" th:title="${service.duration}"></td>
+                    <td class="fs-5 rowButtons">
                         <!-- Delete Button (Triggers delete request in JS) -->
                         <button class="btn btn-outline-danger btn-sm delete-btn" type="button">
                             <span class="material-symbols-outlined">delete</span>
@@ -244,13 +251,13 @@
                 </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
 
-    <!-- === Pagination Bar === -->
-    <!-- Static example navigation (can be made dynamic later) -->
-    <div class="pagination-css align-content-center">
-        <ul class="pagination justify-content-center Page-Navigation-Bar"></ul>
+            <!-- === Pagination Bar === -->
+            <!-- Static example navigation (can be made dynamic later) -->
+            <div class="pagination-css align-content-center mt-4">
+                <ul class="pagination justify-content-center Page-Navigation-Bar"></ul>
+            </div>
+        </div>
     </div>
 </div>
 </body>

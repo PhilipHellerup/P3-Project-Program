@@ -17,10 +17,36 @@ document.addEventListener('DOMContentLoaded', function () {
     const submitProductBtn = document.getElementById('submitProductBtn');
     const submitServiceBtn = document.getElementById('submitServiceBtn');
 
+    /* --- Back to Choice Menu Button --- */
+    const backToChoiceBtn = document.getElementById('backToChoiceBtn');
+
+    // Listen for a click on the back button
+    backToChoiceBtn.addEventListener('click', () => {
+        // Hide both forms
+        productForm.classList.add('d-none');
+        serviceForm.classList.add('d-none');
+
+        // Show the choice menu
+        choiceMenu.classList.remove('d-none');
+
+        // Hide the submit buttons and back button
+        submitProductBtn.classList.add('d-none');
+        submitServiceBtn.classList.add('d-none');
+        backToChoiceBtn.classList.add('d-none');
+
+        // Reset both forms
+        productForm.reset();
+        serviceForm.reset();
+
+        // Reset modal title
+        modalTitle.textContent = "Tilføj Produkter";
+    });
+
+    /* --- Reset Modal Whenever it is Closed Down --- */
     // Modal Title
     const modalTitle = document.getElementById('modalTitle');
 
-    // Reset Modal whenever it is close down
+    // Listen for modal close down
     const addProductModal = document.getElementById('addProductModal');
     addProductModal.addEventListener('hidden.bs.modal', () => {
         // Show the choice menu
@@ -30,9 +56,10 @@ document.addEventListener('DOMContentLoaded', function () {
         productForm.classList.add('d-none');
         serviceForm.classList.add('d-none');
 
-        // Hide submit buttons
+        // Hide the submit buttons and back button
         submitProductBtn.classList.add('d-none');
         submitServiceBtn.classList.add('d-none');
+        backToChoiceBtn.classList.add('d-none');
 
         // Clear input values in the service and product form for clear state
         productForm.reset();
@@ -53,8 +80,11 @@ document.addEventListener('DOMContentLoaded', function () {
         // Show product submit button
         submitProductBtn.classList.remove('d-none');
 
+        // Show the back button
+        backToChoiceBtn.classList.remove('d-none');
+
         // Change modal title to fit the Product Form
-        modalTitle.textContent = "Tilføj Produkt";
+        modalTitle.textContent = "Tilføj Reservedel";
     });
 
     /* --- SHOW SERVICE FORM --- */
@@ -68,8 +98,11 @@ document.addEventListener('DOMContentLoaded', function () {
         // Show service submit button
         submitServiceBtn.classList.remove('d-none');
 
+        // Show the back button
+        backToChoiceBtn.classList.remove('d-none');
+
         // Change modal title to fit the Service Form
-        modalTitle.textContent = "Tilføj Service";
+        modalTitle.textContent = "Tilføj Ydelse";
     });
 
     /* --- PRODUCT SUBMISSION --- */

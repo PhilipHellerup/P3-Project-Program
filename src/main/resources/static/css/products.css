@@ -78,3 +78,74 @@
     font-weight: bold;
     margin-bottom: 8px;
 }
+
+/* Product Table */
+
+/* Set full width and force fixed column layout */
+#productTable {
+    width: 100%;
+    table-layout: fixed; /* "table-layout: fixed" forces the table to respect column widths defined in CSS */
+}
+
+/* Ensure long text does not break the table layout */
+#productTable th, #productTable td {
+    overflow: hidden;         /* Hide anything that overflows the cell */
+    text-overflow: ellipsis;  /* Show "..." for content that doesn't fit */
+    white-space: nowrap;      /* Prevent text from wrapping to a new line */
+}
+
+/* Set exact column widths for each column using nth-child */
+/* "nth-child(n)" targets the nth <th> or <td> inside a <tr> */
+#productTable th:nth-child(1), #productTable td:nth-child(1) { width: 5%; }   /* ID */
+#productTable th:nth-child(2), #productTable td:nth-child(2) { width: 25%; }  /* Name */
+#productTable th:nth-child(3), #productTable td:nth-child(3) { width: 25%; }  /* EAN */
+#productTable th:nth-child(4), #productTable td:nth-child(4) { width: 20%; }  /* Type */
+#productTable th:nth-child(5), #productTable td:nth-child(5) { width: 20%; }  /* Price */
+#productTable th:nth-child(6), #productTable td:nth-child(6) { width: 10%; }  /* Actions */
+
+/* Service Table */
+/* Set full width and force fixed column layout */
+#serviceTable {
+    width: 100%;
+    table-layout: fixed; /* same reason as product table */
+}
+
+/* Handle overflow text */
+#serviceTable th, #serviceTable td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Set exact column widths for each column using nth-child */
+/* "nth-child(n)" targets the nth <th> or <td> inside a <tr> */
+#serviceTable th:nth-child(1), #serviceTable td:nth-child(1) { width: 5%; }   /* ID */
+#serviceTable th:nth-child(2), #serviceTable td:nth-child(2) { width: 40%; }  /* Name */
+#serviceTable th:nth-child(3), #serviceTable td:nth-child(3) { width: 25%; }  /* Price */
+#serviceTable th:nth-child(4), #serviceTable td:nth-child(4) { width: 25%; }  /* Duration */
+#serviceTable th:nth-child(5), #serviceTable td:nth-child(5) { width: 10%; }  /* Actions */
+
+/* Product table container */
+#productTableContainer {
+    min-height: 30.2rem; /* Adjusted to match 7 rows */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensures pagination stays at bottom */
+}
+
+/* Product table container */
+#serviceTableContainer {
+    min-height: 30.2rem; /* Adjusted to match 7 rows */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensures pagination stays at bottom */
+}
+
+/* Editable cells styling */
+.editable-cell {
+    background-color: #0095ff;  /* Highlight background */
+    outline: 1px solid #040404; /* Border */
+    border-radius: 5px;         /* Slightly rounded corners */
+    padding: 4px 8px;           /* Small padding so text does not touch edges */
+    transition: all 0.2s ease;  /* Smooth hover/focus transition */
+}
