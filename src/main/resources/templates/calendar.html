@@ -554,7 +554,7 @@
                         </div>
                         <span class="event-name text-dark">${arg.event.title}</span>
                             ${
-                        ep.job_description && ep.work_time_minutes > 60
+                        ep.job_description && ep.work_time_minutes >= 30
                             ? `<span class="event-description">${ep.job_description}</span>`
                             : ''
                     }
