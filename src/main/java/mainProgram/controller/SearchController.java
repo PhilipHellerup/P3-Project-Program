@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import mainProgram.services.JobService;
+import mainProgram.services.ProductService;
 import mainProgram.services.ServiceService;
-import mainProgram.services.productService;
 import mainProgram.table.Job;
 import mainProgram.table.Product;
 import mainProgram.table.Services;
@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.*;
 public class SearchController {
 
     private final JobService jobService;
-    private final productService productService;
+    private final ProductService productService;
     private final ServiceService serviceService;
 
-    public SearchController(JobService jobService, productService productService, ServiceService serviceService) {
+    public SearchController(JobService jobService, ProductService productService, ServiceService serviceService) {
         this.jobService = jobService;
         this.productService = productService;
         this.serviceService = serviceService;
@@ -36,11 +36,16 @@ public class SearchController {
     ///  this is not working anymore, but maybe we need a search to only get parts somewhere.
 //    @GetMapping("/part")
 //    public List<Product> searchProduct(@RequestParam String q) {
-//        return productService.search(q);
+//        return ProductService.search(q);
 //    }
     @GetMapping("/service")
     public List<Services> searchService(@RequestParam String q) {
         return serviceService.search(q);
+    }
+
+    @GetMapping("/parts")
+    public List<Product> searchProducts(@RequestParam String q) {
+        return productService.search(q);
     }
 
     @GetMapping("/products")

@@ -2,9 +2,12 @@
 import { handleFetchErrors } from '/js/utils/fetchUtils.js';
 import { parsePriceString } from '/js/utils/parsePrice.js';
 
-/* --- DELETE PRODUCT --- */
-// Wait until the entire DOM (HTML structure) has loaded before running the script
-document.addEventListener('DOMContentLoaded', () => {
+/* --- ATTACH PRODUCT ACTIONS --- */
+// This function attaches event listeners for delete and edit actions
+// using event delegation on the entire product table.
+// Works even if rows are dynamically replaced (search/pagination).
+export function attachProductActions() {
+    /* --- DELETE PRODUCT --- */
     // Select all elements with the class "delete-btn" in the product table (trash can buttons)
     // and loop through them to attach an event listener
     document.querySelectorAll('#productTable .delete-btn').forEach(button => {
@@ -41,17 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Success: Reload the page so table and pagination update automatically
                 window.location.reload();
             }
-            // Catch any network or fetch-related errors and log them for debugging
+                // Catch any network or fetch-related errors and log them for debugging
             catch (error) {
                 console.error('Error deleting product:', error);
             }
         });
     });
-});
 
-/* --- EDIT PRODUCT (TOGGLE EDIT MODE) --- */
-// Wait until the entire DOM (HTML structure) has loaded before running the script
-document.addEventListener('DOMContentLoaded', () => {
+    /* --- EDIT PRODUCT (TOGGLE EDIT MODE) --- */
     // Select all elements with the class "edit-btn" in the product table (pencil buttons)
     // and loop through them to attach an event listener
     document.querySelectorAll('#productTable .edit-btn').forEach(button => {
@@ -182,32 +182,33 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-});
 
-/* --- CONTROLLER CALL: PUT PRODUCT UPDATE --- */
-// Sends a PUT request to update a product field in the backend "Product Controller"
-/** @param {string} productId ID of the product to update **/
-/** @param {Object} updatedData Object containing field(s) and value(s) to update **/
-async function updateProduct(productId, updatedData) {
-    try {
-        // Send PUT request to the backend API
-        const response = await fetch(`/api/products/${productId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedData)
-        });
-        // Extra NOTES:
-        // "method" HTTP Method: (Get, Post, Put, Delete)
-        // "headers:" = How to interpret the data being sent
-        //  - Content-Type = Tells Server what type of data is in the request body
-        //  - application/json = The body is JSON, please parse it as JSON
-        // "body:" = Converts JS object to JSON
+    /* --- CONTROLLER CALL: PUT PRODUCT UPDATE --- */
+    // Sends a PUT request to update a product field in the backend "Product Controller"
+    /** @param {string} productId ID of the product to update **/
+    /** @param {Object} updatedData Object containing field(s) and value(s) to update **/
+    async function updateProduct(productId, updatedData) {
+        try {
+            // Send PUT request to the backend API
+            const response = await fetch(`/api/products/${productId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedData)
+            });
+            // Extra NOTES:
+            // "method" HTTP Method: (Get, Post, Put, Delete)
+            // "headers:" = How to interpret the data being sent
+            //  - Content-Type = Tells Server what type of data is in the request body
+            //  - application/json = The body is JSON, please parse it as JSON
+            // "body:" = Converts JS object to JSON
 
-        // Handle any fetch errors (network issues, server errors)
-        await handleFetchErrors(response);
-    }
-    catch (error) {
-        // Log error
-        console.error('Error updating product:', error);
+            // Handle any fetch errors (network issues, server errors)
+            await handleFetchErrors(response);
+        }
+        catch (error) {
+            // Log error
+            console.error('Error updating product:', error);
+        }
     }
 }
+
