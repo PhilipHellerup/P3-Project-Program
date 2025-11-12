@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             customer_phone: btn.dataset.jobCustomerPhone || '',
             work_time_minutes: parseInt(btn.dataset.jobWorkTime) || 0,
             price_per_minute: parseFloat(btn.dataset.jobPrice) || 0,
+            duration: parseInt((btn.dataset.duration) || 0),
             date: btn.dataset.jobDate || '',
             status: {id: parseInt(btn.dataset.jobStatusId) || 1},
         };

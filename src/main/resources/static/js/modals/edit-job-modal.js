@@ -29,11 +29,10 @@
             title: document.getElementById('title').value,
             customer_name: document.getElementById('customer_name').value,
             customer_phone: document.getElementById('customer_phone').value,
-            work_time_minutes: parseInt(
-                document.getElementById('work_time_minutes').value || '0',
+            duration: parseInt(
+                document.getElementById('duration').value || '0',
                 10,
             ),
-            price_per_minute: parseFloat(document.getElementById('price_per_minute').value || '0'),
             date: toIsoLocal(document.getElementById('date').value),
             status: {id: parseInt(document.getElementById('status_id').value, 10)},
         };
@@ -74,8 +73,7 @@
         document.getElementById('customer_phone').value = job.customer_phone || '';
 
         // Numeric fields: allow blank when undefined/null using nullish coalescing
-        document.getElementById('work_time_minutes').value = job.work_time_minutes ?? '';
-        document.getElementById('price_per_minute').value = job.price_per_minute ?? '';
+        document.getElementById('duration').value = job.duration ?? '';
 
         // Date handling:
         // - If job.date exists and is already in "YYYY-MM-DDTHH:MM" (length 16), use it directly.

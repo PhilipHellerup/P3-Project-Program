@@ -35,6 +35,7 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                    th:data-job-customer-phone="${job.customer_phone}"
                    th:data-job-work-time="${job.work_time_minutes}"
                    th:data-job-price="${job.price_per_minute}"
+                   th:data-duration="${job.duration}"
                    th:data-job-date="${#temporals.format(job.date, 'yyyy-MM-dd''T''HH:mm')}"
                    th:data-job-status-id="${job.status.id}" class="btn btn-primary align-co px-1 py-1 pt-0"
                    style="width: 2rem">
@@ -74,6 +75,10 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                         <td><b>Oprettet:</b></td>
                         <!-- Date formatting using Thymeleaf #temporals utility -->
                         <td th:text="${#temporals.format(job.date, 'd. MMMM yyyy HH:mm')}"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Varighed:</b></td>
+                        <td th:text="${job.duration} + ' minutter'"></td>
                     </tr>
                     <tr>
                         <td><b>Cykel:</b></td>

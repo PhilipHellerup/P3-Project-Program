@@ -146,7 +146,7 @@
                 title: displayTitle,
                 start: job.date,
                 end: job.date
-                    ? new Date(job.date).getTime() + (job.work_time_minutes || 0) * 60000
+                    ? new Date(job.date).getTime() + (job.duration || 0) * 60000
                     : null,
                 backgroundColor: colors.backgroundColor,
                 borderColor: colors.borderColor,
@@ -160,6 +160,7 @@
                     job_description: job.job_description,
                     work_time_minutes: job.work_time_minutes,
                     price_per_minute: job.price_per_minute,
+                    duration: job.duration,
                     status: statusName,
                     status_id: statusId,
                 },
