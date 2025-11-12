@@ -38,10 +38,4 @@ public class PartController {
   public List<JobPart> getAllProducts() {
     return jobPartRepository.findAll();
   }
-
-  @GetMapping("api/products/{id}")
-  @ResponseBody
-  public List<JobPart> getAllProducts(@PathVariable int id) {
-    return jobPartRepository.findByJobId(id);
-  }
 }

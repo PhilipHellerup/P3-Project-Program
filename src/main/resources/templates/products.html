@@ -158,13 +158,13 @@
         <nav class="navbar navbar-light">
             <form class="d-inline-flex" style="width: 100%">
                 <!-- Search Input -->
-                <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                <input id="search-input" class="form-control" type="search" placeholder="Search" aria-label="Search">
                 <!-- Search Button with Icon -->
-                <button class="btn btn-dark my-2 my-sm-0 ms-2 p-2" type="submit">
+                <!--<button class="btn btn-dark my-2 my-sm-0 ms-2 p-2" type="submit">
                         <span class="material-symbols-outlined" aria-hidden="true">
                             search
                         </span>
-                </button>
+                </button>-->
             </form>
         </nav>
     </div>
@@ -186,7 +186,7 @@
                 </tr>
                 </thead>
 
-                <tbody>
+                <tbody id="productTable-body">
                 <!-- Thymeleaf loop: Generates one <tr> per product in 'products' list -->
                 <!-- data-id attribute is set dynamically to product.id (used by JS delete logic) -->
                 <tr th:each="product : ${products}" th:attr="data-id=${product.id}">
@@ -233,7 +233,7 @@
                 </tr>
                 </thead>
 
-                <tbody>
+                <tbody id="serviceTable-body">
                 <!-- Thymeleaf loop: Generates one <tr> per service in 'services' list -->
                 <!-- data-id attribute is set dynamically to product.id (used by JS delete logic) -->
                 <tr th:each="service : ${services}" th:attr="data-id=${service.id}">

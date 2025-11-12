@@ -3,6 +3,7 @@ package mainProgram.controller; // Project Organization
 /* --- Imports --- */
 import mainProgram.repository.ProductRepository;
 import mainProgram.table.Product;
+import mainProgram.table.Services;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
@@ -33,6 +34,12 @@ public class ProductController {
 
         // Return the saved product as a JSON response with HTTP 200 OK status.
         return ResponseEntity.ok(savedProduct);
+    }
+
+    // Get a single product by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProduct(@PathVariable int id) {
+      return productRepository.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     // Deletes a specific product from the database based on its ID.

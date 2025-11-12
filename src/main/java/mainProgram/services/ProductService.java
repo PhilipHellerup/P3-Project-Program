@@ -26,6 +26,6 @@ public class ProductService implements BaseSearchService<Product> {
             return productRepository.findAll();
         }
         // Search only by name (case-insensitive, partial match)
-        return productRepository.findByNameContainingIgnoreCase(keyword);
+        return productRepository.search(keyword);
     }
 }

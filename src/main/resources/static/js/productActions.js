@@ -1,6 +1,6 @@
 // Imports
-import { handleFetchErrors } from '/js/utils/fetchUtils.js';
-import { parsePriceString } from '/js/utils/parsePrice.js';
+import { handleFetchErrors } from './utils/fetchUtils.js';
+import { parsePriceString, formatPrice } from './utils/parsePrice.js';
 
 /* --- ATTACH PRODUCT ACTIONS --- */
 // This function attaches event listeners for delete and edit actions
@@ -31,6 +31,7 @@ export function attachProductActions() {
 
             try {
                 // Send a DELETE request to the backend API "ProductController.java" to remove the product
+                if (!confirm('Slet dette produkt?')) return;
                 const response = await fetch(`/api/products/${productId}`, {
                     method: 'DELETE'
                 });
@@ -101,6 +102,12 @@ export function attachProductActions() {
 
                     // Store the original value in a data attribute for comparison later
                     cell.dataset.originalValue = cell.textContent;
+
+                  // If editing the price cell, remove the trailing currency ("Kr."/"Kr") so the user edits a clean number
+                  const fieldName = cell.getAttribute('data-field');
+                  if (fieldName === 'price') {
+                    cell.textContent = cell.textContent.trim().replace(/\s*Kr\.?$/i, '');
+                  }
 
                     // Listen for when the user finishes editing a cell (also called a "blur event")
                     cell.addEventListener('blur', async (ev) => {
@@ -179,6 +186,16 @@ export function attachProductActions() {
                     cell.removeAttribute('contenteditable'); // Removes editing ability
                     delete cell.dataset.originalValue; // Removing original value data
                 });
+
+                // Refresh the row content from server (or last PUT response) so the UI shows authoritative values
+                try {
+                  await refreshRowFromServer(row, productId);
+                } catch (err) {
+                  console.error('Failed to refresh product row:', err);
+                }
+
+                // Clean up any temporary data
+                delete row.dataset.updatedProduct;
             }
         });
     });
@@ -211,4 +228,48 @@ export function attachProductActions() {
         }
     }
 }
+
+/* --- Helper: GET product by ID --- */
+async function fetchProduct(productId) {
+  const response = await fetch(`/api/products/${productId}`, { method: 'GET' });
+  await handleFetchErrors(response);
+  return await response.json();
+}
+
+/* --- Helper: Refresh row from server (or fallback to last PUT response) --- */
+async function refreshRowFromServer(row, productId) {
+  let product = null;
+  try {
+    product = await fetchProduct(productId);
+  } catch (err) {
+    // Fallback to the last PUT response stored on the row
+    if (row.dataset.updatedProduct) {
+      try {
+        product = JSON.parse(row.dataset.updatedProduct);
+      } catch (_) {
+        /* ignore */
+      }
+    }
+  }
+
+  if (!product) return; // nothing to refresh
+
+  // Update each cell with authoritative values
+  const fields = ['productNumber', 'name', 'EAN', 'type', 'price'];
+  fields.forEach((field) => {
+    const cell = row.querySelector(`td[data-field="${field}"]`);
+    if (!cell) return;
+    if (field === 'price') {
+      cell.textContent = formatPrice(product.price);
+    } else {
+      cell.textContent = product[field] != null ? String(product[field]) : '';
+    }
+  });
+}
+
+// === AUTO-INIT PRODUCT ACTIONS ===
+document.addEventListener('DOMContentLoaded', () => {
+  attachProductActions();
+});
+
 
