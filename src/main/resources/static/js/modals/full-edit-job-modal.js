@@ -28,22 +28,19 @@
             customer_name: document.getElementById('full_customer_name').value,
             customer_phone: document.getElementById('full_customer_phone').value,
             job_description: document.getElementById('full_job_description').value || '',
-            work_time_minutes: parseInt(
-                document.getElementById('full_work_time_minutes').value || '0',
+            duration: parseInt(
+                document.getElementById('FullEditduration').value || '0',
                 10,
             ),
-            price_per_minute: parseFloat(
-                document.getElementById('full_price_per_minute').value || '0',
-            ),
             date: toIsoLocal(document.getElementById('full_date').value),
-            status: { id: parseInt(document.getElementById('full_status_id').value, 10) },
+            status: {id: parseInt(document.getElementById('full_status_id').value, 10)},
         };
 
         try {
             // Send PUT request to update the job entry
-            const r1 = await fetch('/api/jobs/' + id, {
+            const r1 = await fetch('/api/jobs/' + id + '/update', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(Payload),
             });
 
@@ -69,8 +66,7 @@
         document.getElementById('full_title').value = job.title || '';
         document.getElementById('full_customer_name').value = job.customer_name || '';
         document.getElementById('full_customer_phone').value = job.customer_phone || '';
-        document.getElementById('full_work_time_minutes').value = job.work_time_minutes ?? '';
-        document.getElementById('full_price_per_minute').value = job.price_per_minute ?? '';
+        document.getElementById('FullEditduration').value = job.duration ?? '';
 
         // Convert job date to proper datetime-local format
         document.getElementById('full_date').value = job.date

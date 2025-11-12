@@ -49,14 +49,14 @@
                             data-action="setStatus"
                             data-status="notDelivered"
                     >
-                        Ikke Indleveret
+                        Ikke Modtaget
                     </a>
                     <a
                             class="dropdown-item"
                             data-action="setStatus"
                             data-status="delivered"
                     >
-                        Indleveret
+                        Modtaget
                     </a>
                     <a
                             class="dropdown-item"
@@ -228,6 +228,7 @@
                 job_description: ep.job_description || '',
                 work_time_minutes: ep.work_time_minutes || 0,
                 price_per_minute: ep.price_per_minute || 0,
+                duration: ep.duration,
                 date: event.start ? formatLocalDateTime(event.start) : null,
                 status: {id: parseInt(statusId, 10)},
             };
@@ -634,8 +635,7 @@
                     customer_name: ep.customer_name || '',
                     customer_phone: ep.customer_phone || '',
                     job_description: ep.job_description || '',
-                    work_time_minutes: ep.work_time_minutes ?? 0,
-                    price_per_minute: ep.price_per_minute ?? 0,
+                    duration: ep.duration,
                     date: toLocalDatetimeInput(target.start),
                     status: {id: ep.status_id || 1},
                 };
@@ -682,14 +682,13 @@
                     customer_name: ep.customer_name || '',
                     customer_phone: ep.customer_phone || '',
                     job_description: ep.job_description || '',
-                    work_time_minutes: ep.work_time_minutes ?? 0,
-                    price_per_minute: ep.price_per_minute ?? 0,
+                    duration: ep.duration,
                     date: toIsoLocal(target.start),
                     status: {id: newStatusId},
                 };
 
                 try {
-                    const res = await fetch('/api/jobs/' + target.id, {
+                    const res = await fetch('/api/jobs/' + target.id + "/update", {
                         method: 'PUT',
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify(payload),
