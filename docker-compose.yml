@@ -1,0 +1,33 @@
+services:
+    db:
+        image: postgres:16
+        container_name: localdb-postgres
+        restart: unless-stopped
+        ports:
+            - "${POSTGRES_PORT:-5432}:5432"
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER:-app}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-app}
+            POSTGRES_DB: ${POSTGRES_DB:-appdb}
+        volumes:
+            - db_data:/var/lib/postgresql/data
+            - ./db/init:/docker-entrypoint-initdb.d:ro
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+            interval: 5s
+            timeout: 5s
+            retries: 10
+
+
+    adminer:
+        image: adminer:4
+        container_name: localdb-adminer
+        restart: unless-stopped
+        depends_on:
+            - db
+        ports:
+            - "${ADMINER_PORT:-8080}:8080"
+
+
+volumes:
+    db_data:
