@@ -72,20 +72,9 @@ Notes:
 # Windows: .\mvnw.cmd spring-boot:run
 ```
 
+- Or use your IDE’s Spring Boot run configuration.
+
 Then open http://localhost:9000
-
-- Running the packaged JAR:
-
-```
-./mvnw -DskipTests package
-java -jar target/project-0.0.1-SNAPSHOT.jar
-```
-
-- Optional: Build an OCI image (if you have a container runtime):
-
-```
-./mvnw spring-boot:build-image
-```
 
 ## Application Entry Point
 
