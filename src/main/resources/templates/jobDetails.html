@@ -29,39 +29,101 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                         <!-- Card title (in Danish: "Detaljer") -->
                         <h5 class="mb-0">Detaljer</h5>
 
-                        <!-- Edit button: opens the edit-job modal. ID used by JS to attach click handler. -->
-                        <a
-                            id="openEditBtn"
-                            th:data-job-id="${job.id}"
-                            th:data-job-title="${job.title}"
-                            th:data-job-customer-name="${job.customer_name}"
-                            th:data-job-customer-phone="${job.customer_phone}"
-                            th:data-job-work-time="${job.work_time_minutes}"
-                            th:data-job-price="${job.price_per_minute}"
-                            th:data-job-date="${#temporals.format(job.date, 'yyyy-MM-dd''T''HH:mm')}"
-                            th:data-job-status-id="${job.status.id}"
-                            class="btn btn-primary align-co px-1 py-1 pt-0"
-                            style="width: 2rem"
-                        >
-                            <!-- Pencil icon (SVG) visually indicates edit action -->
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                class="bi bi-pencil-square"
-                                viewBox="0 0 16 16"
-                            >
-                                <path
-                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                />
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                />
-                            </svg>
-                        </a>
-                    </div>
+                <!-- Edit button: opens the edit-job modal. ID used by JS to attach click handler. -->
+                <a id="openEditBtn"
+                   th:data-job-id="${job.id}"
+                   th:data-job-title="${job.title}"
+                   th:data-job-customer-name="${job.customer_name}"
+                   th:data-job-customer-phone="${job.customer_phone}"
+                   th:data-job-work-time="${job.work_time_minutes}"
+                   th:data-job-price="${job.price_per_minute}"
+                   th:data-duration="${job.duration}"
+                   th:data-job-date="${#temporals.format(job.date, 'yyyy-MM-dd''T''HH:mm')}"
+                   th:data-job-status-id="${job.status.id}" class="btn btn-primary align-co px-1 py-1 pt-0"
+                   style="width: 2rem">
+
+                    <!-- Pencil icon (SVG) visually indicates edit action -->
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-pencil-square"
+                            viewBox="0 0 16 16"
+                    >
+                        <path
+                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                        />
+                        <path
+                                fill-rule="evenodd"
+                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                        />
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Table content: shows job fields populated by Thymeleaf -->
+            <div class="table-content-container">
+                <table class="table tableRemoveLastLine mb-1">
+                    <tbody>
+                    <tr>
+                        <td><b>Status:</b></td>
+                        <!-- job.status.name is printed here; JS will find #job-status and style it -->
+                        <td>
+                            <span class="job-status" id="job-status" th:text="${job.status.name}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Oprettet:</b></td>
+                        <!-- Date formatting using Thymeleaf #temporals utility -->
+                        <td th:text="${#temporals.format(job.date, 'd. MMMM yyyy HH:mm')}"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Varighed:</b></td>
+                        <td th:text="${job.duration} + ' minutter'"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Cykel:</b></td>
+                        <td th:text="${job.title}"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Kunde:</b></td>
+                        <td th:text="${job.customer_name}"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Telefon:</b></td>
+                        <td th:text="${job.customer_phone}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Description Card: brief job description and its edit button -->
+        <div class="card ms-2" style="width: 100%">
+            <div class="card-header d-inline-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Beskrivelse</h5>
+
+                <!-- Button opens description modal. ID used by JS to attach click handler. -->
+                <a id="openDescBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
+                    <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            class="bi bi-pencil-square"
+                            viewBox="0 0 16 16"
+                    >
+                        <path
+                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                        />
+                        <path
+                                fill-rule="evenodd"
+                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                        />
+                    </svg>
+                </a>
+            </div>
 
                     <!-- Table content: shows job fields populated by Thymeleaf -->
                     <div class="table-content-container">
