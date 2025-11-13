@@ -111,7 +111,7 @@
                         id: job.id,
                         title: displayTitle,
                         start: job.date,
-                        end: job.date ? new Date(job.date).getTime() + (job.work_time_minutes || 0) * 60000 : null,
+                        end: job.date ? new Date(job.date).getTime() + (job.duration || 0) * 60000 : null,
                         backgroundColor: colors.backgroundColor,
                         borderColor: colors.borderColor,
                         textColor: colors.textColor,
@@ -189,6 +189,7 @@
                         job_description: ep.job_description || '',
                         work_time_minutes: ep.work_time_minutes || 0,
                         price_per_minute: ep.price_per_minute || 0,
+                        duration: ep.duration,
                         date: event.start ? formatLocalDateTime(event.start) : null,
                         status: { id: parseInt(statusId, 10) },
                     };
@@ -365,7 +366,7 @@
                         const ev = info.event;
                         const payload = buildPayloadFromEvent(ev);
 
-                        fetch('/api/jobs/' + ev.id, {
+                        fetch('/api/jobs/' + ev.id + "/update", {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload),
@@ -405,10 +406,10 @@
 
                         // Calculate new duration in minutes
                         if (ev.start && ev.end) {
-                            payload.work_time_minutes = Math.round((ev.end.getTime() - ev.start.getTime()) / 60000);
+                            payload.duration = Math.round((ev.end.getTime() - ev.start.getTime()) / 60000);
                         }
 
-                        fetch('/api/jobs/' + ev.id, {
+                        fetch('/api/jobs/' + ev.id + "/update", {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload),
