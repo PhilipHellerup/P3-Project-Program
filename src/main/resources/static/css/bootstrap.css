@@ -2164,7 +2164,7 @@ progress {
 }
 
 .pagination-css {
-    position: fixed; /* Stay fixed relative to the viewport */
+    /*osition: fixed; /* Stay fixed relative to the viewport */
     bottom: 1.5rem; /* Stick to the bottom */
     left: 50%; /* Move the element’s left edge to the center of the screen */
 }
@@ -8916,6 +8916,10 @@ textarea.form-control-lg {
 
 .mt-4 {
     margin-top: 1.5rem !important;
+}
+
+.mt-4-5 {
+    margin-top: 2rem !important;
 }
 
 .mt-5 {
