@@ -154,6 +154,9 @@ public class JobController {
                     if (job.getPrice_per_minute() != null) {
                         existing.setPrice_per_minute(job.getPrice_per_minute());
                     }
+                    if (job.getDuration() != null) {
+                        existing.setDuration(job.getDuration());
+                    }
                     if (job.getDate() != null) {
                         existing.setDate(job.getDate());
                     }
