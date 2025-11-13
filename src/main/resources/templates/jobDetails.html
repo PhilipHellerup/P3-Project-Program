@@ -1,31 +1,33 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <!-- Page title is populated by Thymeleaf from the job object -->
-    <title th:text="${job.title}"></title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Page title is populated by Thymeleaf from the job object -->
+        <title th:text="${job.title}"></title>
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png" />
+        <link rel="shortcut icon" href="/images/favicon.png" />
 
-    <!-- Linking: include CSS and JS assets. Keep CSS in <head> for render-blocking styles. -->
-    <link rel="stylesheet" href="/css/bootstrap.css"/>
-</head>
-<body>
-<!--
+        <!-- Linking: include CSS and JS assets. Keep CSS in <head> for render-blocking styles. -->
+        <link rel="stylesheet" href="/css/bootstrap.css" />
+    </head>
+    <body>
+        <!--
 Modals must exist in the DOM before their initialization scripts run.
 Using Thymeleaf th:replace to include modal fragments from a `modals` template.
 -->
-<div th:replace="~{modals :: edit-job-modal}"></div>
-<div th:replace="~{modals :: edit-description-modal}"></div>
+        <div th:replace="~{modals :: edit-job-modal}"></div>
+        <div th:replace="~{modals :: edit-description-modal}"></div>
 
-<!-- Page Container (No Nav Bar): main page content wrapper with margin -->
-<div class="page-content-container m-4">
-    <!-- Card Container: holds two cards side-by-side (Details and Description) -->
-    <div class="d-inline-flex" style="width: 100%">
-        <!-- Details Card: job metadata and edit button -->
-        <div class="card me-2" style="width: 100%">
-            <div class="card-header d-inline-flex justify-content-between align-items-center">
-                <!-- Card title (in Danish: "Detaljer") -->
-                <h5 class="mb-0">Detaljer</h5>
+        <!-- Page Container (No Nav Bar): main page content wrapper with margin -->
+        <div class="page-content-container m-4">
+            <!-- Card Container: holds two cards side-by-side (Details and Description) -->
+            <div class="d-inline-flex" style="width: 100%">
+                <!-- Details Card: job metadata and edit button -->
+                <div class="card me-2" style="width: 100%">
+                    <div class="card-header d-inline-flex justify-content-between align-items-center">
+                        <!-- Card title (in Danish: "Detaljer") -->
+                        <h5 class="mb-0">Detaljer</h5>
 
                 <!-- Edit button: opens the edit-job modal. ID used by JS to attach click handler. -->
                 <a id="openEditBtn"
@@ -123,209 +125,288 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                 </a>
             </div>
 
-            <!-- Description text: filled from job.job_description. ID used to fetch current text when opening modal. -->
-            <p
-                    class="card-text mx-2 my-2"
-                    id="jobDescriptionText"
-                    th:text="${job.job_description}"
-            ></p>
-        </div>
-    </div>
+                    <!-- Table content: shows job fields populated by Thymeleaf -->
+                    <div class="table-content-container">
+                        <table class="table tableRemoveLastLine mb-1">
+                            <tbody>
+                                <tr>
+                                    <td><b>Status:</b></td>
+                                    <!-- job.status.name is printed here; JS will find #job-status and style it -->
+                                    <td>
+                                        <span class="job-status" id="job-status" th:text="${job.status.name}"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><b>Oprettet:</b></td>
+                                    <!-- Date formatting using Thymeleaf #temporals utility -->
+                                    <td th:text="${#temporals.format(job.date, 'd. MMMM yyyy HH:mm')}"></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Cykel:</b></td>
+                                    <td th:text="${job.title}"></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Kunde:</b></td>
+                                    <td th:text="${job.customer_name}"></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Telefon:</b></td>
+                                    <td th:text="${job.customer_phone}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-    <!-- Product Table Container: lists parts/products associated with the job -->
-    <div class="product-table-content-container mt-5">
-        <table class="table align-middle mt-lg-3">
-            <thead>
-            <tr>
-                <th scope="col">Produkter</th>
-                <th scope="col">Antal</th>
-                <th scope="col">Varighed</th>
-                <th scope="col">Styk Pris</th>
-                <th scope="col">Total Pris</th>
-                <th></th>
-            </tr>
-            </thead>
-            <!-- Edit the worktime -->
-            <tbody>
-            <tr id="worktime-table-row" class="fw-medium">
-                <td class="w-30">
-                    <p class="m-1">Arbejdstid (i minutter)</p>
-                </td>
-                <td id="workTimeTd" class="w-15">
-                    <p class="m-1" th:text="${job.work_time_minutes} + ' min.'"></p>
-                </td>
-                <td class="w-15">
+                <!-- Description Card: brief job description and its edit button -->
+                <div class="card ms-2" style="width: 100%">
+                    <div class="card-header d-inline-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Beskrivelse</h5>
 
-                </td>
-                <td id="workCostTd" class="w-15">
-                    <p class="m-1 d-inline"
-                       th:text="${#numbers.formatDecimal(job.price_per_minute, 1, 2,'COMMA')}"></p>
-                    <p class="d-inline">kr.</p>
-                </td>
-                <td class="w-15" th:with="totalPrice=${job.work_time_minutes * job.price_per_minute}">
-                    <p class="m-1 d-inline" th:text="${#numbers.formatDecimal(totalPrice, 1, 2,'COMMA')}"></p>
-                    <p class="d-inline">kr.</p>
-                </td>
-                <td id="editButtonTd" class="p-0">
-                    <button type="button" id="edit-worktime-btn"
-                            class="btn btn-sm btn-secondary align-co px-1 py-1 pt-0"
-                            th:attr="data-id=${job.id}, data-workTimeMin=${job.work_time_minutes}, data-workCost=${job.price_per_minute}"
-                    >
-                        <!-- Pencil edit icon-->
-                        <svg
+                        <!-- Button opens description modal. ID used by JS to attach click handler. -->
+                        <a id="openDescBtn" class="btn btn-primary align-co px-1 py-1 pt-0" style="width: 2rem">
+                            <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                width="18"
-                                height="18"
+                                width="16"
+                                height="16"
                                 fill="currentColor"
                                 class="bi bi-pencil-square"
                                 viewBox="0 0 16 16"
-                        >
-                            <path
+                            >
+                                <path
                                     d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                            />
-                            <path
+                                />
+                                <path
                                     fill-rule="evenodd"
                                     d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                            />
-                        </svg>
+                                />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Description text: filled from job.job_description. ID used to fetch current text when opening modal. -->
+                    <p class="card-text mx-2 my-2" id="jobDescriptionText" th:text="${job.job_description}"></p>
+                </div>
+            </div>
+
+            <!-- Product Table Container: lists parts/products associated with the job -->
+            <div class="product-table-content-container mt-5">
+                <table class="table align-middle mt-lg-3">
+                    <thead>
+                        <tr>
+                            <th scope="col">Produkter</th>
+                            <th scope="col">Antal</th>
+                            <th scope="col">Varighed</th>
+                            <th scope="col">Styk Pris</th>
+                            <th scope="col">Total Pris</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <!-- Edit the worktime -->
+                    <tbody>
+                        <tr id="worktime-table-row" class="fw-medium">
+                            <td class="w-30">
+                                <p class="m-1">Arbejdstid (i minutter)</p>
+                            </td>
+                            <td id="workTimeTd" class="w-15">
+                                <p class="m-1" th:text="${job.work_time_minutes} + ' min.'"></p>
+                            </td>
+                            <td class="w-15"></td>
+                            <td id="workCostTd" class="w-15">
+                                <p
+                                    class="m-1 d-inline"
+                                    th:text="${#numbers.formatDecimal(job.price_per_minute, 1, 2,'COMMA')}"
+                                ></p>
+                                <p class="d-inline">kr.</p>
+                            </td>
+                            <td class="w-15" th:with="totalPrice=${job.work_time_minutes * job.price_per_minute}">
+                                <p
+                                    class="m-1 d-inline"
+                                    th:text="${#numbers.formatDecimal(totalPrice, 1, 2,'COMMA')}"
+                                ></p>
+                                <p class="d-inline">kr.</p>
+                            </td>
+                            <td id="editButtonTd" class="p-0">
+                                <button
+                                    type="button"
+                                    id="edit-worktime-btn"
+                                    class="btn btn-sm btn-secondary align-co px-1 py-1 pt-0"
+                                    th:attr="data-id=${job.id}, data-workTimeMin=${job.work_time_minutes}, data-workCost=${job.price_per_minute}"
+                                >
+                                    <!-- Pencil edit icon-->
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="18"
+                                        height="18"
+                                        fill="currentColor"
+                                        class="bi bi-pencil-square"
+                                        viewBox="0 0 16 16"
+                                    >
+                                        <path
+                                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                                        />
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                                        />
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <!-- Show list of services -->
+                    <tbody>
+                        <tr th:each="js : ${jobService}">
+                            <td class="w-30">
+                                <p class="m-1" th:text="${js.service.name}"></p>
+                            </td>
+                            <td class="w-15">
+                                <p class="m-1" th:text="${js.quantity}"></p>
+                            </td>
+                            <td class="w-15">
+                                <p class="m-1 d-inline" th:text="${js.service.duration}"></p>
+                                <p class="d-inline">min.</p>
+                            </td>
+                            <td class="w-15">
+                                <p
+                                    class="m-1 d-inline"
+                                    th:text="${#numbers.formatDecimal(js.service.price, 1, 2,'COMMA')}"
+                                ></p>
+                                <p class="d-inline">kr.</p>
+                            </td>
+                            <td class="w-15" th:with="totalPrice=${js.service.price * js.quantity}">
+                                <p
+                                    class="m-1 d-inline"
+                                    th:text="${#numbers.formatDecimal(totalPrice, 1, 2,'COMMA')}"
+                                ></p>
+                                <p class="d-inline">kr.</p>
+                            </td>
+                            <td class="p-0">
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-danger remove-btn"
+                                    th:attr="data-id=${js.service.id}, data-type='service' "
+                                >
+                                    X
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <!-- Show list of parts-->
+                        <tr th:each="jp : ${jobParts}">
+                            <td class="w-30">
+                                <p class="m-1" th:text="${jp.product.name}"></p>
+                            </td>
+                            <td class="w-15">
+                                <p class="m-1" th:text="${jp.quantity}"></p>
+                            </td>
+                            <td class="w-15"></td>
+                            <td class="w-15">
+                                <p
+                                    class="m-1 d-inline"
+                                    th:text="${#numbers.formatDecimal(jp.product.price, 1, 2,'COMMA')}"
+                                ></p>
+                                <p class="d-inline">kr.</p>
+                            </td>
+                            <td class="w-15" th:with="totalPrice=${jp.product.price * jp.quantity}">
+                                <p
+                                    class="m-1 d-inline"
+                                    th:text="${#numbers.formatDecimal(totalPrice, 1, 2,'COMMA')}"
+                                ></p>
+                                <p class="d-inline">kr.</p>
+                            </td>
+                            <td class="p-0">
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-danger remove-btn"
+                                    th:attr="data-id=${jp.product.id}, data-type='part' "
+                                >
+                                    X
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Button + Final Price Table: action button on left, totals on right -->
+            <div
+                class="final-table-content-container d-flex justify-content-between align-items-start mt-3"
+                style="width: 100%"
+            >
+                <div class="d-flex flex-column">
+                    <!-- Left Side: Button to add a product. You might wire this to a modal or product selector. -->
+                    <button id="add-product-btn" type="button" class="btn btn-primary">Tilføj Produkt</button>
+
+                    <button class="btn btn-danger mt-3" id="deleteBtn" th:attr="data-job-id=${job.id}">
+                        Slet Reparation
                     </button>
-                </td>
+                </div>
+                <!-- Right Side: Totals table (static values here). Replace with computed values: here are all set to 0 as default. -->
+                <table class="table table-borderless mb-0 mt-5" style="width: auto">
+                    <tbody>
+                        <tr>
+                            <td class="fs-5"><b>Pris:</b></td>
+                            <td class="fs-6" id="subtotal">0 Kr.</td>
+                        </tr>
+                        <tr>
+                            <td class="fs-5"><b>Moms:</b></td>
+                            <td class="fs-6" id="moms">0 Kr.</td>
+                        </tr>
+                        <tr>
+                            <td class="fs-5"><b>Total:</b></td>
+                            <td class="fs-6" id="total"><b>0 Kr.</b></td>
+                        </tr>
+                    </tbody>
+                    <!-- Final price + moms: It takes the price of item from the list and adds it together then plus the 25% ()-->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            let subtotal = 0;
 
-            </tr>
-            </tbody>
-            <!-- Show list of services -->
-            <tbody>
-            <tr th:each="js : ${jobService}">
-                <td class="w-30">
-                    <p class="m-1" th:text="${js.service.name}"></p>
-                </td>
-                <td class="w-15">
-                    <p class="m-1" th:text="${js.quantity}"></p>
-                </td>
-                <td class="w-15">
-                    <p class="m-1 d-inline" th:text="${js.service.duration}"></p>
-                    <p class="d-inline">min.</p>
-                </td>
-                <td class="w-15">
-                    <p class="m-1 d-inline"
-                       th:text="${#numbers.formatDecimal(js.service.price, 1, 2,'COMMA')}"></p>
-                    <p class="d-inline">kr.</p>
-                </td>
-                <td class="w-15" th:with="totalPrice=${js.service.price * js.quantity}">
-                    <p class="m-1 d-inline" th:text="${#numbers.formatDecimal(totalPrice, 1, 2,'COMMA')}"></p>
-                    <p class="d-inline">kr.</p>
-                </td>
-                <td class="p-0">
-                    <button type="button" class="btn btn-sm btn-danger remove-btn"
-                            th:attr="data-id=${js.service.id}, data-type='service' "
-                    >X
-                    </button>
-                </td>
+                            document
+                                .querySelectorAll('.product-table-content-container tbody tr td:nth-child(5) p')
+                                .forEach(
+                                    (cell) =>
+                                        (subtotal +=
+                                            parseFloat(cell.textContent.replace(/[^\d.,-]/g, '').replace(',', '.')) ||
+                                            0),
+                                );
 
-            </tr>
-            </tbody>
-            <tbody>
-            <!-- Show list of parts-->
-            <tr th:each="jp : ${jobParts}">
-                <td class="w-30">
-                    <p class="m-1" th:text="${jp.product.name}"></p>
-                </td>
-                <td class="w-15">
-                    <p class="m-1" th:text="${jp.quantity}"></p>
-                </td>
-                <td class="w-15">
+                            const moms = subtotal * 0.25;
+                            const total = subtotal + moms;
 
-                </td>
-                <td class="w-15">
-                    <p class="m-1 d-inline"
-                       th:text="${#numbers.formatDecimal(jp.product.price, 1, 2,'COMMA')}"></p>
-                    <p class="d-inline">kr.</p>
-                </td>
-                <td class="w-15" th:with="totalPrice=${jp.product.price * jp.quantity}">
-                    <p class="m-1 d-inline" th:text="${#numbers.formatDecimal(totalPrice, 1, 2,'COMMA')}"></p>
-                    <p class="d-inline">kr.</p>
-                </td>
-                <td class="p-0">
-                    <button type="button" class="btn btn-sm btn-danger remove-btn"
-                            th:attr="data-id=${jp.product.id}, data-type='part' "
-                    >X
-                    </button>
-                </td>
+                            // Here it rewrites the total price in Danish currency = DKK
+                            const formatDK = (num) =>
+                                num.toLocaleString('da-DK', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                });
 
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Button + Final Price Table: action button on left, totals on right -->
-    <div
-            class="final-table-content-container d-flex justify-content-between align-items-start mt-3"
-            style="width: 100%"
-
-    >
-        <div class="d-flex flex-column">
-            <!-- Left Side: Button to add a product. You might wire this to a modal or product selector. -->
-            <button id="add-product-btn" type="button" class="btn btn-primary">Tilføj Produkt</button>
-
-            <button class="btn btn-danger mt-3" id="deleteBtn" th:attr="data-job-id=${job.id}">Slet Reparation</button>
+                            document.getElementById('subtotal').textContent = `${formatDK(subtotal)} Kr.`;
+                            document.getElementById('moms').textContent = `${formatDK(moms)} Kr.`;
+                            document.getElementById('total').textContent = `${formatDK(total)} Kr.`;
+                        });
+                    </script>
+                </table>
+            </div>
         </div>
-        <!-- Right Side: Totals table (static values here). Replace with computed values: here are all set to 0 as default. -->
-        <table class="table table-borderless mb-0 mt-5" style="width: auto">
-            <tbody>
-            <tr>
-                <td class="fs-5"><b>Pris:</b></td>
-                <td class="fs-6" id="subtotal"> 0 Kr.</td>
-            </tr>
-            <tr>
-                <td class="fs-5"><b>Moms:</b></td>
-                <td class="fs-6" id="moms"> 0 Kr.</td>
-            </tr>
-            <tr>
-                <td class="fs-5"><b>Total:</b></td>
-                <td class="fs-6" id="total"><b>0 Kr.</b></td>
-            </tr>
-            </tbody>
-            <!-- Final price + moms: It takes the price of item from the list and adds it together then plus the 25% ()-->
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    let subtotal = 0;
+        <div th:replace="~{modals :: add-product-to-repair-modal}"></div>
 
-                    document.querySelectorAll('.product-table-content-container tbody tr td:nth-child(5) p')
-                        .forEach(cell => subtotal += parseFloat(cell.textContent.replace(/[^\d.,-]/g, '').replace(',', '.')) || 0);
+        <script src="/js/bootstrap.js"></script>
+        <script src="/js/html.js"></script>
 
-                    const moms = subtotal * 0.25;
-                    const total = subtotal + moms;
+        <!-- Modal-specific JS: initialize modal behavior after modal markup is included -->
+        <script src="/js/modals/edit-job-modal.js"></script>
+        <script src="/js/modals/edit-description-modal.js"></script>
+        <script src="/js/modals/add-product-to-repair-modal.js"></script>
 
-                    // Here it rewrites the total price in Danish currency = DKK
-                    const formatDK = num => num.toLocaleString('da-DK', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
+        <!-- Navigation: navbar script injects navigation markup at runtime -->
+        <nav>
+            <script src="/js/navbar.js"></script>
+        </nav>
 
-                    document.getElementById('subtotal').textContent = `${formatDK(subtotal)} Kr.`;
-                    document.getElementById('moms').textContent = `${formatDK(moms)} Kr.`;
-                    document.getElementById('total').textContent = `${formatDK(total)} Kr.`;
-                });
-            </script>
-        </table>
-    </div>
-</div>
-<div th:replace="~{modals :: add-product-to-repair-modal}"></div>
-
-<script src="/js/bootstrap.js"></script>
-<script src="/js/html.js"></script>
-
-<!-- Modal-specific JS: initialize modal behavior after modal markup is included -->
-<script src="/js/modals/edit-job-modal.js"></script>
-<script src="/js/modals/edit-description-modal.js"></script>
-<script src="/js/modals/add-product-to-repair-modal.js"></script>
-
-<!-- Navigation: navbar script injects navigation markup at runtime -->
-<nav>
-    <script src="/js/navbar.js"></script>
-</nav>
-
-<!-- Inline script: small DOM manipulation and wiring for edit buttons and status styling -->
-<script src="/js/job-description-script.js"></script>
-</body>
+        <!-- Inline script: small DOM manipulation and wiring for edit buttons and status styling -->
+        <script src="/js/job-description-script.js"></script>
+    </body>
 </html>

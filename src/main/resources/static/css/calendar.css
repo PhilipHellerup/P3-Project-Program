@@ -301,7 +301,6 @@ body {
 
 /* === Description Line === */
 .event-description {
-    margin-left: 18px;
     margin-top: 4px;
     font-size: 0.85rem;
     color: #6b7280; /* soft gray */
