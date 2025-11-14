@@ -88,6 +88,14 @@ public class JobController {
             JobStatus status = statusRepository.findById(statusId.shortValue())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
 
+            // If duration is not defined, set it to 60 mins
+            Integer duration;
+            if (body.get("duration") == null || (Integer) body.get("duration") == 0) {
+                duration = 60;
+            } else {
+                duration = (Integer) body.get("duration");
+            }
+
             // --- Create Job entity ---
             Job job = new Job();
             job.setTitle(title);
@@ -96,7 +104,7 @@ public class JobController {
             job.setJob_description((String) body.get("job_description"));
             job.setWork_time_minutes((Integer) body.get("work_time_minutes"));
             job.setPrice_per_minute(((Number) body.get("price_per_min")).doubleValue());
-            job.setDuration((Integer) body.get("duration"));
+            job.setDuration(duration);
             job.setDate(LocalDateTime.parse(dateString));
             job.setStatus(status);
 
@@ -143,8 +151,14 @@ public class JobController {
                     if (job.getWork_time_minutes() != null) {
                         existing.setWork_time_minutes(job.getWork_time_minutes());
                     }
+                    if (job.getDuration() != null) {
+                        existing.setDuration(job.getDuration());
+                    }
                     if (job.getPrice_per_minute() != null) {
                         existing.setPrice_per_minute(job.getPrice_per_minute());
+                    }
+                    if (job.getDuration() != null) {
+                        existing.setDuration(job.getDuration());
                     }
                     if (job.getDate() != null) {
                         existing.setDate(job.getDate());
