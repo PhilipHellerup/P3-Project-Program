@@ -3,7 +3,7 @@ package mainProgram.table;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "job_services")
+@Table(name = "job_services_jointable")
 public class JobServices {
 
     @Id
