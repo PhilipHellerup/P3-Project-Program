@@ -256,6 +256,7 @@ public class JobController {
         }
         // Delete all JobParts for this job first
         jobPartRepository.deleteByJobId(id);
+        jobServiceRepository.deleteByJobId(id);
         // Now delete the job
         jobRepository.deleteById(id);
         return ResponseEntity.noContent().build();
