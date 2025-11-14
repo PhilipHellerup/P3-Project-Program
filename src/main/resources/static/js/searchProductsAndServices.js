@@ -60,5 +60,12 @@
     };
 
     input.addEventListener('input', debouncedFilter);
+
+    const searchForm = input.closest('form');
+    if (searchForm) {
+      searchForm.addEventListener('submit', (e) => {
+          e.preventDefault();       // stop page reload
+      });
+    }
   });
 })();
