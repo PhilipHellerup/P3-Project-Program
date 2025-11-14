@@ -4,9 +4,6 @@
   const DEBOUNCE_MS = 250;
   let timer = null;
 
-  let params = new URLSearchParams(document.location.search);
-  let table_filter = params.get("filter");
-
   document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('search-input');
     const product_tbody = document.getElementById('productTable-body');
@@ -17,7 +14,7 @@
     const filterNow = () => {
       const q = (input.value || '').trim().toLowerCase();
       let rows;
-      if (table_filter === "products") {
+      if (product_tbody) {
         rows = product_tbody.querySelectorAll('tr');
         if (q === "") {
           rows.forEach((row) => row.classList.remove('d-none'));
@@ -36,7 +33,7 @@
         if (window.Pagination) {
           window.Pagination.refresh();
         }
-      } else if (table_filter === "services") {
+      } else if (service_tbody) {
         rows = service_tbody.querySelectorAll('tr');
         if (q === "") {
           rows.forEach((row) => row.classList.remove('d-none'));
