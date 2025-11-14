@@ -1,10 +1,13 @@
 // Imports
-import { handleFetchErrors } from '/js/utils/fetchUtils.js';
-import { parsePriceString } from '/js/utils/parsePrice.js';
+import { handleFetchErrors } from './utils/fetchUtils.js';
+import { parsePriceString, formatPrice } from './utils/parsePrice.js';
 
-/* --- DELETE PRODUCT --- */
-// Wait until the entire DOM (HTML structure) has loaded before running the script
-document.addEventListener('DOMContentLoaded', () => {
+/* --- ATTACH PRODUCT ACTIONS --- */
+// This function attaches event listeners for delete and edit actions
+// using event delegation on the entire product table.
+// Works even if rows are dynamically replaced (search/pagination).
+export function attachProductActions() {
+    /* --- DELETE PRODUCT --- */
     // Select all elements with the class "delete-btn" in the product table (trash can buttons)
     // and loop through them to attach an event listener
     document.querySelectorAll('#productTable .delete-btn').forEach(button => {
@@ -28,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 // Send a DELETE request to the backend API "ProductController.java" to remove the product
+                if (!confirm('Slet dette produkt?')) return;
                 const response = await fetch(`/api/products/${productId}`, {
                     method: 'DELETE'
                 });
@@ -41,17 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Success: Reload the page so table and pagination update automatically
                 window.location.reload();
             }
-            // Catch any network or fetch-related errors and log them for debugging
+                // Catch any network or fetch-related errors and log them for debugging
             catch (error) {
                 console.error('Error deleting product:', error);
             }
         });
     });
-});
 
-/* --- EDIT PRODUCT (TOGGLE EDIT MODE) --- */
-// Wait until the entire DOM (HTML structure) has loaded before running the script
-document.addEventListener('DOMContentLoaded', () => {
+    /* --- EDIT PRODUCT (TOGGLE EDIT MODE) --- */
     // Select all elements with the class "edit-btn" in the product table (pencil buttons)
     // and loop through them to attach an event listener
     document.querySelectorAll('#productTable .edit-btn').forEach(button => {
@@ -101,6 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Store the original value in a data attribute for comparison later
                     cell.dataset.originalValue = cell.textContent;
+
+                  // If editing the price cell, remove the trailing currency ("Kr."/"Kr") so the user edits a clean number
+                  const fieldName = cell.getAttribute('data-field');
+                  if (fieldName === 'price') {
+                    cell.textContent = cell.textContent.trim().replace(/\s*Kr\.?$/i, '');
+                  }
 
                     // Listen for when the user finishes editing a cell (also called a "blur event")
                     cell.addEventListener('blur', async (ev) => {
@@ -179,35 +186,90 @@ document.addEventListener('DOMContentLoaded', () => {
                     cell.removeAttribute('contenteditable'); // Removes editing ability
                     delete cell.dataset.originalValue; // Removing original value data
                 });
+
+                // Refresh the row content from server (or last PUT response) so the UI shows authoritative values
+                try {
+                  await refreshRowFromServer(row, productId);
+                } catch (err) {
+                  console.error('Failed to refresh product row:', err);
+                }
+
+                // Clean up any temporary data
+                delete row.dataset.updatedProduct;
             }
         });
     });
-});
 
-/* --- CONTROLLER CALL: PUT PRODUCT UPDATE --- */
-// Sends a PUT request to update a product field in the backend "Product Controller"
-/** @param {string} productId ID of the product to update **/
-/** @param {Object} updatedData Object containing field(s) and value(s) to update **/
-async function updateProduct(productId, updatedData) {
-    try {
-        // Send PUT request to the backend API
-        const response = await fetch(`/api/products/${productId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedData)
-        });
-        // Extra NOTES:
-        // "method" HTTP Method: (Get, Post, Put, Delete)
-        // "headers:" = How to interpret the data being sent
-        //  - Content-Type = Tells Server what type of data is in the request body
-        //  - application/json = The body is JSON, please parse it as JSON
-        // "body:" = Converts JS object to JSON
+    /* --- CONTROLLER CALL: PUT PRODUCT UPDATE --- */
+    // Sends a PUT request to update a product field in the backend "Product Controller"
+    /** @param {string} productId ID of the product to update
+    * @param {Object} updatedData Object containing field(s) and value(s) to update **/
+    async function updateProduct(productId, updatedData) {
+        try {
+            // Send PUT request to the backend API
+            const response = await fetch(`/api/products/${productId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedData)
+            });
+            // Extra NOTES:
+            // "method" HTTP Method: (Get, Post, Put, Delete)
+            // "headers:" = How to interpret the data being sent
+            //  - Content-Type = Tells Server what type of data is in the request body
+            //  - application/json = The body is JSON, please parse it as JSON
+            // "body:" = Converts JS object to JSON
 
-        // Handle any fetch errors (network issues, server errors)
-        await handleFetchErrors(response);
-    }
-    catch (error) {
-        // Log error
-        console.error('Error updating product:', error);
+            // Handle any fetch errors (network issues, server errors)
+            await handleFetchErrors(response);
+        }
+        catch (error) {
+            // Log error
+            console.error('Error updating product:', error);
+        }
     }
 }
+
+/* --- Helper: GET product by ID --- */
+async function fetchProduct(productId) {
+  const response = await fetch(`/api/products/${productId}`, { method: 'GET' });
+  await handleFetchErrors(response);
+  return await response.json();
+}
+
+/* --- Helper: Refresh row from server (or fallback to last PUT response) --- */
+async function refreshRowFromServer(row, productId) {
+  let product = null;
+  try {
+    product = await fetchProduct(productId);
+  } catch (err) {
+    // Fallback to the last PUT response stored on the row
+    if (row.dataset.updatedProduct) {
+      try {
+        product = JSON.parse(row.dataset.updatedProduct);
+      } catch (_) {
+        /* ignore */
+      }
+    }
+  }
+
+  if (!product) return; // nothing to refresh
+
+  // Update each cell with authoritative values
+  const fields = ['name', 'EAN', 'type', 'price'];
+  fields.forEach((field) => {
+    const cell = row.querySelector(`td[data-field="${field}"]`);
+    if (!cell) return;
+    if (field === 'price') {
+      cell.textContent = formatPrice(product.price);
+    } else {
+      cell.textContent = product[field] != null ? String(product[field]) : '';
+    }
+  });
+}
+
+// === AUTO-INIT PRODUCT ACTIONS ===
+document.addEventListener('DOMContentLoaded', () => {
+  attachProductActions();
+});
+
+

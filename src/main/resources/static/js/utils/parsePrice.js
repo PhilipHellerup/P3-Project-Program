@@ -49,3 +49,15 @@ export function parsePriceString(raw) {
     // Converted and cleaned string to float number
     return parseFloat(s);
 }
+
+export function formatPrice(value) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return String(value) + ' Kr.';
+  try {
+    // Danish-style formatting (e.g., 1.234,50) could be 'da-DK', but the template uses explicit decimal places.
+    // We'll ensure 2 decimals and append the currency suffix used in the table.
+    return num.toLocaleString('da-DK', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' Kr.';
+  } catch (_) {
+    return num.toFixed(2) + ' Kr.';
+  }
+}

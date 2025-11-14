@@ -2,6 +2,7 @@ package mainProgram.controller; // Project Organization
 
 /* --- Imports --- */
 import mainProgram.repository.ServiceRepository;
+import mainProgram.table.Product;
 import mainProgram.table.Services;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,12 @@ public class ServiceController {
         return ResponseEntity.ok(savedService);
     }
 
+    // Get a single product by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Services> getProduct(@PathVariable int id) {
+      return serviceRepository.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
     // DELETE
     // Handles DELETE requests to remove a service by ID
     // Endpoint: DELETE /api/services/{id}
@@ -65,9 +72,9 @@ public class ServiceController {
     // Handles PUT requests to update a service by ID
     // Endpoint: PUT /api/services/{id}
     // The frontend sends a JSON body containing fields to update: name, price, duration
-    /** @param id the unique id of the service to update **/
-    /** @param updates a Map containing field names as keys and new values as values **/
-    /** @return ResponseEntity containing the updated service (HTTP 200 OK) if found and updated,
+    /** @param id the unique id of the service to update
+    * @param updates a Map containing field names as keys and new values as values
+    * @return ResponseEntity containing the updated service (HTTP 200 OK) if found and updated,
      **         or HTTP 404 Not Found if the service with the given ID does not exist **/
     @PutMapping("/{id}")
     public ResponseEntity<?> editService(@PathVariable int id, @RequestBody Map<String, Object> updates) {
