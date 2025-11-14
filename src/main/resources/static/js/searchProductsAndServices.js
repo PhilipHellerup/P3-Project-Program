@@ -11,6 +11,12 @@
 
     if (!input) return;
 
+    if (product_tbody) {
+      input.placeholder = "Søg efter reservedele";
+    } else if (service_tbody) {
+      input.placeholder = "Søg efter ydelser";
+    }
+
     const filterNow = () => {
       const q = (input.value || '').trim().toLowerCase();
       let rows;
