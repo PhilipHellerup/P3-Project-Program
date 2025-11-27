@@ -22,6 +22,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+
+
+
+
+
+
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -58,20 +69,20 @@ class JobControllerTests {
     }
 
     /**
-     * Happy path: valid JSON -> job saved, default duration applied (duration==0 -> 60).
+     * Happy path/Normal expected path: valid JSON -> job saved, default duration applied (duration==0 -> 60).
      */
     @Test
     void createJob_happyPath_returnsSavedJobWithDefaultDuration() throws Exception {
         String json = """
-            {
-              "title": "Fix Screen",
-              "date": "2025-11-26T10:00:00",
-              "status": { "id": 1 },
-              "duration": 0,
-              "price_per_min": 1.0,
-              "services": [ { "id": 2, "quantity": 1 } ]
-            }
-            """;
+                {
+                  "title": "Fix Screen",
+                  "date": "2025-11-26T10:00:00",
+                  "status": { "id": 1 },
+                  "duration": 0,
+                  "price_per_min": 1.0,
+                  "services": [ { "id": 2, "quantity": 1 } ]
+                }
+                """;
 
         // prepare mocks
         JobStatus status = new JobStatus();
@@ -110,12 +121,12 @@ class JobControllerTests {
     @Test
     void createJob_missingTitle_returnsBadRequest() throws Exception {
         String json = """
-            {
-              "date": "2025-11-26T10:00:00",
-              "status": { "id": 1 },
-              "duration": 30
-            }
-            """;
+                {
+                  "date": "2025-11-26T10:00:00",
+                  "status": { "id": 1 },
+                  "duration": 30
+                }
+                """;
 
         mockMvc.perform(post("/api/jobs/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -130,13 +141,13 @@ class JobControllerTests {
     @Test
     void createJob_invalidStatusId_returnsInternalServerError() throws Exception {
         String json = """
-            {
-              "title": "Fix Screen",
-              "date": "2025-11-26T10:00:00",
-              "status": { "id": 999 },
-              "duration": 30
-            }
-            """;
+                {
+                  "title": "Fix Screen",
+                  "date": "2025-11-26T10:00:00",
+                  "status": { "id": 999 },
+                  "duration": 30
+                }
+                """;
 
         when(statusRepository.findById((short) 999)).thenReturn(Optional.empty());
 
@@ -148,4 +159,106 @@ class JobControllerTests {
         verify(statusRepository, times(1)).findById((short) 999);
         verify(jobRepository, never()).save(any(Job.class));
     }
+
+    /**
+     * Mixed list with a part (with quantity) and a service (without quantity).
+     * Verifies that:
+     *  - addPartToRepair is called with the explicit quantity.
+     *  - addServiceToRepair is called with default quantity 1.
+     */
+    @Test
+    void addProductsToRepair_mixedProducts_callsServiceMethods() throws Exception {
+        String json = """
+            [
+              { "repairId": 10, "productId": 5, "quantity": 2, "type": "part" },
+              { "repairId": 10, "productId": 3, "type": "service" }
+            ]
+            """;
+
+        mockMvc.perform(post("/api/repairs/addProduct")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Products added to repair successfully"));
+
+        // Verify that the correct service methods were called
+        verify(jobService, times(1)).addPartToRepair(10, 5, 2);
+        // second item has no "quantity" -> default 1
+        verify(jobService, times(1)).addServiceToRepair(10, 3, 1);
+        verifyNoMoreInteractions(jobService);
+    }
+
+    @Test
+    void addProductsToRepair_usesDefaultQuantityWhenMissing() throws Exception {
+        // quantity is not set -> should default to 1
+        String jsonBody = """
+            [
+              {"repairId": 5, "productId": 99, "type": "service"}
+            ]
+            """;
+
+        mockMvc.perform(post("/api/repairs/addProduct")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonBody))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Products added to repair successfully"));
+
+        // Verify that quantity 1 was used
+        verify(jobService).addServiceToRepair(5, 99, 1);
+    }
+
+    //--------------------------------------------------------------------------------------
+
+    /**
+     * DELETE /api/jobs/{id}
+     * If the job exists:
+     *  - returns 204 No Content
+     *  - deletes JobPart links, JobService links, then the Job itself.
+     */
+    @Test
+    void deleteJob_existingJob_deletesRelationsAndJob() throws Exception {
+        int jobId = 10;
+
+        when(jobRepository.existsById(jobId)).thenReturn(true);
+
+        mockMvc.perform(delete("/api/jobs/{id}", jobId))
+                .andExpect(status().isNoContent());
+
+        // verify existsById checked
+        verify(jobRepository).existsById(jobId);
+
+        // verify relation deletes
+        verify(jobPartRepository).deleteByJobId(jobId);
+        verify(jobServiceRepository).deleteByJobId(jobId);
+
+        // verify job delete
+        verify(jobRepository).deleteById(jobId);
+
+        // no unexpected extra calls on these three
+        verifyNoMoreInteractions(jobPartRepository, jobServiceRepository, jobRepository);
+    }
+
+    /**
+     * DELETE /api/jobs/{id}
+     * If the job does NOT exist:
+     *  - returns 404 Not Found
+     *  - does NOT call any delete methods.
+     */
+    @Test
+    void deleteJob_nonExistingJob_returnsNotFoundAndDoesNotDelete() throws Exception {
+        int jobId = 99;
+
+        when(jobRepository.existsById(jobId)).thenReturn(false);
+
+        mockMvc.perform(delete("/api/jobs/{id}", jobId))
+                .andExpect(status().isNotFound());
+
+        verify(jobRepository).existsById(jobId);
+
+        // ensure no deletes are called
+        verify(jobPartRepository, never()).deleteByJobId(anyInt());
+        verify(jobServiceRepository, never()).deleteByJobId(anyInt());
+        verify(jobRepository, never()).deleteById(anyInt());
+    }
+
 }

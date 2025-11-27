@@ -218,7 +218,7 @@ public class JobController {
             } else if (Objects.equals(productType, "part")) {
                 jobService.addPartToRepair(repairId, productId, quantity);
             } else {
-                throw new Error("undefined product type");
+                throw new Error("Undefined product type");
             }
 
         }
@@ -240,7 +240,7 @@ public class JobController {
             } else if (Objects.equals(productType, "part")) {
                 jobService.removePartFromRepair(repairId, productId);
             } else {
-                throw new Error("undefined product type");
+                throw new Error("Undefined product type");
             }
         }
 
@@ -261,4 +261,7 @@ public class JobController {
         jobRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+
+
 }
