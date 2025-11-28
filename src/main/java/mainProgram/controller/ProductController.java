@@ -2,8 +2,8 @@ package mainProgram.controller; // Project Organization
 
 /* --- Imports --- */
 import mainProgram.repository.ProductRepository;
+import mainProgram.services.ProductService;
 import mainProgram.table.Product;
-import mainProgram.table.Services;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
@@ -14,58 +14,58 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/products") // Base path for all API routes in this controller
 public class ProductController {
-  // Attributes
-  private final ProductRepository productRepository; // Injected repository used for database operations CRUD
+    /// Attributes
+    private final ProductRepository productRepository; // Injected repository used for database operations CRUD
+    private final ProductService productService;       // Product Services (Service Layer)
 
-    // Constructor for Dependency Injection
+    /// Constructor for Dependency Injection
     // Spring automatically provides an instance of ProductRepository at runtime.
     /** @param productRepository the repository handling CRUD operations for Product entities. **/
-    public ProductController(ProductRepository productRepository) {
+    public ProductController(ProductRepository productRepository, ProductService productService) {
         this.productRepository = productRepository;
+        this.productService = productService;
     }
 
-    // Methods
+    /// Methods
+
+    // Create Product - CREATE
     /** @param product the product object to create **/
     /** @return ResponseEntity containing the created product if successful, or a bad request response **/
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        // Save the product to the database using the repository and its .save() method.
-        Product savedProduct = productRepository.save(product);
+        // Calling the createProduct Service Method
+        Product savedProduct = productService.createProduct(product);
 
         // Return the saved product as a JSON response with HTTP 200 OK status.
         return ResponseEntity.ok(savedProduct);
     }
 
-    // Get a single product by ID
+    // Get Product by ID - READ
+    /** @param id the unique id of the product to read **/
+    /** @return ResponseEntity with HTTP 200 OK if Product was Found or 404 Not Found if the service does not exist **/
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable int id) {
-      return productRepository.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        // Calling the getProduct Service Method
+        Product product = productService.getProduct(id);
+
+        // Return the product as a JSON response with HTTP 200 OK status if Product is found else 404 Not Found
+        return (product != null) ? ResponseEntity.ok(product) : ResponseEntity.notFound().build();
     }
 
-    // Deletes a specific product from the database based on its ID.
-    // Triggered when a DELETE request is sent to "/api/products/{id}"-
-    // Example: request: DELETE /api/products/5 will delete the product with id "5".
+    // Delete Product by ID - DELETE
     /** @param id the unique id of the product to delete **/
     /** @return ResponseEntity with HTTP 204 No Content if deletion is successful,
      **         or HTTP 404 Not Found if the service does not exist **/
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable int id) {
-        // Check if a product with the given ID exists before attempting deletion
-        if (productRepository.existsById(id)) {
-            // If the product exists, delete it from the database
-            productRepository.deleteById(id);
+        // Calling the deleteProduct Service Method
+        boolean deleted = productService.deleteProduct(id);
 
-            // Return HTTP 204: No Content (indicating success, but no response body needed)
-            return ResponseEntity.noContent().build(); // 204 No Content
-        }
-        else {
-            // Return HTTP 404: Not Found (if the product does not exist in the database)
-            return ResponseEntity.notFound().build(); // 404 if not found
-        }
+        // Return HTTP 204 No Content if Product is deleted else 404 Not Found
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
-    // Handles HTTP PUT requests to update a product by its ID.
-    // Base path: /api/products/{id}
+    // Update Product by ID - UPDATE
     // The frontend sends a JSON body containing the fields to update (name, price, etc.)
     /** @param id the unique id of the product to update **/
     /** @param updates a Map containing field names as keys and new values as values **/
@@ -73,40 +73,11 @@ public class ProductController {
      **         or HTTP 404 Not Found if the product with the given ID does not exist **/
     @PutMapping("/{id}")
     public ResponseEntity<?> editProduct(@PathVariable int id, @RequestBody Map<String, Object> updates) {
-        // Look up the product in the database by ID
-        return productRepository.findById(id).map(product -> {
-            // Iterate over each field in the updates map
-            // The map comes from the frontend and contains key/value pairs of fields to update
-            updates.forEach((field, value) -> {
-                switch (field) {
-                    case "name" -> product.setName((String) value);
-                    case "EAN" -> product.setEAN((String) value);
-                    case "type" -> product.setType((String) value);
-                    case "price" -> {
-                        // Handle price being either a number or string
-                        // Frontend sends a numeric value (Double) after parsing EU/US formats
-                        if (value instanceof Number num) {
-                            product.setPrice(num.doubleValue()); // Store numeric value directly
-                        } else {
-                            // Safety fallback: Parse string as Double
-                            product.setPrice(Double.parseDouble(value.toString()));
-                        }
-                    }
-                    default -> System.out.println("Unknown field: " + field);
-                }
-            });
-            // Save the updated product in the database
-            Product saved = productRepository.save(product);
+        // Calling the updateProduct Service Method
+        Product updatedProduct = productService.updateProduct(id, updates);
 
-            // Return HTTP 200 OK because the product updated successfully
-            return ResponseEntity.ok(saved);
-        })
-
-        // Product with given ID does not exist
-        .orElseGet(() -> {
-            // Return HTTP 404: Not Found = Product Not Found
-            return ResponseEntity.notFound().build();
-        });
+        // Return HTTP 200 OK status if Product is updated else 404 Not Found
+        return (updatedProduct != null) ? ResponseEntity.ok(updatedProduct) : ResponseEntity.notFound().build();
     }
 }
 
