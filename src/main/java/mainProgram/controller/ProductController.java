@@ -15,14 +15,11 @@ import java.util.Map;
 @RequestMapping("/api/products") // Base path for all API routes in this controller
 public class ProductController {
     /// Attributes
-    private final ProductRepository productRepository; // Injected repository used for database operations CRUD
-    private final ProductService productService;       // Product Services (Service Layer)
+    // The Service Layer that contains all business logic for job operations
+    private final ProductService productService;
 
-    /// Constructor for Dependency Injection
-    // Spring automatically provides an instance of ProductRepository at runtime.
-    /** @param productRepository the repository handling CRUD operations for Product entities. **/
-    public ProductController(ProductRepository productRepository, ProductService productService) {
-        this.productRepository = productRepository;
+    /// Constructor
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
