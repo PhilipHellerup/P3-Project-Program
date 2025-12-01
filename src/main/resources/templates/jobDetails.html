@@ -85,15 +85,15 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                                 </tr>
                                 <tr>
                                     <td><b>Cykel:</b></td>
-                                    <td th:text="${job.title}"></td>
+                                    <td id="job-title" th:text="${job.title}"></td>
                                 </tr>
                                 <tr>
                                     <td><b>Kunde:</b></td>
-                                    <td th:text="${job.customer_name}"></td>
+                                    <td id="job-customer-name" th:text="${job.customer_name}"></td>
                                 </tr>
                                 <tr>
                                     <td><b>Telefon:</b></td>
-                                    <td th:text="${job.customer_phone}"></td>
+                                    <td id="job-customer-phone" th:text="${job.customer_phone}"></td>
                                 </tr>
                             </tbody>
                         </table>
