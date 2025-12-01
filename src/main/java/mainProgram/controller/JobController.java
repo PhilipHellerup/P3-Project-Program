@@ -204,7 +204,6 @@ public class JobController {
     }
 
 
-    // todo: Aad logic so that if the "link" already exists, a new should not be added but the amount should be updated.
     @PostMapping("/api/repairs/addProduct")
     public ResponseEntity<String> addProductsToRepair(@RequestBody List<Map<String, Object>> dataList) {
         for (Map<String, Object> data : dataList) {
