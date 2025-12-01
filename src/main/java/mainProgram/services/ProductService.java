@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.List;
 
 /* --- ProductService Class --- */
+// Handles the business logic for service-related operations.
+// The controller delegates work, keeping business rules out of the controller layer.
 @Service
 public class ProductService implements BaseSearchService<Product> {
     /// Attributes

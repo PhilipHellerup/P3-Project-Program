@@ -1,7 +1,6 @@
 package mainProgram.controller; // Project Organization
 
 /* --- Imports --- */
-import mainProgram.repository.ProductRepository;
 import mainProgram.services.ProductService;
 import mainProgram.table.Product;
 import org.springframework.http.ResponseEntity;
