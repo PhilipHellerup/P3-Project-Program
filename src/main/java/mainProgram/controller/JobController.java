@@ -1,263 +1,113 @@
-package mainProgram.controller;
+package mainProgram.controller; // Project Organization
 
-import java.time.LocalDateTime;
+/* --- Imports --- */
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-
 import jakarta.transaction.Transactional;
-import mainProgram.repository.JobPartRepository;
-import mainProgram.repository.JobRepository;
-import mainProgram.repository.JobServiceRepository;
-import mainProgram.repository.JobStatusRepository;
-import mainProgram.repository.ServiceRepository;
 import mainProgram.services.JobService;
 import mainProgram.table.Job;
-import mainProgram.table.JobServices;
-import mainProgram.table.JobStatus;
-import mainProgram.table.Services;
-import org.apache.coyote.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 
-/**
- * REST controller for managing job-related operations.
- * Provides endpoints for creating, reading, and updating job records.
- */
-@Controller
+/* --- JobController --- */
+// REST Controller responsible for handling all incoming HTTP requests related to Jobs/Repairs.
+// The Controller does NOT contain Business Logic
+// Its responsibility is to:
+// 1. Receive requests from the client (Front-End)
+// 2. Forward the request data to the JobService (Service Layer)
+// 3. Return the service result as an HTTP response
+@RestController
 @RequestMapping("/")
 public class JobController {
-
-    private static final Logger log = LoggerFactory.getLogger(JobController.class);
-    private final JobRepository jobRepository;
-    private final JobStatusRepository statusRepository;
+    /// Attributes
+    // The Service Layer that contains all business logic for job operations
     private final JobService jobService;
-    private final ServiceRepository serviceRepository;
-    private final JobServiceRepository jobServiceRepository;
-    private final JobPartRepository jobPartRepository;
 
-    /**
-     * Constructor for dependency injection.
-     *
-     * @param jobRepository    the repository for job database operations
-     * @param statusRepository the repository for job status database operations
-     */
-    public JobController(JobRepository jobRepository, JobStatusRepository statusRepository, JobService jobService, ServiceRepository serviceRepository, JobServiceRepository jobServiceRepository, JobPartRepository jobPartRepository) {
-        this.jobRepository = jobRepository;
-        this.statusRepository = statusRepository;
+    /// Constructor
+    public JobController(JobService jobService) {
         this.jobService = jobService;
-        this.serviceRepository = serviceRepository;
-        this.jobServiceRepository = jobServiceRepository;
-        this.jobPartRepository = jobPartRepository;
     }
 
-    /**
-     * Retrieves all jobs from the database.
-     *
-     * @return a list of all jobs
-     */
+    /// Methods
+
+    // Get All Jobs - GET
+    /** @return List of all Job records in the database **/
     @GetMapping("api/jobs")
-    @ResponseBody
     public List<Job> getJobs() {
-        return jobRepository.findAll();
+        // Delegate the request to the Service Layer
+        return jobService.getAllJobs();
     }
 
+    // Create a New Job - POST
+    // Handles POST requests to create a new Job Record
+    // Expects a JSON body containing job data
+    /** @param body a map containing all fields needed to create a Job **/
+    /** @return ResponseEntity containing the created Job or an error message **/
     @PostMapping("/api/jobs/create")
-    @ResponseBody
     public ResponseEntity<Job> createJob(@RequestBody Map<String, Object> body) {
-        try {
-            // --- Extract main job data ---
-            String title = (String) body.get("title");
-            String dateString = (String) body.get("date");
-            Map<String, Object> statusMap = (Map<String, Object>) body.get("status");
-
-            if (title == null || dateString == null || statusMap == null) {
-                return ResponseEntity.badRequest().build();
-            }
-
-            Integer statusId = (Integer) statusMap.get("id");
-            if (statusId == null) {
-                return ResponseEntity.badRequest().build();
-            }
-
-            JobStatus status = statusRepository.findById(statusId.shortValue())
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid status_id"));
-
-            // If duration is not defined, set it to 60 mins
-            Integer duration;
-            if (body.get("duration") == null || (Integer) body.get("duration") == 0) {
-                duration = 60;
-            } else {
-                duration = (Integer) body.get("duration");
-            }
-
-            // --- Create Job entity ---
-            Job job = new Job();
-            job.setTitle(title);
-            job.setCustomer_name((String) body.get("customer_name"));
-            job.setCustomer_phone((String) body.get("customer_phone"));
-            job.setJob_description((String) body.get("job_description"));
-            job.setWork_time_minutes((Integer) body.get("work_time_minutes"));
-            job.setPrice_per_minute(((Number) body.get("price_per_min")).doubleValue());
-            job.setDuration(duration);
-            job.setDate(LocalDateTime.parse(dateString));
-            job.setStatus(status);
-
-            Job savedJob = jobRepository.save(job);
-
-            // --- Attach services if provided ---
-            List<Map<String, Object>> services = (List<Map<String, Object>>) body.get("services");
-            if (services != null) {
-                for (Map<String, Object> s : services) {
-                    Integer serviceId = (Integer) s.get("id");
-                    Integer quantity = (Integer) s.getOrDefault("quantity", 1);
-
-                    if (serviceId != null) {
-                        Services service = serviceRepository.findById(serviceId)
-                                .orElseThrow(() -> new RuntimeException("Service not found"));
-                        jobServiceRepository.save(new JobServices(savedJob, service, quantity));
-                    }
-                }
-            }
-
-            return ResponseEntity.ok(savedJob);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().build();
-        }
+        // Forward creation logic to the Service Layer
+        return jobService.createJob(body);
     }
 
+    // Update a Job - UPDATE
+    // Handles PUT requests to update an existing Job Record
+    /** @param id the ID of the job to update **/
+    /** @param job the update job object sent from the front-end **/
+    /** @return ResponseEntity with the updated job or a not found error **/
     @PutMapping("api/jobs/{id}/update")
-    @ResponseBody
     public ResponseEntity<Job> updateJob(@PathVariable Integer id, @RequestBody Job job) {
-        return jobRepository.findById(id)
-                .map(existing -> {
-                    // Only update if provided (non-null or non-empty)
-                    if (job.getTitle() != null && !job.getTitle().isBlank()) {
-                        existing.setTitle(job.getTitle());
-                    }
-                    if (job.getCustomer_name() != null && !job.getCustomer_name().isBlank()) {
-                        existing.setCustomer_name(job.getCustomer_name());
-                    }
-                    if (job.getCustomer_phone() != null && !job.getCustomer_phone().isBlank()) {
-                        existing.setCustomer_phone(job.getCustomer_phone());
-                    }
-                    if (job.getWork_time_minutes() != null) {
-                        existing.setWork_time_minutes(job.getWork_time_minutes());
-                    }
-                    if (job.getDuration() != null) {
-                        existing.setDuration(job.getDuration());
-                    }
-                    if (job.getPrice_per_minute() != null) {
-                        existing.setPrice_per_minute(job.getPrice_per_minute());
-                    }
-                    if (job.getDuration() != null) {
-                        existing.setDuration(job.getDuration());
-                    }
-                    if (job.getDate() != null) {
-                        existing.setDate(job.getDate());
-                    }
-                    if (job.getStatus() != null && job.getStatus().getId() != null) {
-                        existing.setStatus(job.getStatus());
-                    }
-                    if (job.getJob_description() != null && !job.getJob_description().isBlank()) {
-                        existing.setJob_description(job.getJob_description());
-                    }
-
-                    Job updated = jobRepository.save(existing);
-                    return ResponseEntity.ok(updated);
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        // Service layer handles validation and updating
+        return jobService.updateJob(id, job);
     }
 
-
-    ;
-
-
-    /**
-     * Updates only the job description for a specific job.
-     * This is a partial update endpoint focused on the description field.
-     *
-     * @param id  the ID of the job to update
-     * @param job the job object containing the new description
-     * @return ResponseEntity containing the updated job if found, or a not found response
-     */
+    // Update Job Description Only - UPDATE
+    // Special endpoint that updates ONLY the job description field.
+    // Useful for partial updates without modifying the entire object.
+    /** @param id the ID of the job to update **/
+    /** @param job contains only the new job_description field **/
+    /** @return ResponseEntity with the updated job or not found **/
     @PutMapping("api/jobs/{id}/description")
-    @ResponseBody
     public ResponseEntity<Job> updateJobDesc(@PathVariable Integer id, @RequestBody Job job) {
-        return jobRepository
-                .findById(id)
-                .map((existing) -> {
-                    // Update only the description field
-                    existing.setJob_description(job.getJob_description());
-
-                    Job updated = jobRepository.save(existing);
-                    return ResponseEntity.ok(updated);
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        // Extract only the "description" and update it in the service layer
+        return jobService.updateJobDescription(id, job.getJob_description());
     }
 
-
+    // Add Products (Parts or Services) to a Job/Repair - POST
+    // Adds products/services to a repair.
+    // The request body contains a list of maps describing each item.
+    /** @param dataList list of part/service assignment objects **/
+    /** @return ResponseEntity with a success or error message **/
     @PostMapping("/api/repairs/addProduct")
     public ResponseEntity<String> addProductsToRepair(@RequestBody List<Map<String, Object>> dataList) {
-        for (Map<String, Object> data : dataList) {
-            Integer repairId = (Integer) data.get("repairId");
-            Integer productId = (Integer) data.get("productId");
-            Integer quantity = (Integer) data.getOrDefault("quantity", 1);
-            String productType = (String) data.get("type");
-
-            if (Objects.equals(productType, "service")) {
-                jobService.addServiceToRepair(repairId, productId, quantity);
-            } else if (Objects.equals(productType, "part")) {
-                jobService.addPartToRepair(repairId, productId, quantity);
-            } else {
-                throw new Error("undefined product type");
-            }
-
-        }
-
-        return ResponseEntity.ok("Products added to repair successfully");
+        // Forward the request data to the Service Layer, which performs validation,
+        // checks job existence, and handles linking parts/services to the repair.
+        return jobService.addProductsToRepair(dataList);
     }
 
+    // Remove Products (Parts or Services) from a Job/Repair - POST
+    // Removes one or more parts/services items from a repair.
+    // Marked as @Transactional to ensure consistency if multiple deletes occur.
+    // Using POST as we are removing multiple items and not one predictable resource path.
+    /** @param dataList list of part/service items to remove **/
+    /** @return ResponseEntity with a status message **/
     @PostMapping("/api/repairs/removeProduct")
     @Transactional
     public ResponseEntity<String> removeProductFromRepair(@RequestBody List<Map<String, Object>> dataList) {
-        for (Map<String, Object> data : dataList) {
-            Integer repairId = (Integer) data.get("repairId");
-            Integer productId = (Integer) data.get("productId");
-            String productType = (String) data.get("type");
-
-
-            if (Objects.equals(productType, "service")) {
-                jobService.removeServiceFromRepair(repairId, productId);
-            } else if (Objects.equals(productType, "part")) {
-                jobService.removePartFromRepair(repairId, productId);
-            } else {
-                throw new Error("undefined product type");
-            }
-        }
-
-        return ResponseEntity.ok("Product(s) removed from repair successfully");
+        // Delegate removal logic to the Service Layer, which ensures each provided item
+        // is matched and removed safely with transactional context.
+        return jobService.removeProductsFromRepair(dataList);
     }
 
+    // Delete a Job - DELETE
+    // Deletes a job from the database.
+    // Marked as @Transactional to ensure consistency if multiple deletes occur.
+    /** @param id ID of the job to delete **/
+    /** @return HTTP 204 No Content if successful or 404 if not found **/
     @DeleteMapping("/api/jobs/{id}")
-    @ResponseBody
     @Transactional
     public ResponseEntity<Void> deleteJob(@PathVariable Integer id) {
-        if (!jobRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        // Delete all JobParts for this job first
-        jobPartRepository.deleteByJobId(id);
-        jobServiceRepository.deleteByJobId(id);
-        // Now delete the job
-        jobRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        // Pass the delete request to the Service Layer, which validates the job ID
+        // and performs the deletion. If the job does not exist, a 404 response is returned.
+        return jobService.deleteJob(id);
     }
 }
