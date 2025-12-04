@@ -62,6 +62,23 @@ document.addEventListener('DOMContentLoaded', function () {
             // Prevent duplicates
             if (document.querySelector('.sidebar-nav')) return;
 
+          const onCalendar = (location.pathname || '').startsWith('/kalender');
+          const legendHTML = onCalendar
+            ? `
+              <div class="status-legend" role="region" aria-label="Job status farveguide">
+                <div class="legend-title">Status guide</div>
+                <ul class="legend-list">
+                  <li class="legend-item"><span class="legend-dot" style="--dot:#f65d60"></span><span class="legend-label">Ikke Indleveret</span></li>
+                  <li class="legend-item"><span class="legend-dot" style="--dot:#feb568"></span><span class="legend-label">Indleveret</span></li>
+                  <li class="legend-item"><span class="legend-dot" style="--dot:#0088ff"></span><span class="legend-label">Igangværende</span></li>
+                  <li class="legend-item"><span class="legend-dot" style="--dot:#4b41c8"></span><span class="legend-label">Mangler Del</span></li>
+                  <li class="legend-item"><span class="legend-dot" style="--dot:#32a759"></span><span class="legend-label">Færdig</span></li>
+                  <li class="legend-item"><span class="legend-dot" style="--dot:#939292"></span><span class="legend-label">Afhentet</span></li>
+                </ul>
+              </div>
+            `
+            : '';
+
             const navbarHTML = `
             <nav class="sidebar-nav" aria-hidden="false">
                 <div class="nav-header">
@@ -75,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <li class="nav-item"><a class="nav-link" href="/jobliste"><span class="nav-text">Reparationsliste</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/products"><span class="nav-text">Produkter</span></a></li>
                 </ul>
+                ${legendHTML}
             </nav>
         `;
 

@@ -150,3 +150,51 @@
     background-color: #3b82f6;
     left: 0;
 }
+
+.status-legend {
+  margin: 12px 14px 16px;
+  padding: 10px 12px;
+  background: #1c2532;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  position: sticky;
+  bottom: 12px;
+}
+
+.status-legend .legend-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #9ca3af;
+  margin-bottom: 8px;
+}
+
+.status-legend .legend-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.status-legend .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #e5e7eb;
+}
+
+.status-legend .legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--dot, #9ca3af);
+  box-shadow: 0 0 0 2px #2a3a53; /* ring in sidebar bg */
+  border: 2px solid #ffffff22; /* subtle contrast */
+}
+
+.status-legend .legend-label {
+  font-size: 13px;
+}
