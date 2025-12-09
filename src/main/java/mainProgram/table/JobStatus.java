@@ -20,7 +20,6 @@ public class JobStatus {
     private String name;
 
     /// Getters
-
     // Gets the unique identifier of the job status.
     /** @return the status ID **/
     public Short getId() {
