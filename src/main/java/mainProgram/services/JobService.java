@@ -403,7 +403,7 @@ public class JobService implements BaseSearchService<Job> {
     }
 
     // Custom Search Method for Job/Repair
-    // Searches for jobs by title containing a keyword (case-sensitive)
+    // Searches for jobs by title, customer name, and customer-phone number containing a keyword (case-insensitive)
     /** @param keyword the search string **/
     /** @return list of matching Job entities **/
     @Override
@@ -414,7 +414,7 @@ public class JobService implements BaseSearchService<Job> {
         }
 
         // Perform case-insensitive search in job titles
-        return jobRepository.findByTitleContainingIgnoreCase(keyword);
+        return jobRepository.searchJobs(keyword);
     }
 
     // Get Job by ID - HELPER METHOD

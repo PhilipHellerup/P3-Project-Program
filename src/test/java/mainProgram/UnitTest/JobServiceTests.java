@@ -68,14 +68,14 @@ class JobServiceTests {
     @Test
     void testSearch_WithKeyword() {
         List<Job> expectedJobs = Arrays.asList(testJob);
-        when(jobRepository.findByTitleContainingIgnoreCase("Test")).thenReturn(expectedJobs);
+        when(jobRepository.searchJobs("Test")).thenReturn(expectedJobs);
 
         List<Job> result = jobService.search("Test");
 
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals("Test Job", result.get(0).getTitle());
-        verify(jobRepository, times(1)).findByTitleContainingIgnoreCase("Test");
+        verify(jobRepository, times(1)).searchJobs("Test");
     }
 
     @Test
