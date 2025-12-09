@@ -1,3 +1,4 @@
+// Call this function when the DOM content is all loaded
 document.addEventListener('DOMContentLoaded', function () {
     // Ensure document.body exists (some browsers fire DOMContentLoaded early with null body in edge cases)
     if (!document.body) {
@@ -9,27 +10,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         return;
     }
+
+    // Initiate the navbar. This is called on the calendar, list, and product page to show the navbar
     initNavbar();
 
+    // Definition of the navbar initiation function
     function initNavbar() {
-        // Load Font Awesome (keep as you had it; watch CSP)
-        const faScript = document.createElement('script');
-        faScript.src = 'https://kit.fontawesome.com/ffe0f0379f.js';
-        faScript.crossOrigin = 'anonymous';
-        document.head.appendChild(faScript);
-
-        // Utility: ensure the CSS link exists and load it, return a Promise
+        // Ensure the CSS link to the navbar css stylesheet exists and load it
         function ensureNavbarCss() {
             return new Promise((resolve, reject) => {
                 // Use root-relative path to avoid page-relative resolutions
                 const href = '/css/navbar.css';
 
-                // If already present, resolve when it's loaded (or immediately)
+                // If already present, resolve when it's loaded
                 const existing = Array.from(
                     document.head.querySelectorAll('link[rel="stylesheet"]'),
                 ).find((l) => (l.getAttribute('href') || l.href) === href);
                 if (existing) {
-                    // If it's already loaded (sheet available), resolve immediately
+                    // If it's already loaded, resolve immediately
                     if (existing.sheet) {
                         return resolve();
                     }
@@ -58,8 +56,9 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
+        // The function that inserts the navbar on the page
         function insertNavbar() {
-            // Prevent duplicates
+            // Ensure that the navbar is not already present on the page
             if (document.querySelector('.sidebar-nav')) return;
 
             const navbarHTML = `
@@ -78,48 +77,12 @@ document.addEventListener('DOMContentLoaded', function () {
             </nav>
         `;
 
+            // Insert the navbar on the page
             document.body.insertAdjacentHTML('afterbegin', navbarHTML);
             const navbar = document.querySelector('.sidebar-nav');
             document.body.classList.add('with-navbar', 'content-push');
-
             navbar.style.transform = 'translateX(0)';
-
-            // Dynamic navbar
-            /** const closeBtn = document.getElementById('close-navbar');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', function () {
-          const navbar = document.querySelector('.sidebar-nav');
-          if (navbar) {
-            navbar.style.transform = 'translateX(-100%)';
-            document.body.classList.remove('content-push');
-
-            setTimeout(() => {
-              navbar.remove();
-              document.body.classList.remove('with-navbar');
-              showOpenButton();
-            }, 300);
-          }
-        });
-      } **/
         }
-
-        /** function showOpenButton() {
-      if (!document.getElementById('open-navbar')) {
-        const openBtn = document.createElement('button');
-        openBtn.id = 'open-navbar';
-        openBtn.className = 'open-navbar-btn fa-solid fa-angles-right';
-        openBtn.setAttribute('aria-label', 'Open navbar');
-        document.body.appendChild(openBtn);
-
-        openBtn.addEventListener('click', function () {
-          openBtn.remove();
-          // ensure CSS is present before re-inserting
-          ensureNavbarCss()
-            .then(insertNavbar)
-            .catch(() => insertNavbar());
-        });
-      }
-    } **/
 
         // Ensure CSS is loaded before inserting the navbar (prevents flash / 404 issues due to relative path)
         ensureNavbarCss()

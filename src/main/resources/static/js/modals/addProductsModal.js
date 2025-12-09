@@ -3,6 +3,7 @@ import { handleFetchErrors } from '/js/utils/fetchUtils.js';
 
 // Wait until the entire DOM (HTML structure) has loaded before running the script
 document.addEventListener('DOMContentLoaded', function () {
+
     /* --- SELECT DOM ELEMENTS --- */
     // Buttons for choosing which form to show
     const addPartBtn = document.getElementById('addPartBtn');       // Show product form

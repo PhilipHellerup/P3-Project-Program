@@ -1,3 +1,4 @@
+// Run this function when the DOM contend is all loaded
 document.addEventListener('DOMContentLoaded', () => {
     const el = document.getElementById('job-status');
     if (el) {
@@ -62,9 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.openDescriptionModal(id, current.trim());
     });
 
-    // Event listener for the "tilføj product" btn
-    // todo: show to the user that the product was added
-    // todo: do some data validation and error handling
+    // Event listener for the "tilføj product" btn. On click open the addProductToRepairModal
     document.getElementById('add-product-btn').addEventListener('click', async (e) => {
         window.openAddProductToRepairModal()
     })
@@ -72,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listener to remove a product from a repair
     const removeBtns = document.querySelectorAll('.remove-btn');
 
+    // Add event listeners to the remove buttons for each repair
     removeBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             let productId = parseInt(e.target.getAttribute("data-id"));
@@ -84,9 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 type,
             }];
 
-            console.log(payload)
-            console.log(JSON.stringify(payload))
-
+            // Call the jobController API to remove the jobPart or jobService join-table entity
             fetch("/api/repairs/removeProduct", {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -103,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     })
 
+
     document.getElementById('deleteBtn').addEventListener('click', function () {
         const jobId = this.getAttribute('data-job-id');
         if (confirm('Slet reparation?')) {
@@ -118,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Eventlistener for the edit "arbejdstid" btn
+    // Event listener for the edit "arbejdstid" btn
     let editBtn = document.getElementById('edit-worktime-btn')
     editBtn.addEventListener('click', (e) => {
         // Get the current data from the job using Thymeleaf attributes
@@ -184,12 +183,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .catch((err) => {
                     console.error(err);
-                    // User-facing error (Danish): "Could not update the job."
+                    // User-facing error: "Could not update the job."
                     alert('Kunne ikke opdatere jobbet.');
                 });
         })
 
-        editBtn.parentNode.replaceChild(editBtnClone, editBtn); // Replacing the original btn with the cloned object with the
+        editBtn.parentNode.replaceChild(editBtnClone, editBtn); // Replacing the original btn with the cloned object with the new listener
 
 
     })

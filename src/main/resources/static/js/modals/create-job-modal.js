@@ -12,6 +12,7 @@ let workTimeInput = document.getElementById('workTime');
 let workCostPrMin = document.getElementById('workCost');
 let totalWorkCost = document.getElementById('workTotalCost');
 
+// Main function which is run when the modal is opened
 (function () {
     // Locate the modal element by ID
     const modalEl = document.getElementById('createJobModal');
@@ -20,17 +21,6 @@ let totalWorkCost = document.getElementById('workTotalCost');
     // Initialize Bootstrap modal instance
     const createModal = new bootstrap.Modal(modalEl);
 
-    /**
-     * Convert a datetime-local input value to a full ISO 8601 string.
-     * Ensures seconds are included (adds ":00" if needed).
-     * @param {string} val - The datetime-local input value
-     * @returns {string|null} ISO-compatible datetime string or null
-     */
-    function toIsoLocal(val) {
-        if (!val) return null;
-        return val.length === 16 ? val + ':00' : val;
-    }
-
     // Show search results, when clicking the search bar which already has a value
     searchBar.addEventListener('click', (e) => {
         if (e.target.value) {
@@ -38,7 +28,7 @@ let totalWorkCost = document.getElementById('workTotalCost');
         }
     })
 
-    // Add an evenetListener to the search bar
+    // Add an eventListener to the search bar to search for services on input
     searchBar.addEventListener('input', async (e) => {
         e.preventDefault();
 
@@ -53,10 +43,9 @@ let totalWorkCost = document.getElementById('workTotalCost');
             matches.forEach(match => {
                 let newResult = document.createElement('tr')
                 newResult.addEventListener('click', (e) => {
-                    // The if the product is already on the list. If it is, increate the quantity by one. If not, add the products to the list.
+                    // Check if the product is already on the list. If it is, increate the quantity by one. If not, add the products to the list.
                     const existing = modalServices.find(p =>
                         String(p.product.id) === String(match.id));
-
                     if (existing) {
                         existing.quantity += 1;
                     } else {
@@ -68,6 +57,7 @@ let totalWorkCost = document.getElementById('workTotalCost');
                     searchBar.select();
                     hideSearchResults(searchTable)
                 })
+                // SHow each search results as a table row in the dropdown menu
                 newResult.innerHTML = `
                     <td class="d-flex justify-content-between">
                         <div>
@@ -83,14 +73,16 @@ let totalWorkCost = document.getElementById('workTotalCost');
                      </div>
                     </td>
                 `
+                // Append the new search results to the searchResults container below the search bar
                 searchResults.appendChild(newResult)
+                // Unhide the search results
                 showSearchResults(searchTable)
             })
         }
 
     })
 
-    // Eventlistener on the workTime and WorkCost inputs to change totalWorkCost on inputchange
+    // Event listener on the workTime and WorkCost inputs to change totalWorkCost on input-change
     workTimeInput.addEventListener('input', handleWorkInputChange)
     workCostPrMin.addEventListener('input', handleWorkInputChange)
 
@@ -118,8 +110,6 @@ let totalWorkCost = document.getElementById('workTotalCost');
             date: isoString,
             status: {id: parseInt(document.getElementById('jobStatus').value, 10)},
         };
-
-        console.log(document.getElementById('workCost').value)
 
         // Map services into the array. We only need 'id' and 'quantity' for adding them to the repair
         const servicesArray = modalServices.map(item => ({
@@ -165,10 +155,8 @@ let totalWorkCost = document.getElementById('workTotalCost');
             });
     });
 
-    /**
-     * Expose a global helper to open the modal and reset the form.
-     * Can be called from buttons or other scripts.
-     */
+
+    // Function to open the modal in the current window
     window.openCreateJobModal = function () {
         document.getElementById('createJobForm')?.reset();
         createModal.show();
@@ -219,10 +207,12 @@ function showSearchResults(table) {
     }, 0);
 }
 
+// Function to render the product table. This is called whenever product is added or removed from the modalProducts array
 function renderProductTable() {
     const tableBody = document.getElementById('service-added-table-body');
     tableBody.innerHTML = ''; // clear current rows
 
+    // Create a table row for each item in the array
     modalServices.forEach((item) => {
         const row = document.createElement('tr');
         // Set the productid of the row, so that the remove buttons knows which product to remove from modalServices
@@ -269,12 +259,14 @@ function renderProductTable() {
 
         });
 
+        // Add a event listener to the remove btn beside each service in the table
         row.querySelector('.remove-btn').addEventListener('click', () => {
             const id = parseInt(row.dataset.productId, 10);
             modalServices = modalServices.filter(p => p.product.id !== id);
             renderProductTable(modalServices)
         });
 
+        // Append each service to the table body on the page
         tableBody.appendChild(row);
 
         // Update price and duration
@@ -284,11 +276,13 @@ function renderProductTable() {
 
 }
 
+// Function to handle the change of worktime and work-cost pr. min. This function sets a new total price based on the calculation from updatePriceAndDuration()
 function handleWorkInputChange() {
     totalWorkCost.innerText = (Number(workTimeInput.value) * Number(workCostPrMin.value)).toFixed(2);
     updatePriceAndDuration()
 }
 
+// Calculate a new total cost for the repair, based on the worktime and work-cost pr. min and also the price of services
 function updatePriceAndDuration() {
     // Set the total cost equal to the cost of products.
     // Calculate and set to total duration of the job. This duration can later be editid by the user
@@ -302,25 +296,4 @@ function updatePriceAndDuration() {
     totalPrice.innerText = total;
     totalDuration.value = duration;
 
-}
-
-// Function to add the services chosen here to the products.
-function addServicesToRepair() {
-    // Define the payload to send
-    const payload = modalServices.map(item => ({
-        repairId: "8", // Placeholder. Find a way to get the id of the new created repair
-        productId: item.product.id,
-        quantity: item.quantity,
-        type: item.productType
-    }))
-
-    fetch("api/repairs/addProduct", {
-        method: post,
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-    }).then((r) => {
-        if (!r.ok) {
-            throw new Error("failed to add product to repair")
-        }
-    })
 }
