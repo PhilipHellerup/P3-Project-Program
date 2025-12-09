@@ -161,7 +161,7 @@ Using Thymeleaf th:replace to include modal fragments from a `modals` template.
                                 ></p>
                                 <p class="d-inline">kr.</p>
                             </td>
-                            <td class="w-15" th:with="totalPrice=${job.work_time_minutes * job.price_per_minute}">
+                            <td id="total-cost" class="w-15" th:with="totalPrice=${job.work_time_minutes * job.price_per_minute}">
                                 <p
                                     class="m-1 d-inline"
                                     th:text="${#numbers.formatDecimal(totalPrice, 1, 2,'COMMA')}"

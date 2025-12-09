@@ -73,9 +73,18 @@ public class RepairDetailsIntegrationTest {
         String title = doc.select("#job-title").text();
         String customer = doc.select("#job-customer-name").text();
         String phone = doc.select("#job-customer-phone").text();
+        String totalCost = doc.select("#total-cost").text(); // Parse this to a double
+
+        String cleaned = totalCost.replace("kr.", "").trim();
+
+        cleaned = cleaned.replace(",", ".");
+
+        double value = Double.parseDouble(cleaned);
+
 
         assertEquals("Test repair 1", title);
         assertEquals("John Doe", customer);
         assertEquals("12345678", phone);
+        assertEquals((5.00 * 30), value);
     }
 }
