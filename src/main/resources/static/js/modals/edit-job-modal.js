@@ -6,12 +6,7 @@
     // Initialize the Bootstrap modal instance for programmatic control
     const editModal = new bootstrap.Modal(modalEl);
 
-    /**
-     * Ensure a datetime-local value is converted to an ISO-like string that includes seconds.
-     * datetime-local inputs usually provide "YYYY-MM-DDTHH:MM" (length 16) — append ":00" for seconds.
-     * @param {string|null|undefined} val
-     * @returns {string|null}
-     */
+    // Function to convert date time to IsoLocal time
     function toIsoLocal(val) {
         if (!val) return null;
         return val.length === 16 ? val + ':00' : val;
@@ -58,11 +53,7 @@
             });
     });
 
-    /**
-     * Open the edit modal and pre-fill inputs with `job` data.
-     * This function is exposed globally so other scripts / buttons can call it.
-     * @param {Object} job - Job object with fields like id, title, customer_name, date, status, etc.
-     */
+    // Open the model in the current window and also prefill inout field with the existing values in the job
     window.openEditJobModal = function (job) {
         // Populate hidden job ID
         document.getElementById('jobId').value = job.id;

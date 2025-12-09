@@ -6,12 +6,7 @@
     // Initialize Bootstrap modal instance for programmatic control
     const fullModal = new bootstrap.Modal(modalEl);
 
-    /**
-     * Convert datetime-local input values to full ISO-like strings.
-     * Adds seconds (":00") if missing, ensuring consistent formatting.
-     * @param {string|null|undefined} val
-     * @returns {string|null}
-     */
+    // Function to convert date time to IsoLocal time
     function toIsoLocal(val) {
         if (!val) return null;
         return val.length === 16 ? val + ':00' : val;
@@ -56,10 +51,7 @@
         }
     });
 
-    /**
-     * Expose a global helper function to open and prefill the full edit modal.
-     * @param {Object} job - The job data used to populate the form fields.
-     */
+    // Open the model in the current window and also prefill inout field with the existing values in the job
     window.openFullEditJobModal = function (job) {
         // Populate hidden and input fields with job data
         document.getElementById('full_jobId').value = job.id;

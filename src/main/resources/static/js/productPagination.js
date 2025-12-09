@@ -1,15 +1,16 @@
-// paginationProductService.js
+// this function is called when the DOM content is all loaded
 document.addEventListener('DOMContentLoaded', () => {
   const rowsPerPage = 7;
   const tableBody = document.querySelector('table tbody');
   const paginationContainer = document.querySelector('.pagination');
   let currentPage = 1;
 
+  // Get all the rows which are visible and not hidden from seaching
   function getVisibleRows() {
-    // Only include rows that are not hidden (by search)
     return Array.from(tableBody.querySelectorAll('tr:not(.d-none)'));
   }
 
+  // Display the correct pagination page
   function displayPage(pageNumber) {
     const rows = getVisibleRows();
     const totalPages = Math.max(1, Math.ceil(rows.length / rowsPerPage));
@@ -29,12 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
     updateActivePage(pageNumber);
   }
 
+  // Update the current page if any changes happen
   function updateActivePage(activePage) {
     paginationContainer.querySelectorAll('.page-item').forEach((item) => item.classList.remove('active'));
     const activeButton = paginationContainer.querySelector(`[data-page="${activePage}"]`);
     if (activeButton) activeButton.classList.add('active');
   }
 
+  // Function to set up the pagination by getting the rows, calculating the number of pages, appending the buttons (next and prev)
   function setupPagination() {
     const rows = getVisibleRows();
     const totalPages = Math.max(1, Math.ceil(rows.length / rowsPerPage));
@@ -74,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     paginationContainer.appendChild(nextItem);
   }
 
-  // Public API for other scripts
+  // Public "API" for other scripts
   window.Pagination = {
     refresh: () => {
       setupPagination();

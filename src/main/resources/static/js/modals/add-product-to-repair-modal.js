@@ -4,14 +4,19 @@ let searchTable = document.getElementById('search-table');
 let searchResults = document.getElementById('search-results');
 let searchBar = document.getElementById('searchBar');
 
+// Main function which is run when the modal is opened
 (function () {
+    // Get the modal from the modal.html page using and #id
     const modalEl = document.getElementById('addProductToRepair');
     if (!modalEl) {
         console.warn("Modal element #addProductToRepair not found");
         return;
     }
+
+    // Create a model using the build in boostrap modal class
     const createModal = new bootstrap.Modal(modalEl);
 
+    // Open de new modal in the current window
     window.openAddProductToRepairModal = function () {
         const form = document.getElementById('addProductToRepairForm');
 
@@ -29,7 +34,7 @@ let searchBar = document.getElementById('searchBar');
         }
     });
 
-    // Add an eventListener to the search bar
+    // Add an eventListener to the search bar, to search on input
     searchBar.addEventListener('input', async (e) => {
         e.preventDefault()
 
@@ -44,8 +49,9 @@ let searchBar = document.getElementById('searchBar');
         } else {
             matches.forEach(match => {
                 let newResult = document.createElement('tr')
+                // Add an event listener to each search match. When clicked it should add the product to modalproduct array
                 newResult.addEventListener('click', () => {
-                    // The if the product is already on the list. If it is, increate the quantity by one. If not, add the products to the list.
+                    // Check if the chosen product is already on the list. If it is, increment the quantity by one. If not, add the products to the list.
                     const existing = modalProducts.find(
                         p => p.product.id === match.id && p.product.type === match.type
                     );
@@ -55,12 +61,14 @@ let searchBar = document.getElementById('searchBar');
                     } else {
                         modalProducts.push({product: match, quantity: 1, productType: match.type});
                     }
-                    // Add the product to modal UI and update the UI
+                    // Add the product to modal UI and update the UI, by creating a new table row with information about the new product in renderProductTable()
                     renderProductTable()
                     searchBar.value = '';
                     searchBar.select();
                     hideSearchResults(searchTable)
                 })
+
+                // SHow each search results as a table row in the dropdown menu
                 newResult.innerHTML = `
                     <td class="d-flex justify-content-between">
                         <div>
@@ -79,7 +87,9 @@ let searchBar = document.getElementById('searchBar');
                      </div>
                     </td>
                 `
+                // Append the new search results to the searchResults container below the search bar
                 searchResults.appendChild(newResult)
+                // Unhide the search results
                 showSearchResults(searchTable)
             })
         }
@@ -107,9 +117,7 @@ let searchBar = document.getElementById('searchBar');
             type: item.productType
         }))
 
-        console.log(JSON.stringify(payload))
-
-        // Create a request to send the paylond to the jobController
+        // Create a request to send the payload to the jobController
         fetch('/api/repairs/addProduct', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -124,10 +132,12 @@ let searchBar = document.getElementById('searchBar');
     })
 })();
 
+// Function to render the product table. This is called whenever product is added or removed from the modalProducts array
 function renderProductTable() {
     const tableBody = document.getElementById('table-body');
     tableBody.innerHTML = ''; // clear current rows
 
+    // Create a table row for each item in the array
     modalProducts.forEach((item) => {
         const row = document.createElement('tr');
         // Set the productid of the row, so that the remove buttons knows which product to remove from modalProducts
@@ -164,18 +174,20 @@ function renderProductTable() {
             }
         });
 
+        // Add a event listener to the remove btn beside each product in the table
         row.querySelector('.remove-btn').addEventListener('click', () => {
             const id = parseInt(row.dataset.productId, 10);
             modalProducts = modalProducts.filter(p => p.product.id !== id);
             renderProductTable(modalProducts)
         });
 
+        // Append each product to the tableBody on the page
         tableBody.appendChild(row);
     });
 }
 
 
-// Seach in product using the productController API endpoint
+// Search in products using the productController API endpoint
 async function fetchSearchMatches(searchParam) {
     try {
         // Send PUT request to update the job entry
@@ -224,39 +236,5 @@ function getRepairIdFromUrl() {
     const parts = window.location.pathname.split('/');
     return parseInt(parts[parts.length - 1], 10);
 }
-
-/// Depreciated
-/*
-function addNewProductToTable(name, amount, productPrice) {
-    const tableBody = document.getElementById('table-body');
-    const newProduct = document.createElement('tr');
-
-    newProduct.innerHTML = `
-        <td class="w-15">
-            <p class="mt-0">${name}</p>
-        </td>
-        <td class="w-15">
-            <p class="mt-0">${amount}</p>
-        </td>
-        <td class="w-30">
-            <p class="mt-0">${productPrice}</p>
-        </td>
-        <td class="w-30">
-            <p class="mt-0">${productPrice}</p>
-        </td>
-        <td class="w-10 text-center">
-            <button type="button" class="btn btn-sm btn-danger remove-btn">X</button>
-        </td>
-    `;
-
-    // Add event listener to the button
-    newProduct.querySelector('.remove-btn').addEventListener('click', () => {
-        newProduct.remove();
-    });
-
-    // Append to the table body
-    tableBody.appendChild(newProduct);
-}
-*/
 
 

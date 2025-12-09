@@ -40,12 +40,7 @@
             });
     });
 
-    /**
-     * Expose a global helper to open the modal and prefill form fields.
-     * Used when editing an existing job description.
-     * @param {number|string} jobId - The job’s unique ID
-     * @param {string} currentText - The current job description
-     */
+    // Function to open the model in the current window
     window.openDescriptionModal = function (jobId, currentText) {
         const ta = document.getElementById('job_description_desc');
         const idEl = document.getElementById('jobIdDesc');

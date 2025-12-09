@@ -7,8 +7,9 @@ window.addEventListener("pageshow", function (event) {
     }
 });
 
+// Run this function when the DOM content is all loaded in correctly
 document.addEventListener('DOMContentLoaded', function () {
-    // Consts for active or completed filter buttons
+    // Get elements for active or completed filter buttons
     const completedBtn = document.getElementById('completed-btn');
     const activeBtn = document.getElementById('active-btn');
     const tableBody = document.getElementById('table-body');
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return /picked\s*up/.test(st) || st === 'afhentet' || st === 'pickedup';
     }
 
-
+    // Function to get the status of a row/ repair
     function getRowStatus(row) {
         if (row.dataset && row.dataset.status) return normalizeStatus(row.dataset.status);
         const el = row.querySelector('.job-status');
@@ -74,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-// Eventlistener for the seach-input form
+// Event listener for the search-input form
 document.getElementById('search-input').addEventListener('submit', async (e) => {
     e.preventDefault();
     let matches;
@@ -135,12 +136,12 @@ document.getElementById('search-input').addEventListener('submit', async (e) => 
         // Reformat badges
         formatStatusBadges();
 
-        // Highlight the inputfields text, so that the user quickly can perform a new search
+        // Highlight the input-fields text, so that the user quickly can perform a new search
         document.getElementById('searchparams').select();
     }
 });
 
-// Function to format the date
+// Function to format the date correctly ("DD. MMM YYYY kl. HH:MM" f.eks. "20. september 2025 kl. 13:00")
 function formatDate(dateString) {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -152,7 +153,7 @@ function formatDate(dateString) {
         minute: '2-digit',
     });
 }
-
+// Call the jobController API to get a list of all repairs
 async function fetchAllRepairs() {
     try {
         // Send PUT request to update the job entry
@@ -169,6 +170,7 @@ async function fetchAllRepairs() {
     }
 }
 
+// Function to call the searchController API to search for jobs using a keyword
 async function fetchSearchMatches(searchParam) {
     try {
         // Send PUT request to update the job entry
@@ -185,6 +187,7 @@ async function fetchSearchMatches(searchParam) {
     }
 }
 
+// Dynamically apply css styling to status bages on the page, like changed the color of the text and of the border.
 function formatStatusBadges() {
     document.querySelectorAll('.job-status').forEach((el) => {
         const raw = el.textContent.trim();
