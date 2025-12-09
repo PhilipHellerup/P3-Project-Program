@@ -39,7 +39,7 @@ public class SearchController {
     /** @param keyword the search keyword used to match job titles **/
     /** @return a list of Jobs whose titles contain the keyword **/
     @GetMapping("/job")
-    public List<Job> searchRepair(@RequestParam String keyword) {
+    public List<Job> searchRepair(@RequestParam("q") String keyword) {
         // Calling JobService search method
         return jobService.search(keyword);
     }
