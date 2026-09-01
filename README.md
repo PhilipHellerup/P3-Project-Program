@@ -1,132 +1,41 @@
-# Web Calendar for Repairs
+# Bicycle Repair Management System for Performsport
+A full-stack web application developed for Performsport to centralize bicycle repair scheduling, status tracking, and the management of parts and services.
 
-A Java Spring Boot web application for managing repair jobs with a calendar and lists, server-side rendered with Thymeleaf and backed by PostgreSQL. It exposes REST endpoints for entities like jobs and products and provides HTML pages for calendar and job/product views.
+Developed as a third-semester Software Engineering project at Aalborg University in collaboration with Performsport.
 
-Database resources repo: https://github.com/Rakibei/p3-database
+## Overview
+Performsport previously managed bicycle repairs through a combination of paper notes and Shopify, making it difficult for employees and mechanics to maintain a clear overview of scheduled and ongoing repairs.
 
-## Stack
+The project provides a centralized repair management system with calendar and list views for scheduling and tracking repairs. Employees can manage repair information, update statuses, assign parts and services, and calculate repair costs through a structured web interface.
 
-- Language: Java 21
-- Frameworks/Libraries: Spring Boot 3.5.x (Web, Data JPA, Validation, DevTools), Thymeleaf
-- Database: PostgreSQL (JPA/Hibernate)
-- Build/Package Manager: Maven (with Maven Wrapper `mvnw`/`mvnw.cmd`)
-- Env loading: `spring-dotenv` (reads `.env` at project root)
-- Frontend assets: WebJars (Bootstrap 5.3, jQuery 3.7) + static resources under `src/main/resources/static`
-- Optional Dev tooling: Node.js + Prettier (with `prettier-plugin-java`)
+## Features
+- Creates, edits, reschedules, and deletes bicycle repair jobs.
+- Displays repairs through interactive calendar and list views.
+- Tracks repair progress using configurable status information.
+- Searches and filters existing and completed repairs.
+- Adds predefined parts and services to individual repairs.
+- Calculates costs based on labor, parts, services, and quantities.
+- Stores repair and product data in a PostgreSQL database.
 
-## Requirements
+## Technologies & Concepts
 
-- Java 21 (JDK)
-- Maven Wrapper (included) — no need to install Maven separately
-- PostgreSQL 14+ running locally
+**Technologies:**\
+Java, Spring Boot, Thymeleaf, PostgreSQL, Spring Data JPA, JavaScript, FullCalendar, Bootstrap, Docker, Maven.
 
-## Environment Configuration
+**Concepts:**\
+Full-Stack Development, Object-Oriented Programming, Layered Architecture, MVC, REST APIs, Relational Databases, ORM, Unit Testing, Integration Testing, User-Centered Design.
 
-Configuration is done via `.env` at the project root and `src/main/resources/application.properties`.
+## Contributors
+Developed as a group project by:
+- Anders Mathias Larsen
+- Daniel Sloth
+- Jacob Christian Larsen
+- Philip Vestergaard Hellerup Jørgensen
+- Viktor Alexander Parkhøi
+- Zelalem Niguse Gebremeskel
+- Rasmus Juul Severinsen
 
-1. Copy the example env file and edit values as needed:
+## Project Report
+The accompanying report, **[A Web-Based Bicycle Repair Management System for Performsport](docs/P3-Project-Report.pdf)**, covers the requirements analysis, system and user interface design, software architecture, implementation, testing, and evaluation of the solution.
 
-```
-cp env.example .env
-# On Windows (PowerShell): Copy-Item env.example .env
-```
-
-2. Required environment variables (see `env.example`):
-
-- `JDBC_DATABASE_URL` — e.g. `jdbc:postgresql://localhost:5432/appdb`
-- `POSTGRES_USER` — database user
-- `POSTGRES_PASSWORD` — database password
-
-`application.properties` wires these into Spring:
-
-```
-spring.datasource.url=${JDBC_DATABASE_URL}
-spring.datasource.username=${POSTGRES_USER}
-spring.datasource.password=${POSTGRES_PASSWORD}
-server.port=9000
-spring.jpa.hibernate.ddl-auto=update
-```
-
-Notes:
-
-- The app defaults to port `9000`.
-- JPA `ddl-auto=update` will auto-create/update tables in development; consider using `validate` or migrations in production. TODO: add Flyway/Liquibase if needed.
-
-## Setup
-
-1. Ensure PostgreSQL is running and that the configured database exists.
-2. Create `.env` (see above) with valid connection details.
-3. Build the project to download dependencies:
-
-```
-./mvnw -q -DskipTests package
-# On Windows: .\mvnw.cmd -q -DskipTests package
-```
-
-## Run
-
-- Using Maven (development):
-
-```
-./mvnw spring-boot:run
-# Windows: .\mvnw.cmd spring-boot:run
-```
-
-- Or use your IDE’s Spring Boot run configuration.
-
-Then open http://localhost:9000
-
-## Application Entry Point
-
-- Main class: `mainProgram.MainApplication`
-- Location: `src/main/java/mainProgram/MainApplication.java`
-
-## Endpoints and Pages
-
-- Server-rendered pages (Thymeleaf) via `PageController`:
-  - `/` → redirects to `/kalender`
-  - `/kalender` → calendar view (template `calendar.html`)
-  - `/jobliste` → job list view (template `jobliste.html`)
-  - `/jobliste/{id}` → job details view (template `jobDetails.html`)
-  - `/products` → product list view (template `products.html`)
-- REST APIs (examples):
-  - `POST /api/products` → create product
-  - `PUT  /api/products/{id}` → update product
-  - `DELETE /api/products/{id}` → delete product
-  - Additional controllers exist (e.g., `PartController`, `SearchController`, `JobController`); see source for full details.
-
-## Project Structure (high level)
-
-```
-.
-├─ pom.xml                           # Maven build config
-├─ env.example                       # Sample environment variables
-├─ src
-│  ├─ main
-│  │  ├─ java/mainProgram
-│  │  │  ├─ MainApplication.java     # Entry point
-│  │  │  ├─ controller/              # Controllers
-│  │  │  ├─ repository/              # Spring Data repositories
-│  │  │  ├─ initializer/             # Initializers with table data
-│  │  │  ├─ services/                # Service layer
-│  │  │  └─ table/                   # JPA entities
-│  │  └─ resources
-│  │     ├─ application.properties   # Spring configuration (port, DB, JPA, thymeleaf)
-│  │     ├─ templates/               # Thymeleaf templates (calendar, jobDetails, products, ...)
-│  │     └─ static/                  # Static assets (css, js, images)
-│  └─ test/java/mainProgram          # Tests
-├─ package.json                      # Dev tooling (Prettier)
-└─ README.md
-```
-
-## Development Notes
-
-- Live reload: `spring-boot-devtools` is included; when using your IDE or `spring-boot:run`, changes may trigger restarts.
-- Thymeleaf caching is disabled in `application.properties` for easier template development.
-- WebJars provide Bootstrap and jQuery without external CDNs.
-
-## Troubleshooting
-
-- Cannot connect to DB: verify `.env` is loaded and values match your PostgreSQL instance.
-- Port already in use: change `server.port` in `application.properties` or free port 9000.
-- Templates not updating: ensure template cache is disabled (it is by default in this project) and you’re running in dev mode.
+*3rd Semester Software Engineering Project - Aalborg University - 2025*
